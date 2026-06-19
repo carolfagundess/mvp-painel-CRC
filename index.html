@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Ferramentas — CRC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbar-logo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <path d="M8 21h8M12 17v4" />
+            </svg>
+            Painel de Ferramentas · CRC
+        </div>
+        <div class="topbar-sep"></div>
+        <div class="topbar-status">
+            <div class="dot"></div>
+            Ferramentas ativas
+        </div>
+    </div>
+
+    <div class="layout">
+
+        <nav class="sidebar">
+            <div class="sidebar-section">Início</div>
+            <button class="nav-btn active" onclick="showPage('home', this)">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    <polyline points="9,22 9,12 15,12 15,22" />
+                </svg>
+                Início
+            </button>
+
+            <div class="sidebar-section">Documentação de Cliente</div>
+            <button class="nav-btn" onclick="showPage('identity', this)">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <path d="M2 10h20" />
+                </svg>
+                Gerador Identity
+            </button>
+
+            <div class="sidebar-section">Infraestrutura</div>
+            <button class="nav-btn" onclick="showPage('ciasc', this)">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="16,18 22,12 16,6" />
+                    <polyline points="8,6 2,12 8,18" />
+                </svg>
+                Ferramentas CIASC
+                <span class="nav-badge">2</span>
+            </button>
+            <button class="nav-btn" onclick="showPage('ntp', this)">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12,6 12,12 16,14" />
+                </svg>
+                NTP Server
+            </button>
+            <button class="nav-btn" onclick="showPage('radius', this)">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+                Acesso RADIUS e DNS
+            </button>
+            
+            <div class="sidebar-section">Demais serviços</div>
+            <button class="nav-btn" onclick="showPage('equip', this)">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="2" width="20" height="8" rx="2" />
+                    <rect x="2" y="14" width="20" height="8" rx="2" />
+                    <line x1="6" y1="6" x2="6.01" y2="6" />
+                    <line x1="6" y1="18" x2="6.01" y2="18" />
+                </svg>
+                Verificador Equip.
+            </button>
+
+        </nav>
+
+        <main class="main">
+
+            <div class="page active" id="page-home">
+                <div class="home-header">
+                    <h1>Ferramentas do Setor</h1>
+                    <p>Selecione uma ferramenta abaixo ou use o menu lateral para navegar.</p>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="tool-card" onclick="showPage('identity', document.querySelector('.nav-btn:nth-child(3)'))">
+                        <div class="tool-card-icon icon-blue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="5" width="20" height="14" rx="2" />
+                                <path d="M2 10h20" />
+                            </svg>
+                        </div>
+                        <h3>Gerador Identity</h3>
+                        <p>Gera strings de identidade CUST-RB para clientes Dedicado, Interconexão e mais.</p>
+                        <span class="tool-card-tag tag-blue">Documentação de Cliente</span>
+                    </div>
+
+                    <div class="tool-card" onclick="showPage('ciasc', document.querySelector('[onclick*=ciasc]'))">
+                        <div class="tool-card-icon icon-amber">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="16,18 22,12 16,6" />
+                                <polyline points="8,6 2,12 8,18" />
+                            </svg>
+                        </div>
+                        <h3>Ferramentas CIASC</h3>
+                        <p>Gerador de scripts VPLS, sub-interfaces, QoS e observação de cadastro ZXR10.</p>
+                        <span class="tool-card-tag tag-amber">Infraestrutura · 2 scripts</span>
+                    </div>
+
+                    <div class="tool-card" onclick="showPage('ntp', document.querySelectorAll('.nav-btn')[4])">
+                        <div class="tool-card-icon icon-purple">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12,6 12,12 16,14" />
+                            </svg>
+                        </div>
+                        <h3>NTP Server</h3>
+                        <p>Geração rápida do script padrão de ajuste de horário para MikroTik (v6 e v7).</p>
+                        <span class="tool-card-tag tag-purple">Infraestrutura</span>
+                    </div>
+
+                    <div class="tool-card" onclick="showPage('radius', document.querySelectorAll('.nav-btn')[5])">
+                        <div class="tool-card-icon icon-purple">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            </svg>
+                        </div>
+                        <h3>Acesso RADIUS</h3>
+                        <p>Geração do script padrão de gerência, segurança e logs para MikroTik.</p>
+                        <span class="tool-card-tag tag-purple">Infraestrutura</span>
+                    </div>
+
+                    <div class="tool-card" onclick="showPage('equip', document.querySelector('[onclick*=equip]'))">
+                        <div class="tool-card-icon icon-green">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="2" width="20" height="8" rx="2" />
+                                <rect x="2" y="14" width="20" height="8" rx="2" />
+                                <line x1="6" y1="6" x2="6.01" y2="6" />
+                                <line x1="6" y1="18" x2="6.01" y2="18" />
+                            </svg>
+                        </div>
+                        <h3>Verificador de Equipamentos</h3>
+                        <p>Consulta equipamentos ideais por modalidade, viabilidade e plano contratado.</p>
+                        <span class="tool-card-tag tag-green">Análise de Viabilidade</span>
+                    </div>
+                </div>
+            </div>
+            <div class="page" id="page-identity">
+                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Gerador Identity — RB</h2>
+                        <p>Gera a string de identidade no padrão CUST-RB-...</p>
+                    </div>
+                </div>
+
+                <div class="form-wrap">
+                    <div class="campo">
+                        <label>Modelo</label>
+                        <select id="id-modelo" onchange="idToggleLocal()">
+                            <option value="padrao">Dedicado / Banda Larga</option>
+                            <option value="interconexao">Interconexão</option>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label>Tipo</label>
+                        <select id="id-tipo">
+                            <option value="GPON">GPON</option>
+                            <option value="PTP">PTP</option>
+                        </select>
+                    </div>
+                    <div class="campo hidden" id="id-campoLocal">
+                        <label>Local</label>
+                        <select id="id-local">
+                            <option value="FL">Filial</option>
+                            <option value="CONC">Concentrador</option>
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label>Sigla da cidade</label>
+                        <input type="text" id="id-cidade" placeholder="Ex: BCU">
+                    </div>
+                    <div class="campo">
+                        <label>Código cliente</label>
+                        <input type="text" id="id-cliente" placeholder="Ex: 309983">
+                    </div>
+                    <div class="campo">
+                        <label>Código circuito</label>
+                        <input type="text" id="id-circuito" placeholder="Ex: 03581917001">
+                    </div>
+                    <div class="campo">
+                        <label>Nome do cliente</label>
+                        <input type="text" id="id-nome" placeholder="Ex: INPLAC">
+                    </div>
+
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="idGerar()">Gerar</button>
+                        <button class="btn btn-success" onclick="idCopiar()">Copiar</button>
+                        <button class="btn btn-danger" onclick="idLimpar()">Novo</button>
+                    </div>
+
+                    <div class="resultado-box" id="id-resultado">—</div>
+                    <div class="copiado-msg" id="id-copiado">✓ Copiado para a área de transferência!</div>
+                </div>
+            </div>
+
+
+            <div class="page" id="page-ciasc">
+                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Ferramentas CIASC</h2>
+                        <p>Scripts VPLS / QoS e observação de cadastro para ZXR10</p>
+                    </div>
+                </div>
+
+                <div class="form-full">
+                    <div class="campo">
+                        <label>Selecione a ferramenta</label>
+                        <select id="ciasc-tipo" onchange="ciascTrocar()" style="max-width:520px;">
+                            <option value="">Selecione</option>
+                            <option value="vpls">Gerador de script sub-interfaces das VLANs + QoS</option>
+                            <option value="cadastro">Gerador de observação para cadastro CIASC — ZXR10</option>
+                        </select>
+                    </div>
+
+                    <div id="ciasc-blocoVPLS" class="hidden">
+                        <div class="campo">
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                <input type="checkbox" id="ciasc-novaVlan" onchange="ciascToggleNovaVlan()" style="width:auto;accent-color:var(--accent);">
+                                Precisa de VLAN nova?
+                            </label>
+                        </div>
+
+                        <div id="ciasc-blocoNovaVlan" class="hidden">
+                            <div class="porta-bloco">
+                                <label>VLANs novas / Pseudo-Wires</label>
+                                <div class="vlans-grid">
+                                    <label class="vlan-item"><input type="checkbox" value="650">650</label>
+                                    <label class="vlan-item"><input type="checkbox" value="690">690</label>
+                                    <label class="vlan-item"><input type="checkbox" value="903">903</label>
+                                    <label class="vlan-item"><input type="checkbox" value="601">601</label>
+                                    <label class="vlan-item"><input type="checkbox" value="602">602</label>
+                                    <label class="vlan-item"><input type="checkbox" value="603">603</label>
+                                    <label class="vlan-item"><input type="checkbox" value="604">604</label>
+                                    <label class="vlan-item"><input type="checkbox" value="605">605</label>
+                                    <label class="vlan-item"><input type="checkbox" value="606">606</label>
+                                    <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-divider">Portas TAGG e VLANs</div>
+
+                        <div id="ciasc-portasContainer">
+                            <div class="porta-bloco">
+                                <label>Porta TAGG</label>
+                                <select class="portaTagg" style="margin-bottom:10px;">
+                                    <option value="gei-0/1">gei-0/1 — PADRÃO</option>
+                                    <option value="gei-0/2">gei-0/2</option>
+                                    <option value="gei-0/3">gei-0/3</option>
+                                    <option value="gei-0/4">gei-0/4</option>
+                                </select>
+                                <label>VLANs</label>
+                                <div class="vlans-grid">
+                                    <label class="vlan-item"><input type="checkbox" value="650">650</label>
+                                    <label class="vlan-item"><input type="checkbox" value="690">690</label>
+                                    <label class="vlan-item"><input type="checkbox" value="903">903</label>
+                                    <label class="vlan-item"><input type="checkbox" value="601">601</label>
+                                    <label class="vlan-item"><input type="checkbox" value="602">602</label>
+                                    <label class="vlan-item"><input type="checkbox" value="603">603</label>
+                                    <label class="vlan-item"><input type="checkbox" value="604">604</label>
+                                    <label class="vlan-item"><input type="checkbox" value="605">605</label>
+                                    <label class="vlan-item"><input type="checkbox" value="606">606</label>
+                                    <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                                </div>
+                                <button class="btn btn-danger" style="margin-top:12px;font-size:12px;padding:7px 14px;" onclick="ciascRemoverPorta(this)">Remover Porta</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" style="margin-top:4px;" onclick="ciascAdicionarPorta()">+ Adicionar Porta</button>
+                    </div>
+
+                    <div id="ciasc-blocoCadastro" class="hidden" style="max-width:520px;">
+                        <div class="campo"><label>SN ONU</label><input type="text" id="ciasc-snonu" placeholder="Ex: ZTEGC4B3DC3F"></div>
+                        <div class="campo"><label>IP de Gerência</label><input type="text" id="ciasc-gerencia" placeholder="Ex: 10.29.5.66"></div>
+                        <div class="campo"><label>IP Loopback</label><input type="text" id="ciasc-loopback" placeholder="Ex: 198.18.0.11"></div>
+                        <div class="campo">
+                            <label>VLANs</label>
+                            <div class="vlans-grid">
+                                <label class="vlan-item"><input type="checkbox" value="650">650</label>
+                                <label class="vlan-item"><input type="checkbox" value="690">690</label>
+                                <label class="vlan-item"><input type="checkbox" value="903">903</label>
+                                <label class="vlan-item"><input type="checkbox" value="601">601</label>
+                                <label class="vlan-item"><input type="checkbox" value="602">602</label>
+                                <label class="vlan-item"><input type="checkbox" value="603">603</label>
+                                <label class="vlan-item"><input type="checkbox" value="604">604</label>
+                                <label class="vlan-item"><input type="checkbox" value="605">605</label>
+                                <label class="vlan-item"><input type="checkbox" value="606">606</label>
+                                <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-row" id="ciasc-btnRow" style="display:none;">
+                        <button class="btn btn-primary" onclick="ciascGerar()">Gerar</button>
+                        <button class="btn btn-success" onclick="ciascCopiar()">Copiar</button>
+                        <button class="btn btn-danger" onclick="ciascLimpar()">Novo</button>
+                    </div>
+
+                    <div class="resultado-box" id="ciasc-resultado" style="display:none;">—</div>
+                    <div class="copiado-msg" id="ciasc-copiado">✓ Copiado!</div>
+                </div>
+            </div>
+
+
+            <div class="page" id="page-ntp">
+                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Configuração NTP Server</h2>
+                        <p>Selecione a versão do RouterOS para gerar o script padrão de ajuste de horário.</p>
+                    </div>
+                </div>
+
+                <div class="form-wrap">
+                    <div class="campo">
+                        <label>Versão do MikroTik (RouterOS)</label>
+                        <select id="ntp-versao">
+                            <option value="v6">RouterOS v6</option>
+                            <option value="v7">RouterOS v7</option>
+                        </select>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="ntpGerar()">Gerar Script</button>
+                        <button class="btn btn-success" onclick="ntpCopiar()">Copiar</button>
+                    </div>
+                    <div class="resultado-box" id="ntp-resultado">—</div>
+                    <div class="copiado-msg" id="ntp-copiado">✓ Script copiado para a área de transferência!</div>
+                </div>
+            </div>
+
+
+            <div class="page" id="page-radius">
+                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Configuração de Acesso RADIUS</h2>
+                        <p>Gere o script padrão de gerência corporativa (RADIUS, Logs, DNS e Segurança) para equipamentos MikroTik.</p>
+                    </div>
+                </div>
+
+                <div class="form-wrap">
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="radiusGerar()">Exibir Script Padrão</button>
+                        <button class="btn btn-success" onclick="radiusCopiar()">Copiar</button>
+                    </div>
+                    <div class="resultado-box" id="radius-resultado">—</div>
+                    <div class="copiado-msg" id="radius-copiado">✓ Script copiado para a área de transferência!</div>
+                </div>
+            </div>
+
+
+            <div class="page" id="page-equip">
+                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Verificador de Equipamentos</h2>
+                        <p>Consulte o equipamento correto por modalidade, viabilidade e plano</p>
+                    </div>
+                </div>
+
+                <div class="equip-grid">
+                    <div class="equip-card">
+                        <label>1. Modalidade</label>
+                        <select id="eq-modalidade">
+                            <option value="">Selecione</option>
+                        </select>
+                    </div>
+                    <div class="equip-card">
+                        <label>2. Viabilidade</label>
+                        <select id="eq-viabilidade" disabled>
+                            <option value="">Selecione</option>
+                        </select>
+                    </div>
+                    <div class="equip-card">
+                        <label>3. Plano</label>
+                        <select id="eq-plano" disabled>
+                            <option value="">Selecione</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="resultado-equip" id="eq-resultado">
+                    <h3>Resultado</h3>
+                    <p style="color:var(--text3);font-size:13px;">Selecione as opções acima para ver o equipamento recomendado.</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
