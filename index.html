@@ -68,7 +68,15 @@
                 </svg>
                 Acesso RADIUS e DNS
             </button>
-            
+            <button class="nav-btn" id="nav-wifi" onclick="showPage('wifi', this)">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M12 20s-8-4.5-8-11.8A4 4 0 0 1 8 4c2.2 0 4 2 4 2s1.8-2 4-2a4 4 0 0 1 4 4.2C20 15.5 12 20 12 20z" />
+                    <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                </svg>
+                Wifi Business
+            </button>
+
             <div class="sidebar-section">Demais serviços</div>
             <button class="nav-btn" onclick="showPage('equip', this)">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -91,9 +99,11 @@
                 </div>
 
                 <div class="cards-grid">
-                    <div class="tool-card" onclick="showPage('identity', document.querySelector('.nav-btn:nth-child(3)'))">
+                    <div class="tool-card"
+                        onclick="showPage('identity', document.querySelector('.nav-btn:nth-child(3)'))">
                         <div class="tool-card-icon icon-blue">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <rect x="2" y="5" width="20" height="14" rx="2" />
                                 <path d="M2 10h20" />
                             </svg>
@@ -105,7 +115,8 @@
 
                     <div class="tool-card" onclick="showPage('ciasc', document.querySelector('[onclick*=ciasc]'))">
                         <div class="tool-card-icon icon-amber">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <polyline points="16,18 22,12 16,6" />
                                 <polyline points="8,6 2,12 8,18" />
                             </svg>
@@ -117,7 +128,8 @@
 
                     <div class="tool-card" onclick="showPage('ntp', document.querySelectorAll('.nav-btn')[4])">
                         <div class="tool-card-icon icon-purple">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <circle cx="12" cy="12" r="10" />
                                 <polyline points="12,6 12,12 16,14" />
                             </svg>
@@ -129,7 +141,8 @@
 
                     <div class="tool-card" onclick="showPage('radius', document.querySelectorAll('.nav-btn')[5])">
                         <div class="tool-card-icon icon-purple">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
                         </div>
@@ -137,10 +150,24 @@
                         <p>Geração do script padrão de gerência, segurança e logs para MikroTik.</p>
                         <span class="tool-card-tag tag-purple">Infraestrutura</span>
                     </div>
-
+                    <div class="tool-card" onclick="showPage('wifi', document.getElementById('nav-wifi'))">
+                        <div class="tool-card-icon icon-blue">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path
+                                    d="M12 20s-8-4.5-8-11.8A4 4 0 0 1 8 4c2.2 0 4 2 4 2s1.8-2 4-2a4 4 0 0 1 4 4.2C20 15.5 12 20 12 20z" />
+                                <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                            </svg>
+                        </div>
+                        <h3>Wifi Business</h3>
+                        <p>Gerador modular de scripts MikroTik para TP-Link/UniFi, VLANs, Isolamento e Hotspot Mambo.
+                        </p>
+                        <span class="tool-card-tag tag-blue">Infraestrutura</span>
+                    </div>
                     <div class="tool-card" onclick="showPage('equip', document.querySelector('[onclick*=equip]'))">
                         <div class="tool-card-icon icon-green">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <rect x="2" y="2" width="20" height="8" rx="2" />
                                 <rect x="2" y="14" width="20" height="8" rx="2" />
                                 <line x1="6" y1="6" x2="6.01" y2="6" />
@@ -245,7 +272,8 @@
                     <div id="ciasc-blocoVPLS" class="hidden">
                         <div class="campo">
                             <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-                                <input type="checkbox" id="ciasc-novaVlan" onchange="ciascToggleNovaVlan()" style="width:auto;accent-color:var(--accent);">
+                                <input type="checkbox" id="ciasc-novaVlan" onchange="ciascToggleNovaVlan()"
+                                    style="width:auto;accent-color:var(--accent);">
                                 Precisa de VLAN nova?
                             </label>
                         </div>
@@ -292,16 +320,21 @@
                                     <label class="vlan-item"><input type="checkbox" value="606">606</label>
                                     <label class="vlan-item"><input type="checkbox" value="999">999</label>
                                 </div>
-                                <button class="btn btn-danger" style="margin-top:12px;font-size:12px;padding:7px 14px;" onclick="ciascRemoverPorta(this)">Remover Porta</button>
+                                <button class="btn btn-danger" style="margin-top:12px;font-size:12px;padding:7px 14px;"
+                                    onclick="ciascRemoverPorta(this)">Remover Porta</button>
                             </div>
                         </div>
-                        <button class="btn btn-secondary" style="margin-top:4px;" onclick="ciascAdicionarPorta()">+ Adicionar Porta</button>
+                        <button class="btn btn-secondary" style="margin-top:4px;" onclick="ciascAdicionarPorta()">+
+                            Adicionar Porta</button>
                     </div>
 
                     <div id="ciasc-blocoCadastro" class="hidden" style="max-width:520px;">
-                        <div class="campo"><label>SN ONU</label><input type="text" id="ciasc-snonu" placeholder="Ex: ZTEGC4B3DC3F"></div>
-                        <div class="campo"><label>IP de Gerência</label><input type="text" id="ciasc-gerencia" placeholder="Ex: 10.29.5.66"></div>
-                        <div class="campo"><label>IP Loopback</label><input type="text" id="ciasc-loopback" placeholder="Ex: 198.18.0.11"></div>
+                        <div class="campo"><label>SN ONU</label><input type="text" id="ciasc-snonu"
+                                placeholder="Ex: ZTEGC4B3DC3F"></div>
+                        <div class="campo"><label>IP de Gerência</label><input type="text" id="ciasc-gerencia"
+                                placeholder="Ex: 10.29.5.66"></div>
+                        <div class="campo"><label>IP Loopback</label><input type="text" id="ciasc-loopback"
+                                placeholder="Ex: 198.18.0.11"></div>
                         <div class="campo">
                             <label>VLANs</label>
                             <div class="vlans-grid">
@@ -363,7 +396,7 @@
             </div>
 
 
-            <div class="page" id="page-radius">
+            <div class="page" id="page-wifi">
                 <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M5 12l7 7M5 12l7-7" />
@@ -372,21 +405,76 @@
                 </button>
                 <div class="tool-page-header">
                     <div>
-                        <h2>Configuração de Acesso RADIUS</h2>
-                        <p>Gere o script padrão de gerência corporativa (RADIUS, Logs, DNS e Segurança) para equipamentos MikroTik.</p>
+                        <h2>Script Gerador — Wifi Business</h2>
+                        <p>Selecione os parâmetros da rede para montar o script MikroTik personalizado.</p>
                     </div>
                 </div>
 
-                <div class="form-wrap">
-                    <div class="btn-row">
-                        <button class="btn btn-primary" onclick="radiusGerar()">Exibir Script Padrão</button>
-                        <button class="btn btn-success" onclick="radiusCopiar()">Copiar</button>
+                <div class="form-full">
+                    <div class="equip-grid">
+                        <div class="equip-card">
+                            <label>1. Equipamento (Adoção)</label>
+                            <select id="wifi-ap">
+                                <option value="tplink">TP-Link (Omada)</option>
+                                <option value="unifi">Ubiquiti (UniFi)</option>
+                                <option value="nenhum">Sem adoção de AP</option>
+                            </select>
+                        </div>
+                        <div class="equip-card">
+                            <label>3. Hotspot</label>
+                            <select id="wifi-mambo" onchange="wifiHotspotChange()">
+                                <option value="nao">Não</option>
+                                <option value="wifeed">Sim, com Wifeed</option>
+                                <option value="mambo">Sim, com Mambo</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="resultado-box" id="radius-resultado">—</div>
-                    <div class="copiado-msg" id="radius-copiado">✓ Script copiado para a área de transferência!</div>
+
+                    <div class="campo" id="wifi-identificador-wrap" style="max-width:300px; display:none;">
+                        <label>Identificador Mambo (Obrigatório)</label>
+                        <input type="text" id="wifi-identificador" placeholder="Ex: CLI_PADARIA">
+                    </div>
+
+                    <div class="section-divider">Redes a serem criadas (VLANs)</div>
+                    <div class="porta-bloco" style="max-width: 600px;">
+                        <label style="margin-bottom:12px;">Selecione quais VLANs devem ser provisionadas na
+                            Bridge-LAN</label>
+                        <div style="display:flex; flex-direction:column; gap:10px;">
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
+                                <input type="checkbox" id="vlan20" value="20" checked
+                                    style="width:auto;accent-color:var(--accent);"> VLAN 20 - Hotspot (10.0.0.1/22)
+                            </label>
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
+                                <input type="checkbox" id="vlan30" value="30"
+                                    style="width:auto;accent-color:var(--accent);"> VLAN 30 - Máquina de Cartão
+                                (10.5.4.1/23)
+                            </label>
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
+                                <input type="checkbox" id="vlan40" value="40" checked
+                                    style="width:auto;accent-color:var(--accent);"> VLAN 40 - Corporativo
+                                (10.10.10.1/23)
+                            </label>
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
+                                <input type="checkbox" id="vlan50" value="50"
+                                    style="width:auto;accent-color:var(--accent);"> VLAN 50 - Reserva (10.15.12.1/22)
+                            </label>
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
+                                <input type="checkbox" id="vlan60" value="60" checked
+                                    style="width:auto;accent-color:var(--accent);"> VLAN 60 - Gerência (10.20.20.1/24)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="wifiGerar()">Gerar Script</button>
+                        <button class="btn btn-success" onclick="wifiCopiar()">Copiar</button>
+                        <button class="btn btn-danger" onclick="wifiLimpar()">Limpar</button>
+                    </div>
+
+                    <div class="resultado-box" id="wifi-resultado" style="display:none;">—</div>
+                    <div class="copiado-msg" id="wifi-copiado">✓ Script copiado para a área de transferência!</div>
                 </div>
             </div>
-
 
             <div class="page" id="page-equip">
                 <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
@@ -425,7 +513,8 @@
 
                 <div class="resultado-equip" id="eq-resultado">
                     <h3>Resultado</h3>
-                    <p style="color:var(--text3);font-size:13px;">Selecione as opções acima para ver o equipamento recomendado.</p>
+                    <p style="color:var(--text3);font-size:13px;">Selecione as opções acima para ver o equipamento
+                        recomendado.</p>
                 </div>
             </div>
 
