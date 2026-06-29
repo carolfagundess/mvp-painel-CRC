@@ -480,6 +480,54 @@ function novoGerar() {
     }
 }
 
+function novoGerarSoRadius() {
+    const radiusScript = `/ip service set [find ] address=187.85.161.248/29,189.45.192.0/26,177.54.10.0/29,189.90.48.131/32 disabled=no
+/ip service set ftp,telnet,api,api-ssl disabled=yes
+/radius remove [find ]
+/radius add address=187.85.161.130 secret=99hxSGKae service=login
+/radius incoming set accept=no
+/user aaa
+set default-group=read use-radius=yes
+/user group add name=N1-Suporte policy=[/user group get value-name=policy number=[find name=full ]]
+/system logging
+set 0,1,2,3 action=disk
+/system logging action set 3 remote=187.85.161.130 remote-port=8514
+/system logging remove [find default=no]
+/system logging add action=remote topics=critical
+/system logging add action=remote topics=error,!ipsec
+/system logging add action=remote topics=info,!dhcp,!firewall
+/system logging add action=remote topics=warning,!dhcp
+/ip dns
+set servers=189.45.192.3,177.200.200.20`;
+
+    const resultBox = document.getElementById('novo-id-resultado');
+    if (resultBox) {
+        resultBox.style.display = 'block';
+        resultBox.textContent = `--- RADIUS E SERVICOS ---\n${radiusScript}`;
+    }
+    // Esconde obs pois não tem dados de cliente
+    const obsBox = document.getElementById('novo-obs-resultado');
+    if (obsBox) { obsBox.style.display = 'none'; obsBox.textContent = '—'; }
+}
+
+function novoGerarSoNtp() {
+    const v = document.getElementById('novo-ntp-versao').value;
+    let ntpScript = "";
+    if (v === "v6") {
+        ntpScript = `/system clock\nset time-zone-name=America/Sao_Paulo\n/system ntp client\nset enabled=yes primary-ntp=189.45.192.3`;
+    } else {
+        ntpScript = `/system clock\nset time-zone-name=America/Sao_Paulo\n/system ntp client\nset enabled=yes\n/system ntp client servers\nadd address=189.45.192.3\nadd address=177.200.200.20`;
+    }
+
+    const resultBox = document.getElementById('novo-id-resultado');
+    if (resultBox) {
+        resultBox.style.display = 'block';
+        resultBox.textContent = `--- NTP (${v}) ---\n${ntpScript}`;
+    }
+    const obsBox = document.getElementById('novo-obs-resultado');
+    if (obsBox) { obsBox.style.display = 'none'; obsBox.textContent = '—'; }
+}
+
 function novoCopiar() {
     const obsBox = document.getElementById('novo-obs-resultado');
     const scriptBox = document.getElementById('novo-id-resultado');

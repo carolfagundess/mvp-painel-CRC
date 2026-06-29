@@ -92,7 +92,9 @@
                         <div class="tool-card-icon icon-blue">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2">
-                                <path d="M12 2v6l4 2-4 2v6l-4-2-4 2V8l4-2-4-2V2l4 2 4-2z" />
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="8" x2="12" y2="16" />
+                                <line x1="8" y1="12" x2="16" y2="12" />
                             </svg>
                         </div>
                         <h3>Novo Acesso</h3>
@@ -235,6 +237,10 @@
                                 <button class="btn btn-primary" onclick="novoGerar()">Gerar Tudo</button>
                                 <button class="btn btn-success" onclick="novoCopiar()">Copiar Tudo</button>
                                 <button class="btn btn-danger" onclick="window.location.reload()">Limpar</button>
+                            </div>
+                            <div class="btn-row" style="margin-top: 8px;">
+                                <button class="btn btn-secondary" onclick="novoGerarSoRadius()">Gerar só RADIUS</button>
+                                <button class="btn btn-secondary" onclick="novoGerarSoNtp()">Gerar só NTP</button>
                             </div>
 
                             <div class="section-divider">Resultados</div>
