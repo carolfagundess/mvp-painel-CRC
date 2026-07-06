@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Ferramentas — CRC</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="src/shared/styles/style.css">
 </head>
 
 <body>
@@ -29,7 +29,8 @@
 
         <nav class="sidebar">
             <div class="sidebar-section">Início</div>
-            <button class="nav-btn active" onclick="showPage('home', this)">
+
+            <button id="nav-home" class="nav-btn active">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                     <polyline points="9,22 9,12 15,12 15,22" />
@@ -37,57 +38,49 @@
                 Início
             </button>
 
-            <div class="sidebar-section">Documentação de Cliente</div>
-            <button class="nav-btn" onclick="showPage('identity', this)">
+            <button id="nav-novo" class="nav-btn">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="5" width="20" height="14" rx="2" />
-                    <path d="M2 10h20" />
+                    <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                    <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                    <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                    <line x1="6" y1="18" x2="6.01" y2="18"></line>
                 </svg>
-                Gerador Identity
+                Novo Acesso
+                <span class="nav-badge">2</span>
             </button>
 
             <div class="sidebar-section">Infraestrutura</div>
-            <button class="nav-btn" onclick="showPage('ciasc', this)">
+
+            <button id="nav-ciasc" class="nav-btn">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="16,18 22,12 16,6" />
-                    <polyline points="8,6 2,12 8,18" />
+                    <polyline points="4 17 10 11 4 5"></polyline>
+                    <line x1="12" y1="19" x2="20" y2="19"></line>
                 </svg>
                 Ferramentas CIASC
                 <span class="nav-badge">2</span>
             </button>
-            <button class="nav-btn" onclick="showPage('ntp', this)">
+
+            <button id="nav-wifi" class="nav-btn">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10" />
-                    <polyline points="12,6 12,12 16,14" />
-                </svg>
-                NTP Server
-            </button>
-            <button class="nav-btn" onclick="showPage('radius', this)">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-                Acesso RADIUS e DNS
-            </button>
-            <button class="nav-btn" id="nav-wifi" onclick="showPage('wifi', this)">
-                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path
-                        d="M12 20s-8-4.5-8-11.8A4 4 0 0 1 8 4c2.2 0 4 2 4 2s1.8-2 4-2a4 4 0 0 1 4 4.2C20 15.5 12 20 12 20z" />
-                    <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                    <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                    <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                    <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                    <line x1="12" y1="20" x2="12.01" y2="20"></line>
                 </svg>
                 Wifi Business
             </button>
 
-            <div class="sidebar-section">Demais serviços</div>
-            <button class="nav-btn" onclick="showPage('equip', this)">
+            <div class="sidebar-section">Demais Serviços</div>
+
+            <button id="nav-equip" class="nav-btn">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="2" y="2" width="20" height="8" rx="2" />
-                    <rect x="2" y="14" width="20" height="8" rx="2" />
-                    <line x1="6" y1="6" x2="6.01" y2="6" />
-                    <line x1="6" y1="18" x2="6.01" y2="18" />
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2">
+                    </path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                    <path d="M9 14l2 2 4-4"></path>
                 </svg>
                 Verificador Equip.
             </button>
-
         </nav>
 
         <main class="main">
@@ -99,26 +92,30 @@
                 </div>
 
                 <div class="cards-grid">
-                    <div class="tool-card"
-                        onclick="showPage('identity', document.querySelector('.nav-btn:nth-child(3)'))">
+                    <!-- Card 1: Novo Acesso -->
+                    <div class="tool-card" onclick="showPage('novo')">
                         <div class="tool-card-icon icon-blue">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <rect x="2" y="5" width="20" height="14" rx="2" />
-                                <path d="M2 10h20" />
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+                                <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+                                <line x1="6" y1="6" x2="6.01" y2="6"></line>
+                                <line x1="6" y1="18" x2="6.01" y2="18"></line>
                             </svg>
                         </div>
-                        <h3>Gerador Identity</h3>
-                        <p>Gera strings de identidade CUST-RB para clientes Dedicado, Interconexão e mais.</p>
-                        <span class="tool-card-tag tag-blue">Documentação de Cliente</span>
+                        <h3>Novo Acesso</h3>
+                        <p>Ferramenta unificada para provisionar um equipamento novo: inclui Identity, RADIUS (incl. DNS
+                            e service) e NTP (opções v6/v7).</p>
+                        <span class="tool-card-tag tag-blue">Identity - Infraestrutura - Scripts</span>
                     </div>
 
-                    <div class="tool-card" onclick="showPage('ciasc', document.querySelector('[onclick*=ciasc]'))">
+                    <!-- Card 2: Ferramentas CIASC -->
+                    <div class="tool-card" onclick="showPage('ciasc')">
                         <div class="tool-card-icon icon-amber">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <polyline points="16,18 22,12 16,6" />
-                                <polyline points="8,6 2,12 8,18" />
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="4 17 10 11 4 5"></polyline>
+                                <line x1="12" y1="19" x2="20" y2="19"></line>
                             </svg>
                         </div>
                         <h3>Ferramentas CIASC</h3>
@@ -126,37 +123,15 @@
                         <span class="tool-card-tag tag-amber">Infraestrutura · 2 scripts</span>
                     </div>
 
-                    <div class="tool-card" onclick="showPage('ntp', document.querySelectorAll('.nav-btn')[4])">
-                        <div class="tool-card-icon icon-purple">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12,6 12,12 16,14" />
-                            </svg>
-                        </div>
-                        <h3>NTP Server</h3>
-                        <p>Geração rápida do script padrão de ajuste de horário para MikroTik (v6 e v7).</p>
-                        <span class="tool-card-tag tag-purple">Infraestrutura</span>
-                    </div>
-
-                    <div class="tool-card" onclick="showPage('radius', document.querySelectorAll('.nav-btn')[5])">
-                        <div class="tool-card-icon icon-purple">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                            </svg>
-                        </div>
-                        <h3>Acesso RADIUS</h3>
-                        <p>Geração do script padrão de gerência, segurança e logs para MikroTik.</p>
-                        <span class="tool-card-tag tag-purple">Infraestrutura</span>
-                    </div>
-                    <div class="tool-card" onclick="showPage('wifi', document.getElementById('nav-wifi'))">
+                    <!-- Card 3: Wifi Business -->
+                    <div class="tool-card" onclick="showPage('wifi')">
                         <div class="tool-card-icon icon-blue">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path
-                                    d="M12 20s-8-4.5-8-11.8A4 4 0 0 1 8 4c2.2 0 4 2 4 2s1.8-2 4-2a4 4 0 0 1 4 4.2C20 15.5 12 20 12 20z" />
-                                <path d="M12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" />
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                                <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                                <line x1="12" y1="20" x2="12.01" y2="20"></line>
                             </svg>
                         </div>
                         <h3>Wifi Business</h3>
@@ -164,14 +139,16 @@
                         </p>
                         <span class="tool-card-tag tag-blue">Infraestrutura</span>
                     </div>
-                    <div class="tool-card" onclick="showPage('equip', document.querySelector('[onclick*=equip]'))">
+
+                    <!-- Card 4: Verificador de Equipamentos -->
+                    <div class="tool-card" onclick="showPage('equip')">
                         <div class="tool-card-icon icon-green">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <rect x="2" y="2" width="20" height="8" rx="2" />
-                                <rect x="2" y="14" width="20" height="8" rx="2" />
-                                <line x1="6" y1="6" x2="6.01" y2="6" />
-                                <line x1="6" y1="18" x2="6.01" y2="18" />
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2">
+                                </path>
+                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                                <path d="M9 14l2 2 4-4"></path>
                             </svg>
                         </div>
                         <h3>Verificador de Equipamentos</h3>
@@ -180,73 +157,181 @@
                     </div>
                 </div>
             </div>
-            <div class="page" id="page-identity">
-                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+
+
+            <div class="page" id="page-novo">
+                <button class="back-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M5 12l7 7M5 12l7-7" />
                     </svg>
                     Voltar ao início
                 </button>
+
                 <div class="tool-page-header">
                     <div>
-                        <h2>Gerador Identity — RB</h2>
-                        <p>Gera a string de identidade no padrão CUST-RB-...</p>
+                        <h2>Novo Acesso</h2>
+                        <p>Ferramenta unificada para provisionamento de equipamentos.</p>
                     </div>
                 </div>
 
-                <div class="form-wrap">
-                    <div class="campo">
-                        <label>Modelo</label>
-                        <select id="id-modelo" onchange="idToggleLocal()">
-                            <option value="padrao">Dedicado / Banda Larga</option>
-                            <option value="interconexao">Interconexão</option>
-                        </select>
-                    </div>
-                    <div class="campo">
-                        <label>Tipo</label>
-                        <select id="id-tipo">
-                            <option value="GPON">GPON</option>
-                            <option value="PTP">PTP</option>
-                        </select>
-                    </div>
-                    <div class="campo hidden" id="id-campoLocal">
-                        <label>Local</label>
-                        <select id="id-local">
-                            <option value="FL">Filial</option>
-                            <option value="CONC">Concentrador</option>
-                        </select>
-                    </div>
-                    <div class="campo">
-                        <label>Sigla da cidade</label>
-                        <input type="text" id="id-cidade" placeholder="Ex: BCU">
-                    </div>
-                    <div class="campo">
-                        <label>Código cliente</label>
-                        <input type="text" id="id-cliente" placeholder="Ex: 309983">
-                    </div>
-                    <div class="campo">
-                        <label>Código circuito</label>
-                        <input type="text" id="id-circuito" placeholder="Ex: 03581917001">
-                    </div>
-                    <div class="campo">
-                        <label>Nome do cliente</label>
-                        <input type="text" id="id-nome" placeholder="Ex: INPLAC">
-                    </div>
+                <div class="form-full">
+                    <div class="layout-duas-colunas">
 
-                    <div class="btn-row">
-                        <button class="btn btn-primary" onclick="idGerar()">Gerar</button>
-                        <button class="btn btn-success" onclick="idCopiar()">Copiar</button>
-                        <button class="btn btn-danger" onclick="idLimpar()">Novo</button>
-                    </div>
+                        <!-- COLUNA ESQUERDA (Dados do Cliente) -->
+                        <div>
+                            <!-- Card: Configuração Inicial -->
+                            <div class="form-card">
+                                <div class="form-card-title">Configuração Básica</div>
+                                <div class="grid-2">
+                                    <div class="campo">
+                                        <label>Plano</label>
+                                        <select id="novo-modelo">
+                                            <option value="banda-larga">Banda Larga</option>
+                                            <option value="dedicado">Dedicado</option>
+                                            <option value="interconexao">Interconexão</option>
+                                        </select>
+                                    </div>
+                                    <div class="campo">
+                                        <label>Tipo de Acesso</label>
+                                        <select id="novo-tipo">
+                                            <option value="GPON">GPON</option>
+                                            <option value="PTP">PTP</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="campo hidden" id="novo-campoLocal" style="margin-top: 16px;">
+                                    <label>Local</label>
+                                    <select id="novo-local">
+                                        <option value="FL">Filial</option>
+                                        <option value="CONC">Concentrador</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                    <div class="resultado-box" id="id-resultado">—</div>
-                    <div class="copiado-msg" id="id-copiado">✓ Copiado para a área de transferência!</div>
+                            <!-- Card: Identificador do Equipamento -->
+                            <div class="form-card">
+                                <div class="form-card-title">Identificador do equipamento</div>
+                                <div class="grid-3-7" style="margin-bottom: 16px;">
+                                    <div class="campo"><label>Sigla</label><input type="text" id="novo-cidade"
+                                            placeholder="Ex: BCU"></div>
+                                    <div class="campo"><label>Código Cliente</label><input type="text" id="novo-cliente"
+                                            placeholder="Ex: 309983"></div>
+                                </div>
+                                <div class="grid-2">
+                                    <div class="campo"><label>Circuito</label><input type="text" id="novo-circuito"
+                                            placeholder="Ex: 03581917001"></div>
+                                    <div class="campo"><label>Nome do Cliente</label><input type="text" id="novo-nome"
+                                            placeholder="Ex: INPLAC"></div>
+                                </div>
+                            </div>
+
+                            <!-- Card: Observação -->
+                            <div class="form-card">
+                                <div class="form-card-title">Observação do Novo Cadastro</div>
+
+                                <!-- SEMPRE MOSTRA -->
+                                <div class="campo" style="margin-bottom: 16px;">
+                                    <label>MAC Address</label>
+                                    <input type="text" id="novo-mac" placeholder="Ex: 78:9A:18:F4:93:F5">
+                                </div>
+
+                                <!-- CONDICIONAL: GPON -->
+                                <div id="bloco-gpon-sn" class="campo" style="margin-bottom: 16px;">
+                                    <label>SN ONU</label>
+                                    <input type="text" id="novo-sn" placeholder="Ex: ZTEGCCE7FF93">
+                                </div>
+
+                                <!-- CONDICIONAL: PTP -->
+                                <div id="bloco-ptp-sw" class="hidden" style="margin-bottom: 16px;">
+                                    <div class="campo"><label>Switch Local + Porta</label><input type="text"
+                                            id="novo-sw-local" placeholder="Ex: SW-BKB-GPR-C XGE0/0/41"></div>
+                                </div>
+
+                                <!-- CONDICIONAL: DEDICADO -->
+                                <div id="bloco-dedicado-ips" class="hidden" style="margin-bottom: 16px;">
+                                    <div class="grid-2">
+                                        <div class="campo"><label>IP PTP (/31)</label><input type="text"
+                                                id="novo-ptp-dedicado" placeholder="Ex: 172.30.150.72/31"></div>
+                                        <div class="campo"><label>IP da Rede (/30)</label><input type="text"
+                                                id="novo-rede-dedicado" placeholder="Ex: 189.90.50.12/30"></div>
+                                    </div>
+                                </div>
+
+                                <!-- CONDICIONAL: BANDA LARGA -->
+                                <div id="bloco-bandalarga-ip" class="campo" style="margin-bottom: 16px;">
+                                    <label>IP Fixado (Se houver)</label>
+                                    <input type="text" id="novo-ip-fixado" placeholder="Ex: 189.90.50.10">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COLUNA DIREITA (Ações e Resultados) -->
+                        <div>
+                            <!-- Card: Ações de Provisionamento (Versão Compacta) -->
+                            <div class="form-card" style="padding: 16px; margin-bottom: 16px;">
+                                <div class="form-card-title" style="margin-bottom: 12px; padding-bottom: 8px;">
+                                    Opções de
+                                    Provisionamento</div>
+
+                                <!-- Checkboxes e Select na mesma linha -->
+                                <div
+                                    style="display: flex; gap: 24px; flex-wrap: wrap; align-items: center; margin-bottom: 16px;">
+                                    <label
+                                        style="display:flex;gap:8px;align-items:center; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase;">
+                                        <input type="checkbox" id="novo-includeRadius" checked
+                                            style="width:auto;accent-color:var(--accent); margin:0;">
+                                        Incluir RADIUS / DNS
+                                    </label>
+
+                                    <div style="display:flex;gap:8px;align-items:center;">
+                                        <label
+                                            style="display:flex;gap:8px;align-items:center; font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; margin-bottom: 0;">
+                                            <input type="checkbox" id="novo-includeNtp" checked
+                                                style="width:auto;accent-color:var(--accent); margin:0;">
+                                            Incluir NTP
+                                        </label>
+                                        <select id="novo-ntp-versao"
+                                            style="padding: 4px 8px; font-size: 12px; width: auto; min-width: 110px; background: var(--bg3); color: var(--text); border: 1px solid var(--border2); border-radius: var(--radius-sm); outline: none;">
+                                            <option value="v6">RouterOS v6</option>
+                                            <option value="v7">RouterOS v7</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Botões agrupados e menores -->
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                                    <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">Gerar
+                                        Tudo</button>
+                                    <button class="btn btn-success" style="padding: 6px 12px; font-size: 12px;">Copiar
+                                        Tudo</button>
+                                    <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Só
+                                        RADIUS</button>
+                                    <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;">Só
+                                        NTP</button>
+
+                                    <!-- Botão Limpar deslocado para a direita -->
+                                    <button class="btn btn-danger"
+                                        style="padding: 6px 12px; font-size: 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: var(--red); margin-left: auto;">Limpar</button>
+                                </div>
+                            </div>
+
+                            <!-- Card: Resultados -->
+                            <div class="form-card">
+                                <div class="form-card-title">Resultados</div>
+                                <div class="resultado-box" id="novo-id-resultado" style="margin-top:0; display:none;">—
+                                </div>
+                                <div class="resultado-box" id="novo-obs-resultado"
+                                    style="display:none; min-height: 40px; font-weight: bold;">—</div>
+                                <div class="copiado-msg" id="novo-copiado">✓ Copiado para a área de transferência!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-
+            <!--Página das Ferrramentas do CIASC-->
             <div class="page" id="page-ciasc">
-                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                <button class="back-btn" onclick="showPage('home', document.getElementById('nav-home'))">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M5 12l7 7M5 12l7-7" />
                     </svg>
@@ -260,144 +345,179 @@
                 </div>
 
                 <div class="form-full">
-                    <div class="campo">
-                        <label>Selecione a ferramenta</label>
-                        <select id="ciasc-tipo" onchange="ciascTrocar()" style="max-width:520px;">
-                            <option value="">Selecione</option>
-                            <option value="vpls">Gerador de script sub-interfaces das VLANs + QoS</option>
-                            <option value="cadastro">Gerador de observação para cadastro CIASC — ZXR10</option>
-                        </select>
-                    </div>
+                    <div class="layout-duas-colunas">
 
-                    <div id="ciasc-blocoVPLS" class="hidden">
-                        <div class="campo">
-                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
-                                <input type="checkbox" id="ciasc-novaVlan" onchange="ciascToggleNovaVlan()"
-                                    style="width:auto;accent-color:var(--accent);">
-                                Precisa de VLAN nova?
-                            </label>
-                        </div>
+                        <!-- COLUNA ESQUERDA (Inputs) -->
+                        <div>
+                            <div class="form-card">
+                                <div class="form-card-title">Configuração Inicial</div>
+                                <div class="campo" style="margin-bottom: 0;">
+                                    <label>Selecione a ferramenta</label>
+                                    <select id="ciasc-tipo" onchange="ciascTrocar()">
+                                        <option value="">Selecione</option>
+                                        <option value="vpls">Gerador de script sub-interfaces das VLANs + QoS
+                                        </option>
+                                        <option value="cadastro">Gerador de observação para cadastro CIASC — ZXR10
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
 
-                        <div id="ciasc-blocoNovaVlan" class="hidden">
-                            <div class="porta-bloco">
-                                <label>VLANs novas / Pseudo-Wires</label>
-                                <div class="vlans-grid">
-                                    <label class="vlan-item"><input type="checkbox" value="650">650</label>
-                                    <label class="vlan-item"><input type="checkbox" value="690">690</label>
-                                    <label class="vlan-item"><input type="checkbox" value="903">903</label>
-                                    <label class="vlan-item"><input type="checkbox" value="601">601</label>
-                                    <label class="vlan-item"><input type="checkbox" value="602">602</label>
-                                    <label class="vlan-item"><input type="checkbox" value="603">603</label>
-                                    <label class="vlan-item"><input type="checkbox" value="604">604</label>
-                                    <label class="vlan-item"><input type="checkbox" value="605">605</label>
-                                    <label class="vlan-item"><input type="checkbox" value="606">606</label>
-                                    <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                            <!-- BLOCO VPLS -->
+                            <div id="ciasc-blocoVPLS" class="hidden">
+                                <div class="form-card">
+                                    <div class="form-card-title">Parâmetros VPLS e QoS</div>
+
+                                    <div class="campo">
+                                        <label>VLAN de Enlace InterLAN</label>
+                                        <select id="ciasc-vlanEnlace" style="max-width:200px;">
+                                            <option value="4042">4042</option>
+                                            <option value="3042">3042</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="campo" style="margin-top: 24px;">
+                                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+                                            <input type="checkbox" id="ciasc-novaVlan" onchange="ciascToggleNovaVlan()"
+                                                style="width:auto;accent-color:var(--accent);">
+                                            Precisa de VLAN nova?
+                                        </label>
+                                    </div>
+
+                                    <div id="ciasc-blocoNovaVlan" class="hidden">
+                                        <div class="porta-bloco">
+                                            <label>VLANs novas / Pseudo-Wires</label>
+                                            <div class="vlans-grid">
+                                                <label class="vlan-item"><input type="checkbox" value="650">650</label>
+                                                <label class="vlan-item"><input type="checkbox" value="690">690</label>
+                                                <label class="vlan-item"><input type="checkbox" value="903">903</label>
+                                                <label class="vlan-item"><input type="checkbox" value="601">601</label>
+                                                <label class="vlan-item"><input type="checkbox" value="602">602</label>
+                                                <label class="vlan-item"><input type="checkbox" value="603">603</label>
+                                                <label class="vlan-item"><input type="checkbox" value="604">604</label>
+                                                <label class="vlan-item"><input type="checkbox" value="605">605</label>
+                                                <label class="vlan-item"><input type="checkbox" value="606">606</label>
+                                                <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="section-divider">Portas TAGG e VLANs</div>
+
+                                    <div id="ciasc-portasContainer">
+                                        <div class="porta-bloco">
+                                            <label>Porta TAGG</label>
+                                            <select class="portaTagg" style="margin-bottom:10px;">
+                                                <option value="gei-0/1">gei-0/1 — PADRÃO</option>
+                                                <option value="gei-0/2">gei-0/2</option>
+                                                <option value="gei-0/3">gei-0/3</option>
+                                                <option value="gei-0/4">gei-0/4</option>
+                                            </select>
+                                            <label>VLANs</label>
+                                            <div class="vlans-grid">
+                                                <label class="vlan-item"><input type="checkbox" value="650">650</label>
+                                                <label class="vlan-item"><input type="checkbox" value="690">690</label>
+                                                <label class="vlan-item"><input type="checkbox" value="903">903</label>
+                                                <label class="vlan-item"><input type="checkbox" value="601">601</label>
+                                                <label class="vlan-item"><input type="checkbox" value="602">602</label>
+                                                <label class="vlan-item"><input type="checkbox" value="603">603</label>
+                                                <label class="vlan-item"><input type="checkbox" value="604">604</label>
+                                                <label class="vlan-item"><input type="checkbox" value="605">605</label>
+                                                <label class="vlan-item"><input type="checkbox" value="606">606</label>
+                                                <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                                            </div>
+                                            <button class="btn btn-danger"
+                                                style="margin-top:12px;font-size:12px;padding:7px 14px;"
+                                                onclick="ciascRemoverPorta(this)">Remover Porta</button>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-secondary" style="margin-top:4px;"
+                                        onclick="ciascAdicionarPorta()">+ Adicionar Porta</button>
+                                </div>
+                            </div>
+
+                            <!-- BLOCO CADASTRO -->
+                            <div id="ciasc-blocoCadastro" class="hidden">
+                                <div class="form-card">
+                                    <div class="form-card-title">Dados de Cadastro</div>
+                                    <div class="campo"><label>SN ONU</label><input type="text" id="ciasc-snonu"
+                                            placeholder="Ex: ZTEGC4B3DC3F"></div>
+                                    <div class="campo"><label>IP de Gerência</label><input type="text"
+                                            id="ciasc-gerencia" placeholder="Ex: 10.29.5.66"></div>
+                                    <div class="campo"><label>IP Loopback</label><input type="text" id="ciasc-loopback"
+                                            placeholder="Ex: 198.18.0.11"></div>
+                                    <div class="campo" style="margin-bottom: 0;">
+                                        <label>VLANs</label>
+                                        <div class="vlans-grid">
+                                            <label class="vlan-item"><input type="checkbox" value="650">650</label>
+                                            <label class="vlan-item"><input type="checkbox" value="690">690</label>
+                                            <label class="vlan-item"><input type="checkbox" value="903">903</label>
+                                            <label class="vlan-item"><input type="checkbox" value="601">601</label>
+                                            <label class="vlan-item"><input type="checkbox" value="602">602</label>
+                                            <label class="vlan-item"><input type="checkbox" value="603">603</label>
+                                            <label class="vlan-item"><input type="checkbox" value="604">604</label>
+                                            <label class="vlan-item"><input type="checkbox" value="605">605</label>
+                                            <label class="vlan-item"><input type="checkbox" value="606">606</label>
+                                            <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="section-divider">Portas TAGG e VLANs</div>
-
-                        <div id="ciasc-portasContainer">
-                            <div class="porta-bloco">
-                                <label>Porta TAGG</label>
-                                <select class="portaTagg" style="margin-bottom:10px;">
-                                    <option value="gei-0/1">gei-0/1 — PADRÃO</option>
-                                    <option value="gei-0/2">gei-0/2</option>
-                                    <option value="gei-0/3">gei-0/3</option>
-                                    <option value="gei-0/4">gei-0/4</option>
-                                </select>
-                                <label>VLANs</label>
-                                <div class="vlans-grid">
-                                    <label class="vlan-item"><input type="checkbox" value="650">650</label>
-                                    <label class="vlan-item"><input type="checkbox" value="690">690</label>
-                                    <label class="vlan-item"><input type="checkbox" value="903">903</label>
-                                    <label class="vlan-item"><input type="checkbox" value="601">601</label>
-                                    <label class="vlan-item"><input type="checkbox" value="602">602</label>
-                                    <label class="vlan-item"><input type="checkbox" value="603">603</label>
-                                    <label class="vlan-item"><input type="checkbox" value="604">604</label>
-                                    <label class="vlan-item"><input type="checkbox" value="605">605</label>
-                                    <label class="vlan-item"><input type="checkbox" value="606">606</label>
-                                    <label class="vlan-item"><input type="checkbox" value="999">999</label>
+                        <!-- COLUNA DIREITA (Ações, Resultados e Disclaimer) -->
+                        <div>
+                            <!-- BLOCO DE DISCLAIMER -->
+                            <div class="form-card"
+                                style="border-color: rgba(245, 158, 11, 0.3); background: var(--amber-bg);">
+                                <div style="display:flex; gap:12px; align-items:flex-start;">
+                                    <svg style="color: var(--amber-light); flex-shrink: 0;" width="20" height="20"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                                        </path>
+                                        <line x1="12" y1="9" x2="12" y2="13"></line>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    <div>
+                                        <h3
+                                            style="color: var(--amber-light); font-size: 14px; font-weight: 600; margin-bottom: 4px;">
+                                            Atenção!</h3>
+                                        <p style="color: var(--text); font-size: 13px; line-height: 1.5;">
+                                            Sempre verifique em Notepad++ antes de aplicar o script gerado em um
+                                            equipamento ZXR10 em produção.<br>
+                                            VLAN 4042 (198.18.0.254)<br>
+                                            VLAN 3042 ( 198.20.0.254)
+                                        </p>
+                                    </div>
                                 </div>
-                                <button class="btn btn-danger" style="margin-top:12px;font-size:12px;padding:7px 14px;"
-                                    onclick="ciascRemoverPorta(this)">Remover Porta</button>
+                            </div>
+
+                            <!-- BLOCO DE RESULTADO -->
+                            <div class="form-card">
+                                <div class="form-card-title">Ações e Resultado</div>
+
+                                <div class="btn-row" id="ciasc-btnRow"
+                                    style="display:none; margin-top: 0; margin-bottom: 16px;">
+                                    <button class="btn btn-primary" onclick="ciascGerar()">Gerar Script</button>
+                                    <button class="btn btn-success" onclick="ciascCopiar()">Copiar Tudo</button>
+                                    <button class="btn btn-danger" onclick="ciascLimpar()">Limpar</button>
+                                </div>
+
+                                <div class="resultado-box" id="ciasc-resultado" style="display:none; margin-top: 0;">—
+                                </div>
+                                <div class="copiado-msg" id="ciasc-copiado">✓ Copiado para a área de transferência!
+                                </div>
                             </div>
                         </div>
-                        <button class="btn btn-secondary" style="margin-top:4px;" onclick="ciascAdicionarPorta()">+
-                            Adicionar Porta</button>
-                    </div>
 
-                    <div id="ciasc-blocoCadastro" class="hidden" style="max-width:520px;">
-                        <div class="campo"><label>SN ONU</label><input type="text" id="ciasc-snonu"
-                                placeholder="Ex: ZTEGC4B3DC3F"></div>
-                        <div class="campo"><label>IP de Gerência</label><input type="text" id="ciasc-gerencia"
-                                placeholder="Ex: 10.29.5.66"></div>
-                        <div class="campo"><label>IP Loopback</label><input type="text" id="ciasc-loopback"
-                                placeholder="Ex: 198.18.0.11"></div>
-                        <div class="campo">
-                            <label>VLANs</label>
-                            <div class="vlans-grid">
-                                <label class="vlan-item"><input type="checkbox" value="650">650</label>
-                                <label class="vlan-item"><input type="checkbox" value="690">690</label>
-                                <label class="vlan-item"><input type="checkbox" value="903">903</label>
-                                <label class="vlan-item"><input type="checkbox" value="601">601</label>
-                                <label class="vlan-item"><input type="checkbox" value="602">602</label>
-                                <label class="vlan-item"><input type="checkbox" value="603">603</label>
-                                <label class="vlan-item"><input type="checkbox" value="604">604</label>
-                                <label class="vlan-item"><input type="checkbox" value="605">605</label>
-                                <label class="vlan-item"><input type="checkbox" value="606">606</label>
-                                <label class="vlan-item"><input type="checkbox" value="999">999</label>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="btn-row" id="ciasc-btnRow" style="display:none;">
-                        <button class="btn btn-primary" onclick="ciascGerar()">Gerar</button>
-                        <button class="btn btn-success" onclick="ciascCopiar()">Copiar</button>
-                        <button class="btn btn-danger" onclick="ciascLimpar()">Novo</button>
-                    </div>
-
-                    <div class="resultado-box" id="ciasc-resultado" style="display:none;">—</div>
-                    <div class="copiado-msg" id="ciasc-copiado">✓ Copiado!</div>
                 </div>
             </div>
-
-
-            <div class="page" id="page-ntp">
-                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
-                    </svg>
-                    Voltar ao início
-                </button>
-                <div class="tool-page-header">
-                    <div>
-                        <h2>Configuração NTP Server</h2>
-                        <p>Selecione a versão do RouterOS para gerar o script padrão de ajuste de horário.</p>
-                    </div>
-                </div>
-
-                <div class="form-wrap">
-                    <div class="campo">
-                        <label>Versão do MikroTik (RouterOS)</label>
-                        <select id="ntp-versao">
-                            <option value="v6">RouterOS v6</option>
-                            <option value="v7">RouterOS v7</option>
-                        </select>
-                    </div>
-                    <div class="btn-row">
-                        <button class="btn btn-primary" onclick="ntpGerar()">Gerar Script</button>
-                        <button class="btn btn-success" onclick="ntpCopiar()">Copiar</button>
-                    </div>
-                    <div class="resultado-box" id="ntp-resultado">—</div>
-                    <div class="copiado-msg" id="ntp-copiado">✓ Script copiado para a área de transferência!</div>
-                </div>
-            </div>
-
 
             <div class="page" id="page-wifi">
-                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                <button class="back-btn">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M5 12l7 7M5 12l7-7" />
                     </svg>
@@ -407,6 +527,19 @@
                     <div>
                         <h2>Script Gerador — Wifi Business</h2>
                         <p>Selecione os parâmetros da rede para montar o script MikroTik personalizado.</p>
+                        <!-- BOTÃO QUE CHAMA A DOC -->
+                        <button id="btn-show-doc-wifi" class="btn btn-secondary"
+                            style="margin-top: 14px; display: flex; align-items: center; gap: 8px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            Ver Documentação sobre Redes Wifi Business
+                        </button>
                     </div>
                 </div>
 
@@ -421,8 +554,8 @@
                             </select>
                         </div>
                         <div class="equip-card">
-                            <label>3. Hotspot</label>
-                            <select id="wifi-mambo" onchange="wifiHotspotChange()">
+                            <label>2. Hotspot</label>
+                            <select id="wifi-mambo">
                                 <option value="nao">Não</option>
                                 <option value="wifeed">Sim, com Wifeed</option>
                                 <option value="mambo">Sim, com Mambo</option>
@@ -446,8 +579,8 @@
                             </label>
                             <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
                                 <input type="checkbox" id="vlan30" value="30"
-                                    style="width:auto;accent-color:var(--accent);"> VLAN 30 - Máquina de Cartão
-                                (10.5.4.1/23)
+                                    style="width:auto;accent-color:var(--accent);">
+                                VLAN 30 - Máquina de Cartão (10.5.4.1/23)
                             </label>
                             <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
                                 <input type="checkbox" id="vlan40" value="40" checked
@@ -456,28 +589,222 @@
                             </label>
                             <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
                                 <input type="checkbox" id="vlan50" value="50"
-                                    style="width:auto;accent-color:var(--accent);"> VLAN 50 - Reserva (10.15.12.1/22)
+                                    style="width:auto;accent-color:var(--accent);">
+                                VLAN 50 - Reserva (10.15.12.1/22)
                             </label>
                             <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
                                 <input type="checkbox" id="vlan60" value="60" checked
-                                    style="width:auto;accent-color:var(--accent);"> VLAN 60 - Gerência (10.20.20.1/24)
+                                    style="width:auto;accent-color:var(--accent);"> VLAN 60 - Gerência
+                                (10.20.20.1/24)
                             </label>
                         </div>
                     </div>
 
                     <div class="btn-row">
-                        <button class="btn btn-primary" onclick="wifiGerar()">Gerar Script</button>
-                        <button class="btn btn-success" onclick="wifiCopiar()">Copiar</button>
-                        <button class="btn btn-danger" onclick="wifiLimpar()">Limpar</button>
+                        <button class="btn btn-primary">Gerar Script</button>
+                        <button class="btn btn-success">Copiar</button>
+                        <button class="btn btn-danger">Limpar</button>
                     </div>
 
                     <div class="resultado-box" id="wifi-resultado" style="display:none;">—</div>
                     <div class="copiado-msg" id="wifi-copiado">✓ Script copiado para a área de transferência!</div>
                 </div>
             </div>
+            <div class="page" id="page-doc-wifi">
+                <button class="back-btn" id="btn-back-doc-wifi"
+                    onclick="showPage('wifi', document.getElementById('nav-wifi'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar para o Script Gerador
+                </button>
 
+                <!-- Página documentação Script Wifi Business -->
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Documentação da Topologia — Wifi Business</h2>
+                        <p>Estrutura padrão de provisionamento, VLANs, IPs e regras de rede.</p>
+                    </div>
+                </div>
+
+                <div class="section-divider" style="margin-top: 0;">Resumo Geral da Topologia</div>
+                <div class="table-responsive">
+                    <table class="doc-table">
+                        <thead>
+                            <tr>
+                                <th>VLAN ID</th>
+                                <th>Nome da Rede</th>
+                                <th>Interface / Gateway</th>
+                                <th>Faixa DHCP (Pool)</th>
+                                <th>Firewall RAW</th>
+                                <th>Finalidade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>—</td>
+                                <td>Rede de Adoção</td>
+                                <td>BRIDGE-LAN<br>192.168.200.1/24</td>
+                                <td>192.168.200.2 - 254</td>
+                                <td>Não isolada</td>
+                                <td>Provisionamento de APs UniFi e TP-Link</td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td>HOTSPOT</td>
+                                <td>VLAN_20_HOTSPOT<br>10.0.0.1/22</td>
+                                <td>10.0.0.2 - 10.0.3.254</td>
+                                <td>Isolada</td>
+                                <td>Rede para clientes Wi-Fi com Hotspot</td>
+                            </tr>
+                            <tr>
+                                <td>30</td>
+                                <td>MÁQUINAS DE CARTÃO</td>
+                                <td>VLAN_30_MAQ_CARTAO<br>10.5.4.1/23</td>
+                                <td>10.5.4.2 - 10.5.5.254</td>
+                                <td>Isolada</td>
+                                <td>Rede exclusiva para Pontos de Venda</td>
+                            </tr>
+                            <tr>
+                                <td>40</td>
+                                <td>CORPORATIVO</td>
+                                <td>VLAN_40_CORPORATIVO<br>10.10.10.1/23</td>
+                                <td>10.10.10.2 - 10.10.11.254</td>
+                                <td>Isolada</td>
+                                <td>Computadores, notebooks e dispositivos internos</td>
+                            </tr>
+                            <tr>
+                                <td>50</td>
+                                <td>RESERVA</td>
+                                <td>VLAN_50_RESERVA<br>10.15.12.1/22</td>
+                                <td>10.15.12.2 - 10.15.15.254</td>
+                                <td>Isolada</td>
+                                <td>Rede destinada a expansão futura ou uso temporário</td>
+                            </tr>
+                            <tr>
+                                <td>60</td>
+                                <td>GERÊNCIA</td>
+                                <td>VLAN_60_GERENCIA<br>10.20.20.1/24</td>
+                                <td>10.20.20.2 - 10.20.20.254</td>
+                                <td>Sem bloqueio</td>
+                                <td>Administração da infraestrutura (Equipamentos)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                    <div>
+                        <div class="section-divider">Estrutura da Bridge</div>
+                        <table class="doc-table">
+                            <tbody>
+                                <tr>
+                                    <th>Nome</th>
+                                    <td>BRIDGE-LAN</td>
+                                </tr>
+                                <tr>
+                                    <th>Interface Física</th>
+                                    <td>ether5</td>
+                                </tr>
+                                <tr>
+                                    <th>Protocolo</th>
+                                    <td>RSTP</td>
+                                </tr>
+                                <tr>
+                                    <th>IP da Bridge</th>
+                                    <td>192.168.200.1/24</td>
+                                </tr>
+                                <tr>
+                                    <th>VLANs Adicionadas</th>
+                                    <td>20, 30, 40, 50 e 60</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div>
+                        <div class="section-divider">Servidores DHCP e Leases</div>
+                        <table class="doc-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Gateway</th>
+                                    <th>Lease Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>DHCP_ADOCAO</td>
+                                    <td>192.168.200.1</td>
+                                    <td>10 min</td>
+                                </tr>
+                                <tr>
+                                    <td>DHCP_HOTSPOT</td>
+                                    <td>10.0.0.1</td>
+                                    <td>15 min</td>
+                                </tr>
+                                <tr>
+                                    <td>DHCP_MAQ_CARTAO</td>
+                                    <td>10.5.4.1</td>
+                                    <td>30 min</td>
+                                </tr>
+                                <tr>
+                                    <td>DHCP_CORP</td>
+                                    <td>10.10.10.1</td>
+                                    <td>30 min</td>
+                                </tr>
+                                <tr>
+                                    <td>DHCP_RESERVA</td>
+                                    <td>10.15.12.1</td>
+                                    <td>15 min</td>
+                                </tr>
+                                <tr>
+                                    <td>DHCP_GERENCIA</td>
+                                    <td>10.20.20.1</td>
+                                    <td>1h 59min</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="section-divider">Firewall e Isolamento (RAW)</div>
+                <ul class="doc-list">
+                    <li><strong>Address List <code>BLOCK_REDES</code>:</strong> Reúne as redes internas 10.0.0.0/22
+                        (Hotspot), 10.5.4.0/23 (Máquinas de Cartão), 10.10.10.0/23 (Corporativo) e 10.15.12.0/22
+                        (Reserva).</li>
+                    <li><strong>Isolamento entre VLANs:</strong> Regras no Firewall RAW (prerouting) impedem que
+                        dispositivos das VLANs 20, 30, 40 e 50 acessem as demais redes listadas em
+                        <code>BLOCK_REDES</code>.
+                    </li>
+                    <li><strong>Exceção da VLAN 20 (Hotspot):</strong> Os clientes podem se comunicar com o gateway
+                        10.0.0.1, permitindo o funcionamento do DHCP, DNS (quando fornecido pelo MikroTik) e do
+                        Hotspot/Portal Captivo.</li>
+                    <li><strong>VLAN 60 (Gerência):</strong> Não faz parte da <code>BLOCK_REDES</code> e não possui
+                        regras de bloqueio em raw, podendo acessar as demais redes para fins de administração (salvo
+                        se
+                        existirem outras regras de firewall restringindo esse acesso).</li>
+                    <li><strong>Processamento em RAW:</strong> O bloqueio é realizado antes do Connection Tracking,
+                        reduzindo o consumo de CPU e melhorando o desempenho do roteador.</li>
+                    <li><strong>NAT (Masquerade):</strong> Configurado para todas as redes provisionadas, permitindo
+                        que
+                        elas acessem a Internet utilizando o endereço IP da interface de saída.</li>
+                </ul>
+                <div class="section-divider">Observações e Padrões Fixos</div>
+                <ul class="doc-list">
+                    <li>Todas as VLANs possuem <strong>DHCP próprio</strong> e <strong>Pool de IP dedicado</strong>.
+                    </li>
+                    <li>O servidor DNS entregue via DHCP para todas as VLANs é sempre <strong>8.8.8.8</strong> e
+                        <strong>8.8.4.4</strong>.
+                    </li>
+                    <li>A rede da Bridge <strong>192.168.200.0/24</strong> destina-se exclusivamente ao
+                        provisionamento/adoção de Access Points, isolando este tráfego das demais redes.</li>
+                </ul>
+            </div>
+
+            <!--Página de viabilidade de equipamento-->
             <div class="page" id="page-equip">
-                <button class="back-btn" onclick="showPage('home', document.querySelector('.nav-btn'))">
+                <button class="back-btn" onclick="showPage('home', document.getElementById('nav-home'))">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 12H5M5 12l7 7M5 12l7-7" />
                     </svg>
@@ -490,38 +817,75 @@
                     </div>
                 </div>
 
-                <div class="equip-grid">
-                    <div class="equip-card">
-                        <label>1. Modalidade</label>
-                        <select id="eq-modalidade">
-                            <option value="">Selecione</option>
-                        </select>
+                <div class="page" id="page-equip">
+                    <button class="back-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                        </svg>
+                        Voltar ao início
+                    </button>
+                    <div class="tool-page-header">
+                        <div>
+                            <h2>Verificador de Equipamentos</h2>
+                            <p>Consulte o equipamento correto por modalidade, viabilidade e plano</p>
+                        </div>
                     </div>
-                    <div class="equip-card">
-                        <label>2. Viabilidade</label>
-                        <select id="eq-viabilidade" disabled>
-                            <option value="">Selecione</option>
-                        </select>
-                    </div>
-                    <div class="equip-card">
-                        <label>3. Plano</label>
-                        <select id="eq-plano" disabled>
-                            <option value="">Selecione</option>
-                        </select>
+
+                    <div class="form-full">
+                        <div class="layout-duas-colunas">
+
+                            <!-- COLUNA ESQUERDA (Parâmetros de Busca) -->
+                            <div>
+                                <div class="form-card">
+                                    <div class="form-card-title">Parâmetros de Busca</div>
+
+                                    <div class="campo">
+                                        <label>1. Modalidade</label>
+                                        <select id="eq-modalidade">
+                                            <option value="">Selecione</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="campo">
+                                        <label>2. Viabilidade</label>
+                                        <select id="eq-viabilidade" disabled>
+                                            <option value="">Selecione</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="campo">
+                                        <label>3. Plano</label>
+                                        <select id="eq-plano" disabled>
+                                            <option value="">Selecione</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- COLUNA DIREITA (Resultado) -->
+                            <div>
+                                <div class="form-card">
+                                    <div class="form-card-title">Resultado da Análise</div>
+
+                                    <!-- Mantemos o ID original para o JS não quebrar -->
+                                    <div class="resultado-equip" id="eq-resultado"
+                                        style="border: none; padding: 0; background: transparent; min-height: auto;">
+                                        <p style="color:var(--text3);font-size:13px;">Selecione as opções ao lado
+                                            para
+                                            ver o
+                                            equipamento recomendado.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-
-                <div class="resultado-equip" id="eq-resultado">
-                    <h3>Resultado</h3>
-                    <p style="color:var(--text3);font-size:13px;">Selecione as opções acima para ver o equipamento
-                        recomendado.</p>
-                </div>
-            </div>
-
         </main>
     </div>
 
-    <script src="app.js"></script>
+    <script type="module" src="src/core/main.js"></script>
 </body>
 
 </html>
