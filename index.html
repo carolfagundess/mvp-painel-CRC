@@ -817,71 +817,56 @@
                     </div>
                 </div>
 
-                <div class="page" id="page-equip">
-                    <button class="back-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M19 12H5M5 12l7 7M5 12l7-7" />
-                        </svg>
-                        Voltar ao início
-                    </button>
-                    <div class="tool-page-header">
+                <div class="form-full">
+                    <div class="layout-duas-colunas">
+
+                        <!-- COLUNA ESQUERDA (Parâmetros de Busca) -->
                         <div>
-                            <h2>Verificador de Equipamentos</h2>
-                            <p>Consulte o equipamento correto por modalidade, viabilidade e plano</p>
-                        </div>
-                    </div>
+                            <div class="form-card">
+                                <div class="form-card-title">Parâmetros de Busca</div>
 
-                    <div class="form-full">
-                        <div class="layout-duas-colunas">
+                                <div class="campo">
+                                    <label>1. Modalidade</label>
+                                    <select id="eq-modalidade">
+                                        <option value="">Selecione</option>
+                                    </select>
+                                </div>
 
-                            <!-- COLUNA ESQUERDA (Parâmetros de Busca) -->
-                            <div>
-                                <div class="form-card">
-                                    <div class="form-card-title">Parâmetros de Busca</div>
+                                <div class="campo">
+                                    <label>2. Viabilidade</label>
+                                    <select id="eq-viabilidade" disabled>
+                                        <option value="">Selecione</option>
+                                    </select>
+                                </div>
 
-                                    <div class="campo">
-                                        <label>1. Modalidade</label>
-                                        <select id="eq-modalidade">
-                                            <option value="">Selecione</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="campo">
-                                        <label>2. Viabilidade</label>
-                                        <select id="eq-viabilidade" disabled>
-                                            <option value="">Selecione</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="campo">
-                                        <label>3. Plano</label>
-                                        <select id="eq-plano" disabled>
-                                            <option value="">Selecione</option>
-                                        </select>
-                                    </div>
+                                <div class="campo">
+                                    <label>3. Plano</label>
+                                    <select id="eq-plano" disabled>
+                                        <option value="">Selecione</option>
+                                    </select>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- COLUNA DIREITA (Resultado) -->
-                            <div>
-                                <div class="form-card">
-                                    <div class="form-card-title">Resultado da Análise</div>
+                        <!-- COLUNA DIREITA (Resultado) -->
+                        <div>
+                            <div class="form-card">
+                                <div class="form-card-title">Resultado da Análise</div>
 
-                                    <!-- Mantemos o ID original para o JS não quebrar -->
-                                    <div class="resultado-equip" id="eq-resultado"
-                                        style="border: none; padding: 0; background: transparent; min-height: auto;">
-                                        <p style="color:var(--text3);font-size:13px;">Selecione as opções ao lado
-                                            para
-                                            ver o
-                                            equipamento recomendado.</p>
-                                    </div>
+                                <!-- Mantemos o ID original para o JS não quebrar -->
+                                <div class="resultado-equip" id="eq-resultado"
+                                    style="border: none; padding: 0; background: transparent; min-height: auto;">
+                                    <p style="color:var(--text3);font-size:13px;">Selecione as opções ao lado
+                                        para
+                                        ver o
+                                        equipamento recomendado.</p>
                                 </div>
                             </div>
-
                         </div>
+
                     </div>
                 </div>
+            </div>
         </main>
     </div>
 

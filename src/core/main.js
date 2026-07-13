@@ -24,6 +24,9 @@ function showPage(id, navEl) {
     try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { /* ignore */ }
 }
 
+window.showPage = showPage;
+
+
 // --- INICIALIZAÇÃO E VINCULAÇÃO DE EVENTOS ---
 document.addEventListener('DOMContentLoaded', () => {
 
