@@ -3,6 +3,7 @@ import { initEquipamentos } from '../features/equipamentos/equip.js';
 import { novoToggleTipo, novoGerar, novoGerarSoRadius, novoGerarSoNtp, novoCopiar, novoLimpar } from '../features/acessos/novo-acesso.js';
 import { wifiHotspotChange, wifiGerar, wifiCopiar, wifiLimpar } from '../features/wifi/wifi.js';
 import { ciascTrocar, ciascToggleNovaVlan, ciascAdicionarPorta, ciascRemoverPorta, ciascGerar, ciascCopiar, ciascLimpar } from '../features/ciasc/ciasc.js';
+import { initIpv4, ipv4Calcular, ipv4Copiar, ipv4Limpar } from '../features/ipv4/ipv4.js';
 
 // --- SISTEMA DE NAVEGAÇÃO ---
 function showPage(id, navEl) {
@@ -33,13 +34,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Inicializa o módulo de Equipamentos
     initEquipamentos();
 
+    // 1b. Inicializa o módulo da Calculadora IPv4 (popula o select de máscara)
+    initIpv4();
+
     // 2. Eventos de Navegação (Sidebar e Cards da Home)
     const navLinks = {
         'nav-home': 'home',
         'nav-novo': 'novo', // Ajuste o ID no HTML se necessário
         'nav-ciasc': 'ciasc',
         'nav-wifi': 'wifi',
-        'nav-equip': 'equip'
+        'nav-equip': 'equip',
+        'nav-ipv4': 'ipv4'
     };
 
     // Vincula os botões da Sidebar
@@ -62,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (title.includes('ciasc')) showPage('ciasc', document.getElementById('nav-ciasc'));
             if (title.includes('wifi')) showPage('wifi', document.getElementById('nav-wifi'));
             if (title.includes('verificador')) showPage('equip', document.getElementById('nav-equip'));
+            if (title.includes('ipv4')) showPage('ipv4', document.getElementById('nav-ipv4'));
         });
     });
 
@@ -146,5 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
             showPage('wifi', document.getElementById('nav-wifi'));
         });
     }
+
+    // 6. Eventos: Calculadora IPv4
+    document.querySelector('#page-ipv4 .btn-primary')?.addEventListener('click', ipv4Calcular);
+    document.querySelector('#page-ipv4 .btn-success')?.addEventListener('click', ipv4Copiar);
+    document.querySelector('#page-ipv4 .btn-danger')?.addEventListener('click', ipv4Limpar);
 
 });

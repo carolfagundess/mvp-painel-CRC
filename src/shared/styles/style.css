@@ -643,6 +643,77 @@ body {
   font-weight: 500;
 }
 
+/* ── CALCULADORA IPV4 ── */
+.ipv4-form-full {
+  max-width: 960px;
+}
+
+.ipv4-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.ipv4-fields-grid .campo {
+  margin-bottom: 0;
+}
+
+.ipv4-fields-grid .campo label {
+  display: flex;
+  align-items: flex-end;
+  min-height: 30px;
+}
+
+.campo input[readonly] {
+  background: var(--bg);
+  color: var(--text2);
+  cursor: default;
+}
+
+.ipv4-hint {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: -6px;
+  margin-bottom: 16px;
+}
+
+.ipv4-ajuda {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 20px;
+}
+
+.ipv4-ajuda summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-light);
+  list-style: none;
+}
+
+.ipv4-ajuda summary::-webkit-details-marker {
+  display: none;
+}
+
+.ipv4-ajuda summary::before {
+  content: '▸ ';
+}
+
+.ipv4-ajuda[open] summary::before {
+  content: '▾ ';
+}
+
+.ipv4-ajuda[open] summary {
+  margin-bottom: 12px;
+}
+
+.ipv4-ajuda .doc-list {
+  margin-bottom: 0;
+}
+
 /* ── SEPARADOR ── */
 .section-divider {
   font-size: 11px;

@@ -70,6 +70,21 @@
                 Wifi Business
             </button>
 
+            <button id="nav-ipv4" class="nav-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                    <line x1="8" y1="6" x2="16" y2="6"></line>
+                    <line x1="8" y1="10" x2="8.01" y2="10"></line>
+                    <line x1="12" y1="10" x2="12.01" y2="10"></line>
+                    <line x1="16" y1="10" x2="16.01" y2="10"></line>
+                    <line x1="8" y1="14" x2="8.01" y2="14"></line>
+                    <line x1="12" y1="14" x2="12.01" y2="14"></line>
+                    <line x1="16" y1="14" x2="16.01" y2="14"></line>
+                    <line x1="8" y1="18" x2="16" y2="18"></line>
+                </svg>
+                Calculadora IPv4
+            </button>
+
             <div class="sidebar-section">Demais Serviços</div>
 
             <button id="nav-equip" class="nav-btn">
@@ -154,6 +169,27 @@
                         <h3>Verificador de Equipamentos</h3>
                         <p>Consulta equipamentos ideais por modalidade, viabilidade e plano contratado.</p>
                         <span class="tool-card-tag tag-green">Análise de Viabilidade</span>
+                    </div>
+
+                    <!-- Card 5: Calculadora de Redes IPv4 -->
+                    <div class="tool-card" onclick="showPage('ipv4')">
+                        <div class="tool-card-icon icon-purple">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+                                <line x1="8" y1="6" x2="16" y2="6"></line>
+                                <line x1="8" y1="10" x2="8.01" y2="10"></line>
+                                <line x1="12" y1="10" x2="12.01" y2="10"></line>
+                                <line x1="16" y1="10" x2="16.01" y2="10"></line>
+                                <line x1="8" y1="14" x2="8.01" y2="14"></line>
+                                <line x1="12" y1="14" x2="12.01" y2="14"></line>
+                                <line x1="16" y1="14" x2="16.01" y2="14"></line>
+                                <line x1="8" y1="18" x2="16" y2="18"></line>
+                            </svg>
+                        </div>
+                        <h3>Calculadora de Redes IPv4</h3>
+                        <p>Calcule rede, broadcast, máscara, wildcard e faixa de hosts a partir de um IP/CIDR.</p>
+                        <span class="tool-card-tag tag-purple">Cálculo · Sub-rede</span>
                     </div>
                 </div>
             </div>
@@ -865,6 +901,120 @@
                         </div>
 
                     </div>
+                </div>
+            </div>
+
+            <!--Página da Calculadora de Redes IPv4-->
+            <div class="page" id="page-ipv4">
+                <button class="back-btn" onclick="showPage('home', document.getElementById('nav-home'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Calculadora de Redes IPv4</h2>
+                        <p>Informe a rede e a máscara para calcular os dados da sub-rede — divida em múltiplas
+                            sub-redes se necessário.</p>
+                    </div>
+                </div>
+
+                <div class="form-full ipv4-form-full">
+
+                    <details class="ipv4-ajuda">
+                        <summary>Como usar esta calculadora</summary>
+                        <ul class="doc-list">
+                            <li>Informe o <code>Endereço de Rede</code> (ex: <code>10.0.0.0</code>) e escolha a
+                                <code>Máscara de Sub-rede</code> correspondente na lista.</li>
+                            <li>Para dividir a rede em sub-redes menores, preencha <strong>apenas um</strong> dos
+                                campos: <code>Nº de Sub-redes Desejado</code> ou
+                                <code>Hosts Necessários por Sub-rede</code>. Deixe os dois em branco se não quiser
+                                dividir a rede.</li>
+                            <li>Clique em <strong>Calcular</strong> para ver o resumo da rede e a tabela
+                                <code>Detalhes da Sub-rede</code> com cada sub-rede gerada.</li>
+                            <li>Use <strong>Copiar</strong> para copiar o resultado como texto, ou
+                                <strong>Limpar</strong> para reiniciar os campos.</li>
+                        </ul>
+                    </details>
+
+                    <div class="form-card">
+                        <div class="form-card-title">Parâmetros da Rede</div>
+
+                        <div class="ipv4-fields-grid">
+                            <div class="campo">
+                                <label>Endereço de Rede</label>
+                                <input type="text" id="ipv4-ip" placeholder="Ex: 10.0.0.0">
+                            </div>
+                            <div class="campo">
+                                <label>Máscara de Sub-rede</label>
+                                <select id="ipv4-mascara"></select>
+                            </div>
+                            <div class="campo">
+                                <label>Nº de Sub-redes Desejado</label>
+                                <input type="number" id="ipv4-num-subredes" min="1" placeholder="Ex: 4">
+                            </div>
+                            <div class="campo">
+                                <label>Hosts por Sub-rede</label>
+                                <input type="number" id="ipv4-num-hosts" min="1" placeholder="Ex: 50">
+                            </div>
+                        </div>
+                        <p class="ipv4-hint">Preencha apenas um dos campos "Nº de Sub-redes" ou "Hosts por Sub-rede".
+                            Se ambos forem preenchidos, o de hosts tem prioridade.</p>
+
+                        <div class="btn-row">
+                            <button class="btn btn-primary">Calcular</button>
+                            <button class="btn btn-success">Copiar</button>
+                            <button class="btn btn-danger">Limpar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-card hidden" id="ipv4-erro-wrap">
+                        <p class="equip-alert" id="ipv4-erro-msg"></p>
+                    </div>
+
+                    <div class="form-card hidden" id="ipv4-resultado-wrap">
+                        <div class="form-card-title">Resultado</div>
+
+                        <div class="ipv4-fields-grid">
+                            <div class="campo">
+                                <label>Intervalo de Endereço de Host</label>
+                                <input type="text" id="ipv4-out-hostrange" readonly>
+                            </div>
+                            <div class="campo">
+                                <label>Endereço de Difusão</label>
+                                <input type="text" id="ipv4-out-broadcast" readonly>
+                            </div>
+                            <div class="campo">
+                                <label>Máscara Curinga</label>
+                                <input type="text" id="ipv4-out-wildcard" readonly>
+                            </div>
+                            <div class="campo">
+                                <label>Notação CIDR</label>
+                                <input type="text" id="ipv4-out-cidr" readonly>
+                            </div>
+                        </div>
+                        <p id="ipv4-out-extra" class="ipv4-hint"></p>
+
+                        <div class="section-divider">Detalhes da Sub-rede</div>
+
+                        <p class="equip-alert hidden" id="ipv4-tabela-aviso" style="margin-bottom:12px;"></p>
+                        <div class="table-responsive">
+                            <table class="doc-table">
+                                <thead>
+                                    <tr>
+                                        <th>Subnet ID</th>
+                                        <th>Endereço da Sub-rede</th>
+                                        <th>Faixa de Host</th>
+                                        <th>Broadcast</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ipv4-tabela-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="copiado-msg" id="ipv4-copiado">✓ Copiado para a área de transferência!</div>
                 </div>
             </div>
         </main>
