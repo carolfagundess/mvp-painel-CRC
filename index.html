@@ -167,7 +167,7 @@
                             </svg>
                         </div>
                         <h3>Verificador de Equipamentos</h3>
-                        <p>Consulta equipamentos ideais por modalidade, viabilidade e plano contratado.</p>
+                        <p>Guia de referência com os equipamentos recomendados por modalidade, viabilidade e plano contratado.</p>
                         <span class="tool-card-tag tag-green">Análise de Viabilidade</span>
                     </div>
 
@@ -849,58 +849,207 @@
                 <div class="tool-page-header">
                     <div>
                         <h2>Verificador de Equipamentos</h2>
-                        <p>Consulte o equipamento correto por modalidade, viabilidade e plano</p>
+                        <p>Selecione a modalidade para ver o equipamento recomendado por viabilidade e faixa de plano.</p>
                     </div>
                 </div>
 
                 <div class="form-full">
-                    <div class="layout-duas-colunas">
 
-                        <!-- COLUNA ESQUERDA (Parâmetros de Busca) -->
-                        <div>
-                            <div class="form-card">
-                                <div class="form-card-title">Parâmetros de Busca</div>
-
-                                <div class="campo">
-                                    <label>1. Modalidade</label>
-                                    <select id="eq-modalidade">
-                                        <option value="">Selecione</option>
-                                    </select>
-                                </div>
-
-                                <div class="campo">
-                                    <label>2. Viabilidade</label>
-                                    <select id="eq-viabilidade" disabled>
-                                        <option value="">Selecione</option>
-                                    </select>
-                                </div>
-
-                                <div class="campo">
-                                    <label>3. Plano</label>
-                                    <select id="eq-plano" disabled>
-                                        <option value="">Selecione</option>
-                                    </select>
-                                </div>
-                            </div>
+                    <div class="form-card" style="margin-bottom: 24px;">
+                        <div class="campo" style="max-width: 320px; margin-bottom: 0;">
+                            <label>Modalidade</label>
+                            <select id="eq-modalidade">
+                                <option value="dedicado">Dedicado</option>
+                                <option value="interconexao">Interconexão</option>
+                                <option value="wifibusiness">Wifi-Business</option>
+                                <option value="bandalarga">Banda Larga PF/PJ</option>
+                            </select>
                         </div>
-
-                        <!-- COLUNA DIREITA (Resultado) -->
-                        <div>
-                            <div class="form-card">
-                                <div class="form-card-title">Resultado da Análise</div>
-
-                                <!-- Mantemos o ID original para o JS não quebrar -->
-                                <div class="resultado-equip" id="eq-resultado"
-                                    style="border: none; padding: 0; background: transparent; min-height: auto;">
-                                    <p style="color:var(--text3);font-size:13px;">Selecione as opções ao lado
-                                        para
-                                        ver o
-                                        equipamento recomendado.</p>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
+
+                    <!-- DEDICADO -->
+                    <div class="equip-view active" id="eq-view-dedicado">
+                        <div class="section-divider">GPON ZTE — Corporativo</div>
+                        <div class="table-responsive">
+                            <table class="doc-table">
+                                <thead><tr><th>Faixa</th><th>Viabilidade</th><th>Equipamento</th></tr></thead>
+                                <tbody>
+                                    <tr><td>100 a 300 Mbps</td><td><span class="status-badge tag-green">Positivo</span></td><td>F601 + RB750Gr3</td></tr>
+                                    <tr><td>400 a 700 Mbps</td><td><span class="status-badge tag-green">Positivo</span></td><td>F601 + RB3011/RB4011</td></tr>
+                                    <tr><td>Soma total dos serviços: até 700 Mbps</td><td><span class="status-badge tag-green">Positivo</span></td><td>F601 + RB4011</td></tr>
+                                    <tr><td>Soma total dos serviços: acima de 700 Mbps</td><td><span class="status-badge tag-red">Negativo · PTP</span></td><td>N/A PTP</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section-divider">PTP — Dedicado</div>
+                        <div class="table-responsive">
+                            <table class="doc-table">
+                                <thead><tr><th>Soma total dos serviços entregues</th><th>Equipamento</th></tr></thead>
+                                <tbody>
+                                    <tr><td>0 a 200 Mbps</td><td>RB750Gr3</td></tr>
+                                    <tr><td>200 a 500 Mbps</td><td>RB4011</td></tr>
+                                    <tr><td>500 a 1000 Mbps</td><td>RB4011</td></tr>
+                                    <tr><td>1000 a 5000 Mbps</td><td>CCR2004</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <details class="ipv4-ajuda">
+                            <summary>Módulos de Fibra — PTP</summary>
+
+                            <p style="text-align:center;color:var(--accent-light);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Enlace com o cliente (curta distância)</p>
+                            <div class="table-responsive">
+                                <table class="doc-table">
+                                    <thead><tr><th>Módulo</th><th>Código</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>MÓDULO SFP+ 10G BASE 300M SR 850NM</td><td>502000196</td></tr>
+                                        <tr><td>CORDÃO ÓPTICO DUPLEX MM LC/LC 62,5/125LA 2,5MT</td><td>110000037</td></tr>
+                                        <tr><td>CORDÃO ÓPTICO DUPLEX MM LC/LC 62,5/125LA 5MT</td><td>103000115</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p style="text-align:center;color:var(--accent-light);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:20px 0 12px;">Enlace com o POP (par BIDI, TX invertido em cada ponta)</p>
+                            <div class="table-responsive">
+                                <table class="doc-table">
+                                    <thead><tr><th>Módulo</th><th>Código</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>MÓDULO SFP 1.25G 20KM BIDI LC DDM TX1310/RX1550NM B3524L-R20D</td><td>502000193</td></tr>
+                                        <tr><td>MÓDULO SFP 1.25G 20KM BIDI LC DDM TX1550/RX1310NM B5324L-R20D</td><td>502000214</td></tr>
+                                        <tr><td>MÓDULO SFP+ 10G BIDI LC 20KM 1270/1330</td><td>502000219</td></tr>
+                                        <tr><td>MÓDULO SFP+ 10G BIDI LC 20KM 1330/1270</td><td>502000220</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p style="color:var(--text3);font-size:12px;">Usar sempre um módulo de cada comprimento de onda (ex.: TX1310/RX1550 numa ponta e TX1550/RX1310 na outra) — nunca o mesmo par nas duas extremidades.</p>
+                        </details>
+                    </div>
+
+                    <!-- INTERCONEXÃO -->
+                    <div class="equip-view" id="eq-view-interconexao">
+                        <div class="section-divider">GPON ZTE — Corporativo</div>
+                        <div class="table-responsive">
+                            <table class="doc-table">
+                                <thead><tr><th>Faixa</th><th>Viabilidade</th><th>Equipamento</th></tr></thead>
+                                <tbody>
+                                    <tr><td>100 a 300 Mbps</td><td><span class="status-badge tag-green">Positivo</span></td><td>F601 + RB750Gr3</td></tr>
+                                    <tr><td>400 a 700 Mbps</td><td><span class="status-badge tag-green">Positivo</span></td><td>F601 + RB3011/RB4011</td></tr>
+                                    <tr><td>Soma total dos serviços: até 700 Mbps</td><td><span class="status-badge tag-green">Positivo</span></td><td>F601 + RB4011</td></tr>
+                                    <tr><td>Soma total dos serviços: acima de 700 Mbps</td><td><span class="status-badge tag-red">Negativo · PTP</span></td><td>N/A PTP</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="section-divider">PTP — Interconexão</div>
+                        <div class="table-responsive">
+                            <table class="doc-table">
+                                <thead><tr><th>Soma total dos serviços entregues</th><th>Equipamento</th></tr></thead>
+                                <tbody>
+                                    <tr><td>0 a 300 Mbps</td><td>RB3011</td></tr>
+                                    <tr><td>300 a 500 Mbps</td><td>RB4011</td></tr>
+                                    <tr><td>500 a 900 Mbps</td><td>DM4360</td></tr>
+                                    <tr><td>Acima de 900 até 10000 Mbps</td><td>DM4370</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <details class="ipv4-ajuda">
+                            <summary>Módulos de Fibra — PTP</summary>
+
+                            <p style="text-align:center;color:var(--accent-light);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Enlace com o cliente (curta distância)</p>
+                            <div class="table-responsive">
+                                <table class="doc-table">
+                                    <thead><tr><th>Módulo</th><th>Código</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>MÓDULO SFP+ 10G BASE 300M SR 850NM</td><td>502000196</td></tr>
+                                        <tr><td>CORDÃO ÓPTICO DUPLEX MM LC/LC 62,5/125LA 2,5MT</td><td>110000037</td></tr>
+                                        <tr><td>CORDÃO ÓPTICO DUPLEX MM LC/LC 62,5/125LA 5MT</td><td>103000115</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <p style="text-align:center;color:var(--accent-light);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin:20px 0 12px;">Enlace com o POP (par BIDI, TX invertido em cada ponta)</p>
+                            <div class="table-responsive">
+                                <table class="doc-table">
+                                    <thead><tr><th>Módulo</th><th>Código</th></tr></thead>
+                                    <tbody>
+                                        <tr><td>MÓDULO SFP 1.25G 20KM BIDI LC DDM TX1310/RX1550NM B3524L-R20D</td><td>502000193</td></tr>
+                                        <tr><td>MÓDULO SFP 1.25G 20KM BIDI LC DDM TX1550/RX1310NM B5324L-R20D</td><td>502000214</td></tr>
+                                        <tr><td>MÓDULO SFP+ 10G BIDI LC 20KM 1270/1330</td><td>502000219</td></tr>
+                                        <tr><td>MÓDULO SFP+ 10G BIDI LC 20KM 1330/1270</td><td>502000220</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p style="color:var(--text3);font-size:12px;">Usar sempre um módulo de cada comprimento de onda (ex.: TX1310/RX1550 numa ponta e TX1550/RX1310 na outra) — nunca o mesmo par nas duas extremidades.</p>
+                        </details>
+                    </div>
+
+                    <!-- WIFI BUSINESS -->
+                    <div class="equip-view" id="eq-view-wifibusiness">
+                        <div class="section-divider">Caixa de Atendimento (GPON)</div>
+                        <div class="table-responsive">
+                            <table class="doc-table">
+                                <thead><tr><th>Plano</th><th>Equipamento</th></tr></thead>
+                                <tbody>
+                                    <tr><td>100–500 Mega</td><td>F601 + RB750G3 + AP(s) OMADA TPLINK<span class="obs-note">Máximo de 3 APs; se precisar de mais, abrir tarefa com TI</span></td></tr>
+                                    <tr><td>500–700 Mega</td><td>F601 + RB3011 + AP(s) OMADA TPLINK<span class="obs-note">Máximo de 3 APs; se precisar de mais, abrir tarefa com TI</span></td></tr>
+                                    <tr><td>1000 Mega</td><td>F601 + RB4011 + AP(s) OMADA TPLINK<span class="obs-note">Máximo de 3 APs; se precisar de mais, abrir tarefa com TI</span></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-card" style="border-color: rgba(245, 158, 11, 0.3); background: var(--amber-bg); margin-bottom: 0;">
+                            <p class="equip-alert">⚠ Ponto-a-Ponto (PTP): dependem de projeto da engenharia — consulte o protocolo e veja o projeto.</p>
+                            <p style="color:var(--text2);font-size:13px;margin-top:8px;">ⓘ Pode ser necessário conversor de mídia: <strong style="color:var(--text);">Conversor de Mídia MC220L Gigabit SFP — TP-Link</strong></p>
+                        </div>
+                    </div>
+
+                    <!-- BANDA LARGA -->
+                    <div class="equip-view" id="eq-view-bandalarga">
+                        <div class="section-divider">Caixa de Atendimento (GPON)</div>
+                        <div class="table-responsive">
+                            <table class="doc-table">
+                                <thead><tr><th>Plano</th><th>Equipamento</th><th>Mesh</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>100–600 Mega</td>
+                                        <td>Tplink XC220-G3</td>
+                                        <td>Tplink HC 220 – Wi-fi5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>100–600 Mega + adicional Wifi 6</td>
+                                        <td>ZTE ONT F6600<span class="obs-note">Quatro portas GE LAN</span></td>
+                                        <td>ZTE H3601</td>
+                                    </tr>
+                                    <tr>
+                                        <td>600 Mega + telefonia</td>
+                                        <td>Tplink XC220-G3 + ATA Khomp<span class="obs-note">Para linha(s) fixa(s) Unifique</span></td>
+                                        <td>Tplink HC 220 – Wi-fi5</td>
+                                    </tr>
+                                    <tr>
+                                        <td>600 Mega + 2 serviços Unifique</td>
+                                        <td>ZTE ONT F670L<span class="obs-note">Necessário para uso de portas LAN</span></td>
+                                        <td>ZTE H119A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>660–1000 Mega</td>
+                                        <td>ZTE ONT F6600<span class="obs-note">Quatro portas GE LAN</span></td>
+                                        <td>ZTE H3601</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2000–5000 Mega</td>
+                                        <td>ZTE ONT F8648P<span class="obs-note">Uma porta 10GE</span></td>
+                                        <td>ZTE H3601</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-card" style="border-color: rgba(245, 158, 11, 0.3); background: var(--amber-bg); margin-bottom: 0;">
+                            <p class="equip-alert">⚠ Ponto-a-Ponto (PTP): dependem de projeto da engenharia — consulte o protocolo e veja o projeto.</p>
+                            <p style="color:var(--text2);font-size:13px;margin-top:8px;">ⓘ Pode ser necessário conversor de mídia: <strong style="color:var(--text);">Conversor de Mídia MC220L Gigabit SFP — TP-Link</strong></p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 

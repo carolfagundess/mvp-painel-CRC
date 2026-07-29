@@ -31,7 +31,7 @@ window.showPage = showPage;
 // --- INICIALIZAÇÃO E VINCULAÇÃO DE EVENTOS ---
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Inicializa o módulo de Equipamentos
+    // 1a. Inicializa o módulo do Verificador de Equipamentos
     initEquipamentos();
 
     // 1b. Inicializa o módulo da Calculadora IPv4 (popula o select de máscara)
