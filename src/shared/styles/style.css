@@ -580,7 +580,7 @@ body {
   margin-bottom: 12px;
 }
 
-.porta-bloco label {
+.porta-bloco > label {
   font-size: 11px;
   font-weight: 600;
   color: var(--text3);
@@ -588,6 +588,209 @@ body {
   letter-spacing: 0.05em;
   display: block;
   margin-bottom: 6px;
+}
+
+.vlan-dica {
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--text3);
+  margin-top: 14px;
+}
+
+.vlan-dica code {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--accent-light);
+  background: var(--accent-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* ── TABELA DE VLANs (Wifi Business) ── */
+.vlan-cabecalho,
+.vlan-row {
+  display: grid;
+  grid-template-columns: 128px minmax(0, 1fr) 174px 30px;
+  gap: 12px;
+  align-items: center;
+}
+
+.vlan-cabecalho {
+  padding: 0 13px 9px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+.vlan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vlan-row {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  transition: border-color 0.16s, background 0.16s;
+}
+
+.vlan-row:has(input[type=checkbox]:checked) {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.vlan-check {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+  margin: 0;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text2);
+  transition: color 0.16s;
+}
+
+.vlan-row:has(input[type=checkbox]:checked) .vlan-check { color: var(--text); }
+
+.vlan-check input {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.vlan-check strong {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: inherit;
+}
+
+.vlan-nome,
+.vlan-rede,
+.vlan-id {
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  font-size: 12.5px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.vlan-nome { min-width: 0; }
+
+.vlan-nome:focus,
+.vlan-rede:focus,
+.vlan-id:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.vlan-nome.erro,
+.vlan-rede.erro,
+.vlan-id.erro {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16);
+}
+
+.vlan-nome-fixo,
+.vlan-fixo {
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px dashed var(--border2);
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  font-size: 11.5px;
+  color: var(--text3);
+  cursor: help;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vlan-fixo { text-align: center; }
+.vlan-rede, .vlan-fixo { width: 174px; }
+
+.vlan-rede-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.vlan-hosts {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: var(--text3);
+  padding-left: 2px;
+  min-height: 12px;
+  white-space: nowrap;
+}
+
+.vlan-hosts.invalido { color: var(--red); }
+
+.vlan-extra {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.vlan-id-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.vlan-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  flex-shrink: 0;
+}
+
+.vlan-id {
+  width: 62px;
+  flex-shrink: 0;
+  text-align: center;
+  font-weight: 700;
+}
+
+.vlan-remover {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(239, 68, 68, 0.26);
+  background: transparent;
+  color: var(--red);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.vlan-remover:hover {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: var(--red);
+}
+
+@media (max-width: 880px) {
+  .vlan-cabecalho { display: none; }
+  .vlan-row { grid-template-columns: 1fr 1fr; }
+  .vlan-rede, .vlan-fixo { width: 100%; }
 }
 
 /* ── VERIFICADOR EQUIP ── */

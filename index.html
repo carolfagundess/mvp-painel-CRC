@@ -604,45 +604,120 @@
                         <input type="text" id="wifi-identificador" placeholder="Ex: CLI_PADARIA">
                     </div>
 
-                    <div class="section-divider">Redes a serem criadas (VLANs)</div>
-                    <div class="porta-bloco" style="max-width: 600px;">
-                        <label style="margin-bottom:12px;">Selecione quais VLANs devem ser provisionadas na
-                            Bridge-LAN</label>
-                        <div style="display:flex; flex-direction:column; gap:10px;">
-                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
-                                <input type="checkbox" id="vlan20" value="20" checked
-                                    style="width:auto;accent-color:var(--accent);"> VLAN 20 - Hotspot (10.0.0.1/22)
-                            </label>
-                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
-                                <input type="checkbox" id="vlan30" value="30"
-                                    style="width:auto;accent-color:var(--accent);">
-                                VLAN 30 - Máquina de Cartão (10.5.4.1/23)
-                            </label>
-                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
-                                <input type="checkbox" id="vlan40" value="40" checked
-                                    style="width:auto;accent-color:var(--accent);"> VLAN 40 - Corporativo
-                                (10.10.10.1/23)
-                            </label>
-                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
-                                <input type="checkbox" id="vlan50" value="50"
-                                    style="width:auto;accent-color:var(--accent);">
-                                VLAN 50 - Reserva (10.15.12.1/22)
-                            </label>
-                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer; font-size:14px;">
-                                <input type="checkbox" id="vlan60" value="60" checked
-                                    style="width:auto;accent-color:var(--accent);"> VLAN 60 - Gerência
-                                (10.20.20.1/24)
-                            </label>
+                    <div class="section-divider">Portas da BRIDGE-LAN</div>
+                    <div class="porta-bloco" style="max-width: 680px;">
+                        <label style="margin-bottom:12px;">Portas que entram na BRIDGE-LAN (onde ficam os APs e as
+                            VLANs)</label>
+                        <div class="vlans-grid" id="wifi-portas">
+                            <label class="vlan-item"><input type="checkbox" value="2">ether2</label>
+                            <label class="vlan-item"><input type="checkbox" value="3">ether3</label>
+                            <label class="vlan-item"><input type="checkbox" value="4">ether4</label>
+                            <label class="vlan-item"><input type="checkbox" value="5" checked>ether5</label>
+                            <label class="vlan-item"><input type="checkbox" value="6">ether6</label>
+                            <label class="vlan-item"><input type="checkbox" value="7">ether7</label>
+                            <label class="vlan-item"><input type="checkbox" value="8">ether8</label>
+                            <label class="vlan-item"><input type="checkbox" value="9">ether9</label>
+                            <label class="vlan-item"><input type="checkbox" value="10">ether10</label>
                         </div>
+                        <p class="vlan-dica">A <code>ether1</code> fica de fora por ser a WAN. Confira quantas portas o
+                            modelo tem antes de marcar (RB750G3 vai até a 5; RB3011 e RB4011 até a 10).</p>
+                    </div>
+
+                    <div class="section-divider">Redes a serem criadas (VLANs)</div>
+                    <div class="porta-bloco" style="max-width: 680px;">
+                        <label style="margin-bottom:14px;">Marque as VLANs a provisionar na Bridge-LAN e ajuste o
+                            endereçamento</label>
+
+                        <div class="vlan-cabecalho">
+                            <span>VLAN</span>
+                            <span>Nome</span>
+                            <span>Rede (gateway/máscara)</span>
+                            <span></span>
+                        </div>
+
+                        <div class="vlan-list">
+                            <div class="vlan-row">
+                                <label class="vlan-check">
+                                    <input type="checkbox" id="vlan20" value="20" checked>
+                                    <strong>VLAN 20</strong>
+                                </label>
+                                <span class="vlan-nome-fixo" title="Nome padrão do setor — não editável">HOTSPOT</span>
+                                <span class="vlan-rede-wrap"><span class="vlan-fixo" title="Endereçamento padrão do setor — não editável">10.0.0.1/22
+                                    · fixo</span><small class="vlan-hosts" id="vlan20-hosts"></small></span>
+                                <span></span>
+                            </div>
+
+                            <div class="vlan-row">
+                                <label class="vlan-check">
+                                    <input type="checkbox" id="vlan30" value="30">
+                                    <strong>VLAN 30</strong>
+                                </label>
+                                <input type="text" class="vlan-nome" id="vlan30-nome" value="MAQ_CARTAO"
+                                    spellcheck="false" aria-label="Nome da VLAN 30">
+                                <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan30-rede" value="10.30.0.1/20"
+                                    spellcheck="false" aria-label="Endereçamento da VLAN 30"><small class="vlan-hosts" id="vlan30-hosts"></small></span>
+                                <span></span>
+                            </div>
+
+                            <div class="vlan-row">
+                                <label class="vlan-check">
+                                    <input type="checkbox" id="vlan40" value="40" checked>
+                                    <strong>VLAN 40</strong>
+                                </label>
+                                <input type="text" class="vlan-nome" id="vlan40-nome" value="CORPORATIVO"
+                                    spellcheck="false" aria-label="Nome da VLAN 40">
+                                <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan40-rede" value="10.40.0.1/20"
+                                    spellcheck="false" aria-label="Endereçamento da VLAN 40"><small class="vlan-hosts" id="vlan40-hosts"></small></span>
+                                <span></span>
+                            </div>
+
+                            <div class="vlan-row">
+                                <label class="vlan-check">
+                                    <input type="checkbox" id="vlan50" value="50">
+                                    <strong>VLAN 50</strong>
+                                </label>
+                                <input type="text" class="vlan-nome" id="vlan50-nome" value="RESERVA"
+                                    spellcheck="false" aria-label="Nome da VLAN 50">
+                                <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan50-rede" value="10.50.0.1/20"
+                                    spellcheck="false" aria-label="Endereçamento da VLAN 50"><small class="vlan-hosts" id="vlan50-hosts"></small></span>
+                                <span></span>
+                            </div>
+
+                            <div class="vlan-row">
+                                <label class="vlan-check">
+                                    <input type="checkbox" id="vlan60" value="60" checked>
+                                    <strong>VLAN 60</strong>
+                                </label>
+                                <input type="text" class="vlan-nome" id="vlan60-nome" value="GERENCIA"
+                                    spellcheck="false" aria-label="Nome da VLAN 60">
+                                <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan60-rede" value="10.60.0.1/24"
+                                    spellcheck="false" aria-label="Endereçamento da VLAN 60"><small class="vlan-hosts" id="vlan60-hosts"></small></span>
+                                <span></span>
+                            </div>
+                        </div>
+
+                        <div id="wifi-vlans-extras" class="vlan-list" style="margin-top:8px;"></div>
+
+                        <button type="button" class="btn btn-secondary" id="wifi-add-vlan" style="margin-top:12px;">+ Adicionar VLAN</button>
+
+                        <p class="vlan-dica">Padrão do setor: <code>10.&lt;VLAN&gt;.0.1/20</code> — a VLAN 40 nasce em
+                            <code>10.40.0.1/20</code>. Fora do padrão só a 20 (Hotspot), com faixa própria e não
+                            editável, e a 60 (Gerência), que nasce <code>/24</code> por não precisar de pool grande.
+                            Informe o IP do gateway com a máscara que o pool DHCP, a rede, o NAT e o isolamento saem
+                            calculados. VLANs adicionais recebem o mesmo bloco de configuração — muda só a rede — e o
+                            endereço acompanha o número da VLAN (VLAN 55 → <code>10.55.0.1/20</code>) até você editá-lo
+                            à mão.</p>
                     </div>
 
                     <div class="btn-row">
                         <button class="btn btn-primary">Gerar Script</button>
                         <button class="btn btn-success">Copiar</button>
+                        <button class="btn btn-secondary" id="wifi-baixar-rsc"
+                            title="Salva um arquivo .rsc para importar no MikroTik com /import">Baixar .rsc</button>
                         <button class="btn btn-danger">Limpar</button>
                     </div>
 
-                    <div class="resultado-box" id="wifi-resultado" style="display:none;">—</div>
+                    <div class="resultado-box" id="wifi-resultado" data-rotulo="script · routeros" style="display:none;">—</div>
                     <div class="copiado-msg" id="wifi-copiado">✓ Script copiado para a área de transferência!</div>
                 </div>
             </div>

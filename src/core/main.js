@@ -1,7 +1,7 @@
 // --- IMPORTAÇÃO DOS MÓDULOS ---
 import { initEquipamentos } from '../features/equipamentos/equip.js';
 import { novoToggleTipo, novoGerar, novoGerarSoRadius, novoGerarSoNtp, novoCopiar, novoLimpar } from '../features/acessos/novo-acesso.js';
-import { wifiHotspotChange, wifiGerar, wifiCopiar, wifiLimpar } from '../features/wifi/wifi.js';
+import { wifiHotspotChange, wifiGerar, wifiCopiar, wifiLimpar, initWifi } from '../features/wifi/wifi.js';
 import { ciascTrocar, ciascToggleNovaVlan, ciascAdicionarPorta, ciascRemoverPorta, ciascGerar, ciascCopiar, ciascLimpar } from '../features/ciasc/ciasc.js';
 import { initIpv4, ipv4Calcular, ipv4Copiar, ipv4Limpar } from '../features/ipv4/ipv4.js';
 
@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1b. Inicializa o módulo da Calculadora IPv4 (popula o select de máscara)
     initIpv4();
+
+    // 1c. Inicializa o módulo do Wifi Business (hosts calculados, VLANs adicionais, .rsc)
+    initWifi();
 
     // 2. Eventos de Navegação (Sidebar e Cards da Home)
     const navLinks = {
