@@ -332,8 +332,19 @@ export function wifiHotspotChange() {
     wrap.style.display = mostra ? 'block' : 'none';
     if (!mostra) input.value = '';
 
-    // O Hotspot exige a VLAN 20 provisionada.
-    if (select.value !== 'nao') document.getElementById('vlan20').checked = true;
+    // Sem Hotspot, a VLAN 20 não faz sentido: trava desmarcada e fora de edição.
+    const vlan20 = document.getElementById('vlan20');
+    if (vlan20) {
+        if (select.value === 'nao') {
+            vlan20.checked = false;
+            vlan20.disabled = true;
+            vlan20.title = 'Selecione um Hotspot (Mambo ou Wifeed) para habilitar a VLAN 20';
+        } else {
+            vlan20.disabled = false;
+            vlan20.checked = true;
+            vlan20.title = '';
+        }
+    }
 }
 
 export function wifiLimpar() {
@@ -342,10 +353,12 @@ export function wifiLimpar() {
     document.getElementById('wifi-identificador').value = '';
     document.getElementById('wifi-identificador-wrap').style.display = 'none';
 
-    const padroes = { vlan20: true, vlan30: false, vlan40: true, vlan50: false, vlan60: true };
+    const padroes = { vlan30: false, vlan40: true, vlan50: false, vlan60: true };
     Object.entries(padroes).forEach(([id, marcado]) => {
         document.getElementById(id).checked = marcado;
     });
+    // VLAN 20 depende do Hotspot selecionado (acabou de voltar para "Não").
+    wifiHotspotChange();
 
     const camposPadrao = {
         'vlan30-nome': 'WIFI-CORP1', 'vlan30-rede': wifiRedePadrao(30),
@@ -376,7 +389,8 @@ export function wifiGerar() {
     const hotspot = document.getElementById('wifi-mambo').value;
     const identificador = document.getElementById('wifi-identificador').value.trim();
 
-    const v20 = document.getElementById('vlan20').checked;
+    // Sem Hotspot a VLAN 20 nunca entra no script, mesmo que o checkbox esteja marcado.
+    const v20 = hotspot !== 'nao' && document.getElementById('vlan20').checked;
     const v30 = document.getElementById('vlan30').checked;
     const v40 = document.getElementById('vlan40').checked;
     const v50 = document.getElementById('vlan50').checked;
@@ -579,6 +593,7 @@ export function wifiCopiar() {
 export function initWifi() {
     wifiAtualizarHosts();
     wifiWireVlansExtras();
+    wifiHotspotChange(); // sincroniza o estado inicial da VLAN 20 com o Hotspot selecionado
 
     ['vlan30-rede', 'vlan40-rede', 'vlan50-rede'].forEach(id => {
         const el = document.getElementById(id);
