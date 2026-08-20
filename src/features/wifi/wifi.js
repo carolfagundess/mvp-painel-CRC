@@ -78,6 +78,16 @@ const WIFI_REDE_ADOCAO_TXT = '192.168.200.1/24';
 const WIFI_REDE_GERENCIA_TXT = '10.60.0.1/24';
 
 const WIFI_REDE_HOTSPOT = wifiParseRede(WIFI_REDE_HOTSPOT_TXT);
+const WIFI_REDE_GERENCIA = wifiParseRede(WIFI_REDE_GERENCIA_TXT);
+
+/* VLAN 60 (Gerência) é travada: sempre ativa, nome e rede fixos. */
+const WIFI_IDS_GERENCIA = {
+    nome: 'GERENCIA',
+    interface: 'VLAN_60_GERENCIA',
+    pool: 'POOL_GERENCIA',
+    dhcp: 'DHCP_GERENCIA',
+    comentario: 'REDE_GERENCIA'
+};
 
 /* Endereço padrão de uma VLAN a partir do octeto que a representa. */
 function wifiRedePadrao(octeto) {
@@ -124,8 +134,11 @@ function wifiAtualizarHosts() {
     const el20 = document.getElementById('vlan20-hosts');
     if (el20) el20.textContent = `${WIFI_REDE_HOTSPOT.poolTotal} IPs no pool`;
 
+    const el60 = document.getElementById('vlan60-hosts');
+    if (el60) el60.textContent = `${WIFI_REDE_GERENCIA.poolTotal} IPs no pool`;
+
     const campos = [
-        ...['vlan30', 'vlan40', 'vlan50', 'vlan60'].map(v => [document.getElementById(`${v}-rede`), document.getElementById(`${v}-hosts`)]),
+        ...['vlan30', 'vlan40', 'vlan50'].map(v => [document.getElementById(`${v}-rede`), document.getElementById(`${v}-hosts`)]),
         ...[...document.querySelectorAll('#wifi-vlans-extras .vlan-extra')].map(l => [l.querySelector('.vlan-rede'), l.querySelector('.vlan-hosts')])
     ];
 
@@ -160,12 +173,13 @@ function wifiLerVlansExtras() {
    `ignorarEl` deixa de fora o próprio campo que está sendo recalculado. */
 function wifiRedesEmUso(ignorarEl) {
     const campos = [
-        ...['vlan30-rede', 'vlan40-rede', 'vlan50-rede', 'vlan60-rede'].map(id => document.getElementById(id)),
+        ...['vlan30-rede', 'vlan40-rede', 'vlan50-rede'].map(id => document.getElementById(id)),
         ...document.querySelectorAll('#wifi-vlans-extras .vlan-rede')
     ].filter(el => el && el !== ignorarEl);
 
     return [
-        WIFI_REDE_HOTSPOT_TXT,   // VLAN 20 (única fixa)
+        WIFI_REDE_HOTSPOT_TXT,   // VLAN 20 (fixa)
+        WIFI_REDE_GERENCIA_TXT,  // VLAN 60 (fixa)
         WIFI_REDE_ADOCAO_TXT,    // BRIDGE-LAN, criada em todo script
         ...campos.map(el => el.value)
     ].map(wifiParseRede).filter(Boolean);
@@ -197,17 +211,20 @@ export function wifiAdicionarVlan() {
     do { sugestao += 10; } while (usados.includes(sugestao) && sugestao < 4090);
     if (sugestao > 4094) sugestao = 4094;
 
+    // Segue a sequência WIFI-CORP1/2/3 das VLANs fixas (30/40/50) para as adicionais.
+    const corpIndex = 3 + document.querySelectorAll('#wifi-vlans-extras .vlan-extra').length + 1;
+
     const linha = document.createElement('div');
     linha.className = 'vlan-row vlan-extra';
     linha.innerHTML = `
 <span class="vlan-id-wrap"><span class="vlan-tag">VLAN</span><input type="text" class="vlan-id" value="${sugestao}" inputmode="numeric" maxlength="4" aria-label="ID da VLAN"></span>
-<input type="text" class="vlan-nome" placeholder="Nome (opcional)" spellcheck="false" aria-label="Nome da VLAN">
+<input type="text" class="vlan-nome" value="WIFI-CORP${corpIndex}" spellcheck="false" aria-label="Nome da VLAN">
 <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" value="${wifiSugerirRede(sugestao)}" data-auto="1" spellcheck="false" title="Segue o número da VLAN automaticamente até você editar" aria-label="Endereçamento da VLAN"><small class="vlan-hosts"></small></span>
 <button type="button" class="vlan-remover" title="Remover esta VLAN">&times;</button>`;
 
     document.getElementById('wifi-vlans-extras').appendChild(linha);
     wifiAtualizarHosts();
-    linha.querySelector('.vlan-nome').focus();
+    linha.querySelector('.vlan-nome').select();
 }
 
 /* Ao trocar o ID, a rede acompanha o padrão 10.<id>.0.1/20 —
@@ -331,10 +348,9 @@ export function wifiLimpar() {
     });
 
     const camposPadrao = {
-        'vlan30-nome': 'MAQ_CARTAO', 'vlan30-rede': wifiRedePadrao(30),
-        'vlan40-nome': 'CORPORATIVO', 'vlan40-rede': wifiRedePadrao(40),
-        'vlan50-nome': 'RESERVA', 'vlan50-rede': wifiRedePadrao(50),
-        'vlan60-nome': 'GERENCIA', 'vlan60-rede': WIFI_REDE_GERENCIA_TXT
+        'vlan30-nome': 'WIFI-CORP1', 'vlan30-rede': wifiRedePadrao(30),
+        'vlan40-nome': 'WIFI-CORP2', 'vlan40-rede': wifiRedePadrao(40),
+        'vlan50-nome': 'WIFI-CORP3', 'vlan50-rede': wifiRedePadrao(50)
     };
     Object.entries(camposPadrao).forEach(([id, valor]) => {
         const el = document.getElementById(id);
@@ -375,19 +391,19 @@ export function wifiGerar() {
         return;
     }
 
-    // Endereçamento: só o Hotspot é fixo; as demais vêm dos campos.
+    // Endereçamento: Hotspot e Gerência são fixos; as demais vêm dos campos.
     const hs = WIFI_REDE_HOTSPOT;
     const r30 = v30 ? wifiLerRede('vlan30-rede') : null;
     const r40 = v40 ? wifiLerRede('vlan40-rede') : null;
     const r50 = v50 ? wifiLerRede('vlan50-rede') : null;
-    const r60 = v60 ? wifiLerRede('vlan60-rede') : null;
+    const r60 = v60 ? WIFI_REDE_GERENCIA : null;
 
-    // Nomes editáveis (o Hotspot é o único com nome fixo).
+    // Nomes editáveis (Hotspot e Gerência têm nome fixo).
     const n30 = wifiIdentificadores(30, document.getElementById('vlan30-nome').value);
     const n40 = wifiIdentificadores(40, document.getElementById('vlan40-nome').value);
     const n50 = wifiIdentificadores(50, document.getElementById('vlan50-nome').value);
-    const n60 = wifiIdentificadores(60, document.getElementById('vlan60-nome').value);
-    ['vlan30-nome', 'vlan40-nome', 'vlan50-nome', 'vlan60-nome'].forEach(id => document.getElementById(id).classList.remove('erro'));
+    const n60 = WIFI_IDS_GERENCIA;
+    ['vlan30-nome', 'vlan40-nome', 'vlan50-nome'].forEach(id => document.getElementById(id).classList.remove('erro'));
 
     const portas = wifiPortasSelecionadas();
     if (!portas.length) {
@@ -401,7 +417,6 @@ export function wifiGerar() {
     if (v30 && !r30) invalidas.push('VLAN 30');
     if (v40 && !r40) invalidas.push('VLAN 40');
     if (v50 && !r50) invalidas.push('VLAN 50');
-    if (v60 && !r60) invalidas.push('VLAN 60');
     extras.forEach((v, i) => {
         if (!v.idValido) invalidas.push(`VLAN adicional #${i + 1} (ID precisa ficar entre 2 e 4094)`);
         else if (!v.rede) invalidas.push(`VLAN ${v.id}`);
@@ -429,7 +444,7 @@ export function wifiGerar() {
         v30 && { rotulo: 'VLAN 30', nome: n30.nome, el: document.getElementById('vlan30-nome') },
         v40 && { rotulo: 'VLAN 40', nome: n40.nome, el: document.getElementById('vlan40-nome') },
         v50 && { rotulo: 'VLAN 50', nome: n50.nome, el: document.getElementById('vlan50-nome') },
-        v60 && { rotulo: 'VLAN 60', nome: n60.nome, el: document.getElementById('vlan60-nome') },
+        v60 && { rotulo: 'VLAN 60', nome: n60.nome },
         ...extras.map(v => ({ rotulo: `VLAN ${v.id}`, nome: v.ids.nome, el: v.nomeEl }))
     ].filter(item => item && item.nome);
 
@@ -450,7 +465,7 @@ export function wifiGerar() {
         v30 && { rotulo: 'VLAN 30', rede: r30, el: document.getElementById('vlan30-rede') },
         v40 && { rotulo: 'VLAN 40', rede: r40, el: document.getElementById('vlan40-rede') },
         v50 && { rotulo: 'VLAN 50', rede: r50, el: document.getElementById('vlan50-rede') },
-        v60 && { rotulo: 'VLAN 60', rede: r60, el: document.getElementById('vlan60-rede') },
+        v60 && { rotulo: 'VLAN 60', rede: r60 },
         ...extras.map(v => ({ rotulo: `VLAN ${v.id}`, rede: v.rede, el: v.redeEl }))
     ].filter(Boolean);
 
@@ -565,7 +580,7 @@ export function initWifi() {
     wifiAtualizarHosts();
     wifiWireVlansExtras();
 
-    ['vlan30-rede', 'vlan40-rede', 'vlan50-rede', 'vlan60-rede'].forEach(id => {
+    ['vlan30-rede', 'vlan40-rede', 'vlan50-rede'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener('input', wifiAtualizarHosts);
     });

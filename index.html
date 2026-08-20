@@ -652,7 +652,7 @@
                                     <input type="checkbox" id="vlan30" value="30">
                                     <strong>VLAN 30</strong>
                                 </label>
-                                <input type="text" class="vlan-nome" id="vlan30-nome" value="MAQ_CARTAO"
+                                <input type="text" class="vlan-nome" id="vlan30-nome" value="WIFI-CORP1"
                                     spellcheck="false" aria-label="Nome da VLAN 30">
                                 <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan30-rede" value="10.30.0.1/20"
                                     spellcheck="false" aria-label="Endereçamento da VLAN 30"><small class="vlan-hosts" id="vlan30-hosts"></small></span>
@@ -664,7 +664,7 @@
                                     <input type="checkbox" id="vlan40" value="40" checked>
                                     <strong>VLAN 40</strong>
                                 </label>
-                                <input type="text" class="vlan-nome" id="vlan40-nome" value="CORPORATIVO"
+                                <input type="text" class="vlan-nome" id="vlan40-nome" value="WIFI-CORP2"
                                     spellcheck="false" aria-label="Nome da VLAN 40">
                                 <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan40-rede" value="10.40.0.1/20"
                                     spellcheck="false" aria-label="Endereçamento da VLAN 40"><small class="vlan-hosts" id="vlan40-hosts"></small></span>
@@ -676,7 +676,7 @@
                                     <input type="checkbox" id="vlan50" value="50">
                                     <strong>VLAN 50</strong>
                                 </label>
-                                <input type="text" class="vlan-nome" id="vlan50-nome" value="RESERVA"
+                                <input type="text" class="vlan-nome" id="vlan50-nome" value="WIFI-CORP3"
                                     spellcheck="false" aria-label="Nome da VLAN 50">
                                 <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan50-rede" value="10.50.0.1/20"
                                     spellcheck="false" aria-label="Endereçamento da VLAN 50"><small class="vlan-hosts" id="vlan50-hosts"></small></span>
@@ -685,13 +685,12 @@
 
                             <div class="vlan-row">
                                 <label class="vlan-check">
-                                    <input type="checkbox" id="vlan60" value="60" checked>
+                                    <input type="checkbox" id="vlan60" value="60" checked disabled title="Gerência sempre ativa — não pode ser desmarcada">
                                     <strong>VLAN 60</strong>
                                 </label>
-                                <input type="text" class="vlan-nome" id="vlan60-nome" value="GERENCIA"
-                                    spellcheck="false" aria-label="Nome da VLAN 60">
-                                <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan60-rede" value="10.60.0.1/24"
-                                    spellcheck="false" aria-label="Endereçamento da VLAN 60"><small class="vlan-hosts" id="vlan60-hosts"></small></span>
+                                <span class="vlan-nome-fixo" title="Nome padrão do setor — não editável">GERENCIA</span>
+                                <span class="vlan-rede-wrap"><span class="vlan-fixo" title="Endereçamento padrão do setor — não editável">10.60.0.1/24
+                                    · fixo</span><small class="vlan-hosts" id="vlan60-hosts"></small></span>
                                 <span></span>
                             </div>
                         </div>
@@ -701,12 +700,13 @@
                         <button type="button" class="btn btn-secondary" id="wifi-add-vlan" style="margin-top:12px;">+ Adicionar VLAN</button>
 
                         <p class="vlan-dica">Padrão do setor: <code>10.&lt;VLAN&gt;.0.1/20</code> — a VLAN 40 nasce em
-                            <code>10.40.0.1/20</code>. Fora do padrão só a 20 (Hotspot), com faixa própria e não
-                            editável, e a 60 (Gerência), que nasce <code>/24</code> por não precisar de pool grande.
-                            Informe o IP do gateway com a máscara que o pool DHCP, a rede, o NAT e o isolamento saem
-                            calculados. VLANs adicionais recebem o mesmo bloco de configuração — muda só a rede — e o
-                            endereço acompanha o número da VLAN (VLAN 55 → <code>10.55.0.1/20</code>) até você editá-lo
-                            à mão.</p>
+                            <code>10.40.0.1/20</code> e o nome padrão segue <code>WIFI-CORP&lt;N&gt;</code> (30 → CORP1,
+                            40 → CORP2, 50 → CORP3, e assim por diante nas VLANs adicionais). Fora do padrão só a 20
+                            (Hotspot) e a 60 (Gerência): ambas com nome e endereço fixos, e a Gerência fica sempre
+                            ativa — não pode ser desmarcada. Informe o IP do gateway com a máscara que o pool DHCP, a
+                            rede, o NAT e o isolamento saem calculados. VLANs adicionais recebem o mesmo bloco de
+                            configuração — muda só a rede — e o endereço acompanha o número da VLAN (VLAN 55 →
+                            <code>10.55.0.1/20</code>) até você editá-lo à mão.</p>
                     </div>
 
                     <div class="btn-row">
