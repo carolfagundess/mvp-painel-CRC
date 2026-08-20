@@ -11,11 +11,21 @@ Projeto 100% front-end (HTML + CSS + JavaScript puro), sem backend, sem build e 
 ## Estrutura de arquivos
 
 ```
-mvp-painel-CRC-homolog/
-├── index.html   # Estrutura das páginas e formulários
-├── style.css    # Estilos (tema, layout, componentes)
-├── app.js       # Lógica de navegação e geração de scripts/textos
-└── README.md    # Este arquivo
+mvp-painel-CRC/
+├── index.html                        # Estrutura das páginas e formulários
+├── src/
+│   ├── core/
+│   │   └── main.js                   # Navegação entre páginas e wiring dos eventos
+│   ├── features/
+│   │   ├── acessos/novo-acesso.js     # Lógica do Novo Acesso
+│   │   ├── ciasc/ciasc.js             # Lógica das Ferramentas CIASC
+│   │   ├── wifi/wifi.js               # Lógica do Wifi Business
+│   │   ├── equipamentos/equip.js      # Lógica do Verificador de Equipamentos
+│   │   └── ipv4/ipv4.js               # Lógica da Calculadora de Redes IPv4
+│   └── shared/
+│       ├── data/dados.js             # Dados estáticos (ex.: equipamentos por plano)
+│       └── styles/style.css          # Estilos (tema, layout, componentes)
+└── README.md                          # Este arquivo
 ```
 
 ## Como rodar
@@ -57,11 +67,17 @@ Gerador modular de scripts MikroTik, com:
 ### 📋 Verificador de Equipamentos
 Consulta em cascata (Modalidade → Viabilidade → Plano) que retorna o equipamento recomendado, com observações e, quando aplicável, alerta de regra especial (ex.: acessos PTP que dependem de projeto de engenharia).
 
-As regras desta ferramenta ficam no objeto `eqDados`, dentro de `app.js`, e podem ser atualizadas ali conforme o portfólio de equipamentos mudar.
+As regras desta ferramenta ficam no objeto `eqDados`, dentro de `src/shared/data/dados.js`, e podem ser atualizadas ali conforme o portfólio de equipamentos mudar.
+
+### 🧮 Calculadora de Redes IPv4
+Calculadora de sub-redes IPv4, inspirada na ferramenta do site24x7:
+- Informe o **Endereço de Rede** e a **Máscara de Sub-rede** (lista de `/0` a `/32`) para calcular faixa de host, broadcast, máscara curinga e notação CIDR.
+- Divida a rede em múltiplas sub-redes informando **Nº de Sub-redes Desejado** ou **Hosts Necessários por Sub-rede** (apenas um dos dois) — o resultado exibe uma tabela com **Detalhes da Sub-rede** (Subnet ID, endereço, faixa de host e broadcast) para cada sub-rede gerada, com limite de 256 linhas exibidas por segurança/performance.
+- Traz um tutorial recolhível ("Como usar esta calculadora") explicando o preenchimento dos campos.
 
 ## Todas as ferramentas oferecem
 
-- Botão **Gerar** para montar o texto/script
+- Botão **Gerar/Calcular** para montar o texto/script ou o resultado do cálculo
 - Botão **Copiar** para copiar o resultado para a área de transferência (com mensagem de confirmação)
 - Botão **Limpar/Novo** para reiniciar o formulário
 
