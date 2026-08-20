@@ -739,14 +739,18 @@
                 </div>
 
                 <div class="section-divider" style="margin-top: 0;">Resumo Geral da Topologia</div>
+                <p style="color:var(--text2);font-size:13px;margin-bottom:14px;">A tabela abaixo mostra os valores
+                    <strong>padrão</strong> propostos pelo gerador. Nome e rede das VLANs 30/40/50 e das VLANs
+                    adicionais podem ser editados na tela antes de gerar o script — apenas o Hotspot (20) e a
+                    Gerência (60) são fixos e não podem ser alterados.</p>
                 <div class="table-responsive">
                     <table class="doc-table">
                         <thead>
                             <tr>
                                 <th>VLAN ID</th>
-                                <th>Nome da Rede</th>
-                                <th>Interface / Gateway</th>
-                                <th>Faixa DHCP (Pool)</th>
+                                <th>Nome padrão</th>
+                                <th>Interface / Gateway padrão</th>
+                                <th>Editável?</th>
                                 <th>Firewall RAW</th>
                                 <th>Finalidade</th>
                             </tr>
@@ -756,7 +760,7 @@
                                 <td>—</td>
                                 <td>Rede de Adoção</td>
                                 <td>BRIDGE-LAN<br>192.168.200.1/24</td>
-                                <td>192.168.200.2 - 254</td>
+                                <td>Não</td>
                                 <td>Não isolada</td>
                                 <td>Provisionamento de APs UniFi e TP-Link</td>
                             </tr>
@@ -764,41 +768,49 @@
                                 <td>20</td>
                                 <td>HOTSPOT</td>
                                 <td>VLAN_20_HOTSPOT<br>10.0.0.1/22</td>
-                                <td>10.0.0.2 - 10.0.3.254</td>
-                                <td>Isolada</td>
-                                <td>Rede para clientes Wi-Fi com Hotspot</td>
+                                <td>Não — fixo (só entra se algum Hotspot for selecionado)</td>
+                                <td>Isolada, exceto o gateway</td>
+                                <td>Rede para clientes Wi-Fi com Hotspot (Mambo ou Wifeed)</td>
                             </tr>
                             <tr>
                                 <td>30</td>
-                                <td>MÁQUINAS DE CARTÃO</td>
-                                <td>VLAN_30_MAQ_CARTAO<br>10.5.4.1/23</td>
-                                <td>10.5.4.2 - 10.5.5.254</td>
+                                <td>WIFI-CORP1</td>
+                                <td>VLAN_30_WIFI_CORP1<br>10.30.0.1/20</td>
+                                <td>Sim — nome e rede</td>
                                 <td>Isolada</td>
-                                <td>Rede exclusiva para Pontos de Venda</td>
+                                <td>Rede corporativa / dispositivos internos</td>
                             </tr>
                             <tr>
                                 <td>40</td>
-                                <td>CORPORATIVO</td>
-                                <td>VLAN_40_CORPORATIVO<br>10.10.10.1/23</td>
-                                <td>10.10.10.2 - 10.10.11.254</td>
+                                <td>WIFI-CORP2</td>
+                                <td>VLAN_40_WIFI_CORP2<br>10.40.0.1/20</td>
+                                <td>Sim — nome e rede</td>
                                 <td>Isolada</td>
-                                <td>Computadores, notebooks e dispositivos internos</td>
+                                <td>Rede corporativa / dispositivos internos</td>
                             </tr>
                             <tr>
                                 <td>50</td>
-                                <td>RESERVA</td>
-                                <td>VLAN_50_RESERVA<br>10.15.12.1/22</td>
-                                <td>10.15.12.2 - 10.15.15.254</td>
+                                <td>WIFI-CORP3</td>
+                                <td>VLAN_50_WIFI_CORP3<br>10.50.0.1/20</td>
+                                <td>Sim — nome e rede</td>
                                 <td>Isolada</td>
-                                <td>Rede destinada a expansão futura ou uso temporário</td>
+                                <td>Rede corporativa / dispositivos internos</td>
                             </tr>
                             <tr>
                                 <td>60</td>
-                                <td>GERÊNCIA</td>
-                                <td>VLAN_60_GERENCIA<br>10.20.20.1/24</td>
-                                <td>10.20.20.2 - 10.20.20.254</td>
+                                <td>GERENCIA</td>
+                                <td>VLAN_60_GERENCIA<br>10.60.0.1/24</td>
+                                <td>Não — fixo e sempre ativo</td>
                                 <td>Sem bloqueio</td>
-                                <td>Administração da infraestrutura (Equipamentos)</td>
+                                <td>Administração da infraestrutura (equipamentos)</td>
+                            </tr>
+                            <tr>
+                                <td>Livre (2–4094)</td>
+                                <td>WIFI-CORP4, WIFI-CORP5…</td>
+                                <td>VLAN_&lt;ID&gt;_&lt;NOME&gt;<br>10.&lt;ID&gt;.0.1/20</td>
+                                <td>Sim — ID, nome e rede</td>
+                                <td>Isolada</td>
+                                <td>VLANs adicionais criadas via "+ Adicionar VLAN"</td>
                             </tr>
                         </tbody>
                     </table>
@@ -814,8 +826,9 @@
                                     <td>BRIDGE-LAN</td>
                                 </tr>
                                 <tr>
-                                    <th>Interface Física</th>
-                                    <td>ether5</td>
+                                    <th>Portas físicas</th>
+                                    <td>Configuráveis (ether2 a ether10) — ether5 marcada por padrão. A
+                                        <code>ether1</code> nunca entra, por ser a WAN.</td>
                                 </tr>
                                 <tr>
                                     <th>Protocolo</th>
@@ -826,19 +839,20 @@
                                     <td>192.168.200.1/24</td>
                                 </tr>
                                 <tr>
-                                    <th>VLANs Adicionadas</th>
-                                    <td>20, 30, 40, 50 e 60</td>
+                                    <th>VLANs possíveis</th>
+                                    <td>20, 30, 40, 50, 60 (marque as que quiser provisionar) + quantas VLANs
+                                        adicionais forem necessárias</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <div>
-                        <div class="section-divider">Servidores DHCP e Leases</div>
+                        <div class="section-divider">Lease Time por Papel de VLAN</div>
                         <table class="doc-table">
                             <thead>
                                 <tr>
-                                    <th>Nome</th>
+                                    <th>DHCP (nome dinâmico)</th>
                                     <th>Gateway</th>
                                     <th>Lease Time</th>
                                 </tr>
@@ -855,61 +869,82 @@
                                     <td>15 min</td>
                                 </tr>
                                 <tr>
-                                    <td>DHCP_MAQ_CARTAO</td>
-                                    <td>10.5.4.1</td>
+                                    <td>DHCP_&lt;NOME DA VLAN 30&gt;</td>
+                                    <td>gateway informado</td>
                                     <td>30 min</td>
                                 </tr>
                                 <tr>
-                                    <td>DHCP_CORP</td>
-                                    <td>10.10.10.1</td>
+                                    <td>DHCP_&lt;NOME DA VLAN 40&gt;</td>
+                                    <td>gateway informado</td>
                                     <td>30 min</td>
                                 </tr>
                                 <tr>
-                                    <td>DHCP_RESERVA</td>
-                                    <td>10.15.12.1</td>
+                                    <td>DHCP_&lt;NOME DA VLAN 50&gt;</td>
+                                    <td>gateway informado</td>
                                     <td>15 min</td>
                                 </tr>
                                 <tr>
+                                    <td>DHCP_&lt;NOME DA VLAN ADICIONAL&gt;</td>
+                                    <td>gateway informado</td>
+                                    <td>30 min</td>
+                                </tr>
+                                <tr>
                                     <td>DHCP_GERENCIA</td>
-                                    <td>10.20.20.1</td>
+                                    <td>10.60.0.1</td>
                                     <td>1h 59min</td>
                                 </tr>
                             </tbody>
                         </table>
+                        <p style="color:var(--text3);font-size:11.5px;margin-top:8px;">O nome do DHCP, do pool e do
+                            comentário da rede seguem o nome informado para a VLAN — ex.: uma VLAN 40 renomeada para
+                            "FILIAL" gera <code>DHCP_FILIAL</code>, <code>POOL_FILIAL</code> e
+                            <code>REDE_FILIAL</code>. Sem nome, cai para o número da VLAN (<code>DHCP_70</code>).</p>
                     </div>
                 </div>
 
                 <div class="section-divider">Firewall e Isolamento (RAW)</div>
                 <ul class="doc-list">
-                    <li><strong>Address List <code>BLOCK_REDES</code>:</strong> Reúne as redes internas 10.0.0.0/22
-                        (Hotspot), 10.5.4.0/23 (Máquinas de Cartão), 10.10.10.0/23 (Corporativo) e 10.15.12.0/22
-                        (Reserva).</li>
+                    <li><strong>Address List <code>BLOCK_REDES</code>:</strong> Reúne as redes de todas as VLANs
+                        marcadas na tela — Hotspot (20), WIFI-CORP1/2/3 (30/40/50, apenas as marcadas) e qualquer
+                        VLAN adicional criada. A lista é montada dinamicamente a cada geração, então só entram as
+                        redes efetivamente provisionadas.</li>
                     <li><strong>Isolamento entre VLANs:</strong> Regras no Firewall RAW (prerouting) impedem que
-                        dispositivos das VLANs 20, 30, 40 e 50 acessem as demais redes listadas em
-                        <code>BLOCK_REDES</code>.
+                        dispositivos do Hotspot e das VLANs corporativas (fixas ou adicionais) acessem as demais
+                        redes listadas em <code>BLOCK_REDES</code>.
                     </li>
                     <li><strong>Exceção da VLAN 20 (Hotspot):</strong> Os clientes podem se comunicar com o gateway
-                        10.0.0.1, permitindo o funcionamento do DHCP, DNS (quando fornecido pelo MikroTik) e do
-                        Hotspot/Portal Captivo.</li>
-                    <li><strong>VLAN 60 (Gerência):</strong> Não faz parte da <code>BLOCK_REDES</code> e não possui
+                        do Hotspot (10.0.0.1), permitindo o funcionamento do DHCP, DNS (quando fornecido pelo
+                        MikroTik) e do Hotspot/Portal Captivo.</li>
+                    <li><strong>VLAN 60 (Gerência):</strong> Nunca entra na <code>BLOCK_REDES</code> e não possui
                         regras de bloqueio em raw, podendo acessar as demais redes para fins de administração (salvo
-                        se
-                        existirem outras regras de firewall restringindo esse acesso).</li>
+                        se existirem outras regras de firewall restringindo esse acesso). Por ser sempre provisionada,
+                        a rede de Gerência está sempre disponível para gerenciar o equipamento.</li>
                     <li><strong>Processamento em RAW:</strong> O bloqueio é realizado antes do Connection Tracking,
                         reduzindo o consumo de CPU e melhorando o desempenho do roteador.</li>
-                    <li><strong>NAT (Masquerade):</strong> Configurado para todas as redes provisionadas, permitindo
-                        que
-                        elas acessem a Internet utilizando o endereço IP da interface de saída.</li>
+                    <li><strong>NAT (Masquerade):</strong> Configurado para cada rede provisionada e, por segurança,
+                        reforçado por uma regra de masquerade geral ao final do script, cobrindo qualquer rede que
+                        não tenha ganhado regra própria.</li>
                 </ul>
                 <div class="section-divider">Observações e Padrões Fixos</div>
                 <ul class="doc-list">
-                    <li>Todas as VLANs possuem <strong>DHCP próprio</strong> e <strong>Pool de IP dedicado</strong>.
-                    </li>
+                    <li>Todas as VLANs provisionadas possuem <strong>DHCP próprio</strong> e <strong>Pool de IP
+                        dedicado</strong>, calculados automaticamente a partir do gateway/máscara informado.</li>
                     <li>O servidor DNS entregue via DHCP para todas as VLANs é sempre <strong>8.8.8.8</strong> e
                         <strong>8.8.4.4</strong>.
                     </li>
                     <li>A rede da Bridge <strong>192.168.200.0/24</strong> destina-se exclusivamente ao
                         provisionamento/adoção de Access Points, isolando este tráfego das demais redes.</li>
+                    <li>A VLAN 60 (Gerência) é sempre provisionada — não pode ser desmarcada — e mantém nome
+                        (<code>GERENCIA</code>) e rede (<code>10.60.0.1/24</code>) fixos.</li>
+                    <li>As VLANs 30, 40 e 50 nascem com o nome padrão <code>WIFI-CORP1</code>, <code>WIFI-CORP2</code>
+                        e <code>WIFI-CORP3</code>; VLANs adicionais seguem a mesma sequência
+                        (<code>WIFI-CORP4</code>, <code>WIFI-CORP5</code>...), mas todos os nomes podem ser
+                        editados livremente.</li>
+                    <li>O Hotspot pode ser configurado com <strong>Mambo</strong> (exige Identificador e provisiona o
+                        RADIUS/Walled Garden) ou <strong>Wifeed</strong> (a VLAN 20 é criada sem endereço local, pois
+                        a autenticação é gerenciada externamente).</li>
+                    <li>O script gerado pode ser copiado ou baixado como arquivo <strong>.rsc</strong>, pronto para
+                        importar no MikroTik com <code>/import file-name=&lt;arquivo&gt;.rsc</code>.</li>
                 </ul>
             </div>
 
