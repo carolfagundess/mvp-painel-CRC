@@ -54,6 +54,7 @@ function wifiParseRede(valor) {
 
     return {
         gateway: wifiIntParaIp(gwInt),
+        prefixo,
         gatewayCidr: `${wifiIntParaIp(gwInt)}/${prefixo}`,
         redeCidr: `${wifiIntParaIp(redeInt)}/${prefixo}`,
         poolRanges: faixas.map(([ini, fim]) => `${wifiIntParaIp(ini)}-${wifiIntParaIp(fim)}`).join(','),
@@ -69,25 +70,16 @@ function wifiRedesSobrepostas(a, b) {
 }
 
 /* Endereçamento padrão do setor: o número da VLAN vira o segundo octeto e a
-   máscara é /20 — VLAN 40 → 10.40.0.1/20. A única exceção é a VLAN 20, que tem
-   a faixa própria do Hotspot. Hotspot e Gerência não são editáveis. */
+   máscara é /20 — VLAN 40 → 10.40.0.1/20. A VLAN 20 (Hotspot) segue o mesmo
+   padrão; a única que foge é a 60 (Gerência), que nasce /24. Nenhuma das duas
+   é mais travada: viram VLAN comum, só com nome e rede pré-preenchidos. */
 const WIFI_MASCARA_PADRAO = 20;
-const WIFI_REDE_HOTSPOT_TXT = '10.0.0.1/22';
+const WIFI_REDE_HOTSPOT_TXT = '10.20.0.1/20';
 /* Rede da BRIDGE-LAN, usada para adoção dos APs — nasce em todo script. */
 const WIFI_REDE_ADOCAO_TXT = '192.168.200.1/24';
 const WIFI_REDE_GERENCIA_TXT = '10.60.0.1/24';
 
-const WIFI_REDE_HOTSPOT = wifiParseRede(WIFI_REDE_HOTSPOT_TXT);
-const WIFI_REDE_GERENCIA = wifiParseRede(WIFI_REDE_GERENCIA_TXT);
-
-/* VLAN 60 (Gerência) é travada: sempre ativa, nome e rede fixos. */
-const WIFI_IDS_GERENCIA = {
-    nome: 'GERENCIA',
-    interface: 'VLAN_60_GERENCIA',
-    pool: 'POOL_GERENCIA',
-    dhcp: 'DHCP_GERENCIA',
-    comentario: 'REDE_GERENCIA'
-};
+const WIFI_REDE_ADOCAO = wifiParseRede(WIFI_REDE_ADOCAO_TXT);
 
 /* Endereço padrão de uma VLAN a partir do octeto que a representa. */
 function wifiRedePadrao(octeto) {
@@ -131,14 +123,8 @@ function wifiIdentificadores(id, nomeDigitado) {
 
 /* Mostra quantos IPs o pool DHCP terá, embaixo de cada campo de rede. */
 function wifiAtualizarHosts() {
-    const el20 = document.getElementById('vlan20-hosts');
-    if (el20) el20.textContent = `${WIFI_REDE_HOTSPOT.poolTotal} IPs no pool`;
-
-    const el60 = document.getElementById('vlan60-hosts');
-    if (el60) el60.textContent = `${WIFI_REDE_GERENCIA.poolTotal} IPs no pool`;
-
     const campos = [
-        ...['vlan30', 'vlan40', 'vlan50'].map(v => [document.getElementById(`${v}-rede`), document.getElementById(`${v}-hosts`)]),
+        ...['vlan20', 'vlan30', 'vlan40', 'vlan50', 'vlan60'].map(v => [document.getElementById(`${v}-rede`), document.getElementById(`${v}-hosts`)]),
         ...[...document.querySelectorAll('#wifi-vlans-extras .vlan-extra')].map(l => [l.querySelector('.vlan-rede'), l.querySelector('.vlan-hosts')])
     ];
 
@@ -173,13 +159,11 @@ function wifiLerVlansExtras() {
    `ignorarEl` deixa de fora o próprio campo que está sendo recalculado. */
 function wifiRedesEmUso(ignorarEl) {
     const campos = [
-        ...['vlan30-rede', 'vlan40-rede', 'vlan50-rede'].map(id => document.getElementById(id)),
+        ...['vlan20-rede', 'vlan30-rede', 'vlan40-rede', 'vlan50-rede', 'vlan60-rede'].map(id => document.getElementById(id)),
         ...document.querySelectorAll('#wifi-vlans-extras .vlan-rede')
     ].filter(el => el && el !== ignorarEl);
 
     return [
-        WIFI_REDE_HOTSPOT_TXT,   // VLAN 20 (fixa)
-        WIFI_REDE_GERENCIA_TXT,  // VLAN 60 (fixa)
         WIFI_REDE_ADOCAO_TXT,    // BRIDGE-LAN, criada em todo script
         ...campos.map(el => el.value)
     ].map(wifiParseRede).filter(Boolean);
@@ -345,6 +329,175 @@ export function wifiHotspotChange() {
             vlan20.title = '';
         }
     }
+
+    /* O endereço da VLAN 20 só é aplicado no MikroTik quando o Hotspot é
+       Mambo — sem Hotspot não há por que configurá-lo, e com Wifeed quem
+       configura a rede de verdade é o painel do Wifeed, do outro lado (o
+       valor aqui só serve de base para os campos traduzidos ao lado). Fica
+       visível mas travado no padrão do setor nos outros dois casos. */
+    const vlan20Rede = document.getElementById('vlan20-rede');
+    if (vlan20Rede) {
+        const editavel = select.value === 'mambo';
+        if (!editavel) vlan20Rede.value = WIFI_REDE_HOTSPOT_TXT;
+        vlan20Rede.disabled = !editavel;
+        vlan20Rede.title = editavel ? '' : (select.value === 'wifeed'
+            ? 'O Wifeed gerencia este endereçamento — veja o aviso ao lado'
+            : 'Selecione o Hotspot Mambo para editar o endereçamento da VLAN 20');
+    }
+
+    wifiAtualizarWifeed();
+}
+
+/* ── apoio à configuração do Wifeed ──
+
+   A VLAN 20 é a do hotspot. Quando ela recebe uma rede, é porque o cliente vai
+   ser integrado ao Wifeed depois — e quem configura lá do outro lado precisa
+   dos mesmos números que estão aqui. Este bloco traduz o endereçamento para os
+   campos que o painel do Wifeed pede, para ninguém ter que converter máscara
+   na mão nem descobrir a faixa por tentativa. */
+
+/* /20 vira 255.255.240.0 — o Wifeed pede a máscara em decimal.
+   Sem prefixo válido devolve vazio: melhor faltar o campo do que entregar uma
+   máscara plausível e errada para quem vai configurar do outro lado. */
+function wifiMascaraDecimal(prefixo) {
+    if (!Number.isInteger(prefixo) || prefixo < 1 || prefixo > 32) return '';
+    return wifiIntParaIp(((0xFFFFFFFF << (32 - prefixo)) >>> 0));
+}
+
+const WIFI_DNS = '8.8.8.8,8.8.4.4';
+
+/* Fonte única dos campos: a tela e o texto copiado saem os dois daqui, na
+   ordem em que aparecem no painel do Wifeed. */
+function wifiCamposWifeed(rede) {
+    if (!rede) return null;
+    return [
+        { grupo: 'Rede', rotulo: 'Endereço IP', valor: rede.gateway },
+        { grupo: 'Rede', rotulo: 'Máscara de Rede', valor: wifiMascaraDecimal(rede.prefixo) },
+        { grupo: 'Rede', rotulo: 'Faixa de IP', valor: rede.poolRanges },
+        { grupo: 'Rede', rotulo: 'Servidores DNS', valor: WIFI_DNS },
+        { grupo: 'Mikrotik', rotulo: 'Interface LAN', valor: 'VLAN_20_HOTSPOT' },
+        { grupo: 'Mikrotik', rotulo: 'Virtual LAN', valor: '20' }
+    ];
+}
+
+/* Mesmo conteúdo da tela, em texto — para colar no chamado. */
+function wifiDadosWifeed(rede) {
+    const campos = wifiCamposWifeed(rede);
+    if (!campos) return null;
+
+    const linhas = [];
+    let grupoAtual = '';
+    campos.forEach(c => {
+        if (c.grupo !== grupoAtual) {
+            if (grupoAtual) linhas.push('');
+            linhas.push(c.grupo.toUpperCase());
+            grupoAtual = c.grupo;
+        }
+        linhas.push(`${c.rotulo}: ${c.valor}`);
+    });
+    return linhas.join('\n');
+}
+
+function wifiEscapar(txt) {
+    return String(txt).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+}
+
+/* Desenha os campos agrupados como no painel do Wifeed, cada um com cópia
+   individual — na hora de transcrever, é campo a campo. */
+function wifiDesenharWifeed(campos) {
+    const grupos = [];
+    campos.forEach(c => {
+        const ultimo = grupos[grupos.length - 1];
+        if (ultimo && ultimo.nome === c.grupo) ultimo.itens.push(c);
+        else grupos.push({ nome: c.grupo, itens: [c] });
+    });
+
+    return grupos.map(g => `<div class="wf-grupo">
+    <h4>${wifiEscapar(g.nome)}</h4>
+    ${g.itens.map(c => `<div class="wf-campo">
+        <span class="wf-texto">
+            <span class="wf-rotulo">${wifiEscapar(c.rotulo)}</span>
+            <span class="wf-valor">${wifiEscapar(c.valor)}</span>
+        </span>
+        <button type="button" class="wf-copia" data-copiar-campo title="Copiar ${wifiEscapar(c.rotulo)}" aria-label="Copiar ${wifiEscapar(c.rotulo)}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+    </div>`).join('\n')}
+</div>`).join('\n');
+}
+
+/* Mostra ou esconde o bloco conforme o hotspot escolhido, e mantém os números
+   em dia enquanto a rede da VLAN 20 é editada. */
+function wifiAtualizarWifeed() {
+    const caixa = document.getElementById('wifi-wifeed-apoio');
+    if (!caixa) return;
+
+    const ehWifeed = document.getElementById('wifi-mambo').value === 'wifeed';
+    caixa.style.display = ehWifeed ? 'block' : 'none';
+    if (!ehWifeed) return;
+
+    const rede = wifiParseRede(document.getElementById('vlan20-rede').value);
+    const campos = wifiCamposWifeed(rede);
+    const alvo = document.getElementById('wifi-wifeed-campos');
+
+    const alertaRede = document.getElementById('wifi-alerta-rede');
+    if (alertaRede) alertaRede.textContent = rede ? rede.gatewayCidr : 'a definir';
+
+    /* A nota é sempre recalculada, inclusive quando some — senão ela sobra na
+       tela descrevendo uma rede que não está mais no campo. */
+    const nota = document.getElementById('wifi-wifeed-nota');
+    nota.style.display = 'none';
+
+    if (!campos) {
+        alvo.innerHTML = '<p class="wf-vazio">Informe a rede da VLAN 20 para o painel calcular os campos.</p>';
+        return;
+    }
+    alvo.innerHTML = wifiDesenharWifeed(campos);
+
+    /* Gateway fora do primeiro host parte o pool em duas faixas, e o campo do
+       Wifeed aceita só uma. Melhor avisar aqui do que descobrir lá. */
+    const partido = rede.poolRanges.includes(',');
+    nota.style.display = partido ? 'block' : 'none';
+    if (partido) {
+        nota.textContent = 'A faixa saiu partida em duas porque o gateway não é o primeiro host da rede. ' +
+            'O campo do Wifeed aceita uma faixa só — use a maior, ou mude o gateway para o primeiro endereço.';
+    }
+}
+
+/* Copia o valor de um campo isolado, para transcrever no Wifeed sem erro de digitação. */
+function wifiCopiarCampo(btn) {
+    const valor = btn.closest('.wf-campo').querySelector('.wf-valor').textContent;
+    wifiCopiarTexto(valor);
+
+    btn.classList.add('wf-copiado');
+    setTimeout(() => btn.classList.remove('wf-copiado'), 1200);
+}
+
+/* Delegação de eventos dos botões de copiar campo — os campos são redesenhados a cada cálculo. */
+function wifiWireWifeedCampos() {
+    const alvo = document.getElementById('wifi-wifeed-campos');
+    if (!alvo || alvo.dataset.wired) return;
+    alvo.dataset.wired = '1';
+
+    alvo.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-copiar-campo]');
+        if (btn) wifiCopiarCampo(btn);
+    });
+}
+
+export function wifiCopiarWifeed() {
+    const rede = wifiParseRede(document.getElementById('vlan20-rede').value);
+    const dados = wifiDadosWifeed(rede);
+    if (!dados) { alert('Informe a rede da VLAN 20 primeiro.'); return; }
+
+    wifiCopiarTexto(dados);
+    const msg = document.getElementById('wifi-copiado');
+    msg.textContent = '✓ Dados do Wifeed copiados!';
+    msg.style.display = 'block';
+    setTimeout(() => {
+        msg.style.display = 'none';
+        msg.textContent = '✓ Script copiado para a área de transferência!';
+    }, 2600);
 }
 
 export function wifiLimpar() {
@@ -353,17 +506,17 @@ export function wifiLimpar() {
     document.getElementById('wifi-identificador').value = '';
     document.getElementById('wifi-identificador-wrap').style.display = 'none';
 
-    const padroes = { vlan30: false, vlan40: true, vlan50: false, vlan60: true };
+    const padroes = { vlan20: true, vlan30: false, vlan40: true, vlan50: false, vlan60: true };
     Object.entries(padroes).forEach(([id, marcado]) => {
         document.getElementById(id).checked = marcado;
     });
-    // VLAN 20 depende do Hotspot selecionado (acabou de voltar para "Não").
-    wifiHotspotChange();
 
     const camposPadrao = {
+        'vlan20-rede': WIFI_REDE_HOTSPOT_TXT,
         'vlan30-nome': 'WIFI-CORP1', 'vlan30-rede': wifiRedePadrao(30),
         'vlan40-nome': 'WIFI-CORP2', 'vlan40-rede': wifiRedePadrao(40),
-        'vlan50-nome': 'WIFI-CORP3', 'vlan50-rede': wifiRedePadrao(50)
+        'vlan50-nome': 'WIFI-CORP3', 'vlan50-rede': wifiRedePadrao(50),
+        'vlan60-nome': 'GERENCIA', 'vlan60-rede': WIFI_REDE_GERENCIA_TXT
     };
     Object.entries(camposPadrao).forEach(([id, valor]) => {
         const el = document.getElementById(id);
@@ -377,6 +530,9 @@ export function wifiLimpar() {
         cb.checked = cb.value === '5';
     });
     wifiAtualizarHosts();
+
+    // VLAN 20 depende do Hotspot selecionado (acabou de voltar para "Não") — atualiza junto o apoio Wifeed.
+    wifiHotspotChange();
 
     const res = document.getElementById('wifi-resultado');
     res.style.display = 'none';
@@ -405,19 +561,19 @@ export function wifiGerar() {
         return;
     }
 
-    // Endereçamento: Hotspot e Gerência são fixos; as demais vêm dos campos.
-    const hs = WIFI_REDE_HOTSPOT;
+    // Endereçamento: todas as redes vêm dos campos.
+    const hs = v20 ? wifiLerRede('vlan20-rede') : null;
     const r30 = v30 ? wifiLerRede('vlan30-rede') : null;
     const r40 = v40 ? wifiLerRede('vlan40-rede') : null;
     const r50 = v50 ? wifiLerRede('vlan50-rede') : null;
-    const r60 = v60 ? WIFI_REDE_GERENCIA : null;
+    const r60 = v60 ? wifiLerRede('vlan60-rede') : null;
 
-    // Nomes editáveis (Hotspot e Gerência têm nome fixo).
+    // Nomes editáveis (Hotspot é o único com nome fixo).
     const n30 = wifiIdentificadores(30, document.getElementById('vlan30-nome').value);
     const n40 = wifiIdentificadores(40, document.getElementById('vlan40-nome').value);
     const n50 = wifiIdentificadores(50, document.getElementById('vlan50-nome').value);
-    const n60 = WIFI_IDS_GERENCIA;
-    ['vlan30-nome', 'vlan40-nome', 'vlan50-nome'].forEach(id => document.getElementById(id).classList.remove('erro'));
+    const n60 = wifiIdentificadores(60, document.getElementById('vlan60-nome').value);
+    ['vlan30-nome', 'vlan40-nome', 'vlan50-nome', 'vlan60-nome'].forEach(id => document.getElementById(id).classList.remove('erro'));
 
     const portas = wifiPortasSelecionadas();
     if (!portas.length) {
@@ -428,9 +584,11 @@ export function wifiGerar() {
     const extras = wifiLerVlansExtras();
 
     const invalidas = [];
+    if (v20 && !hs) invalidas.push('VLAN 20');
     if (v30 && !r30) invalidas.push('VLAN 30');
     if (v40 && !r40) invalidas.push('VLAN 40');
     if (v50 && !r50) invalidas.push('VLAN 50');
+    if (v60 && !r60) invalidas.push('VLAN 60');
     extras.forEach((v, i) => {
         if (!v.idValido) invalidas.push(`VLAN adicional #${i + 1} (ID precisa ficar entre 2 e 4094)`);
         else if (!v.rede) invalidas.push(`VLAN ${v.id}`);
@@ -458,7 +616,7 @@ export function wifiGerar() {
         v30 && { rotulo: 'VLAN 30', nome: n30.nome, el: document.getElementById('vlan30-nome') },
         v40 && { rotulo: 'VLAN 40', nome: n40.nome, el: document.getElementById('vlan40-nome') },
         v50 && { rotulo: 'VLAN 50', nome: n50.nome, el: document.getElementById('vlan50-nome') },
-        v60 && { rotulo: 'VLAN 60', nome: n60.nome },
+        v60 && { rotulo: 'VLAN 60', nome: n60.nome, el: document.getElementById('vlan60-nome') },
         ...extras.map(v => ({ rotulo: `VLAN ${v.id}`, nome: v.ids.nome, el: v.nomeEl }))
     ].filter(item => item && item.nome);
 
@@ -474,12 +632,12 @@ export function wifiGerar() {
 
     // Duas VLANs não podem dividir a mesma faixa de IP.
     const ativas = [
-        { rotulo: 'BRIDGE-LAN (adoção)', rede: wifiParseRede(WIFI_REDE_ADOCAO_TXT) },
-        v20 && { rotulo: 'VLAN 20', rede: hs },
+        { rotulo: 'BRIDGE-LAN (adoção)', rede: WIFI_REDE_ADOCAO },
+        v20 && { rotulo: 'VLAN 20', rede: hs, el: document.getElementById('vlan20-rede') },
         v30 && { rotulo: 'VLAN 30', rede: r30, el: document.getElementById('vlan30-rede') },
         v40 && { rotulo: 'VLAN 40', rede: r40, el: document.getElementById('vlan40-rede') },
         v50 && { rotulo: 'VLAN 50', rede: r50, el: document.getElementById('vlan50-rede') },
-        v60 && { rotulo: 'VLAN 60', rede: r60 },
+        v60 && { rotulo: 'VLAN 60', rede: r60, el: document.getElementById('vlan60-rede') },
         ...extras.map(v => ({ rotulo: `VLAN ${v.id}`, rede: v.rede, el: v.redeEl }))
     ].filter(Boolean);
 
@@ -497,13 +655,13 @@ export function wifiGerar() {
     const removePortas = portas.map(p => `/interface bridge port remove [find interface=${p}]`).join('\n');
     const addPortas = portas.map(p => `/interface bridge port add interface=${p} bridge=BRIDGE-LAN`).join('\n');
 
-    let script = `#BASICO\n/user add name=admin.local password=#@!4432dDA45 group=full\n/ip dns set servers=8.8.8.8,8.8.4.4\n#PORTAS DA BRIDGE-LAN: ${portas.join(', ')}\n${removePortas}\n/interface bridge add name=BRIDGE-LAN protocol-mode=rstp\n${addPortas}\n/ip address add address=192.168.200.1/24 interface=BRIDGE-LAN\n/ip pool add name=POOL_BRIDGE_LAN ranges=192.168.200.2-192.168.200.254\n\n`;
+    let script = `#BASICO\n/user add name=admin.local password=#@!4432dDA45 group=full\n/ip dns set servers=${WIFI_DNS}\n#PORTAS DA BRIDGE-LAN: ${portas.join(', ')}\n${removePortas}\n/interface bridge add name=BRIDGE-LAN protocol-mode=rstp\n${addPortas}\n/ip address add address=192.168.200.1/24 interface=BRIDGE-LAN\n/ip pool add name=POOL_BRIDGE_LAN ranges=192.168.200.2-192.168.200.254\n\n`;
 
     // 2. BLOCO ADOÇÃO (Dinâmico)
     if (ap === 'tplink') {
-        script += `#ADOCAO TPLINK\n/ip dhcp-server network add address=192.168.200.0/24 gateway=192.168.200.1 dns-server=8.8.8.8,8.8.4.4 caps-manager=187.85.164.32 comment=ADOTA_TPLINK_NO_CAPS_MANAGERS\n/ip dhcp-server add name=DHCP_ADOCAO lease-time=00:10:00 address-pool=POOL_BRIDGE_LAN interface=BRIDGE-LAN authoritative=yes add-arp=yes disabled=no\n/ip firewall nat add chain=srcnat src-address=192.168.200.0/24 action=masquerade comment=REDE_ADOCAO\n\n`;
+        script += `#ADOCAO TPLINK\n/ip dhcp-server network add address=192.168.200.0/24 gateway=192.168.200.1 dns-server=${WIFI_DNS} caps-manager=187.85.164.32 comment=ADOTA_TPLINK_NO_CAPS_MANAGERS\n/ip dhcp-server add name=DHCP_ADOCAO lease-time=00:10:00 address-pool=POOL_BRIDGE_LAN interface=BRIDGE-LAN authoritative=yes add-arp=yes disabled=no\n/ip firewall nat add chain=srcnat src-address=192.168.200.0/24 action=masquerade comment=REDE_ADOCAO\n\n`;
     } else if (ap === 'unifi') {
-        script += `#DHCP UNIFI\n/ip dhcp-server add name=DHCP_ADOCAO lease-time=00:10:00 address-pool=POOL_BRIDGE_LAN interface=BRIDGE-LAN authoritative=yes add-arp=yes disabled=no\n/ip dhcp-server network add address=192.168.200.0/24 gateway=192.168.200.1 dns-server=8.8.8.8,8.8.4.4 comment=REDE_ADOCAO\n/ip firewall nat add chain=srcnat src-address=192.168.200.0/24 action=masquerade comment=REDE_ADOCAO\n\n`;
+        script += `#DHCP UNIFI\n/ip dhcp-server add name=DHCP_ADOCAO lease-time=00:10:00 address-pool=POOL_BRIDGE_LAN interface=BRIDGE-LAN authoritative=yes add-arp=yes disabled=no\n/ip dhcp-server network add address=192.168.200.0/24 gateway=192.168.200.1 dns-server=${WIFI_DNS} comment=REDE_ADOCAO\n/ip firewall nat add chain=srcnat src-address=192.168.200.0/24 action=masquerade comment=REDE_ADOCAO\n\n`;
     }
 
     // 3. CRIAÇÃO DAS VLANS (Dinâmico)
@@ -520,7 +678,7 @@ export function wifiGerar() {
 
     // 4. IP, DHCP E NAT (Dinâmico)
     const blocoVlan = (id, ids, r, leaseTime) =>
-        `#ADDRESS ${ids.comentario} ->>>>>>>>> ${ids.comentario} - VLAN_${id}\n/ip address add address=${r.gatewayCidr} interface=${ids.interface} disabled=no\n/ip pool add name=${ids.pool} ranges=${r.poolRanges}\n/ip dhcp-server network add address=${r.redeCidr} gateway=${r.gateway} dns-server=8.8.8.8,8.8.4.4\n/ip dhcp-server add name=${ids.dhcp} lease-time=${leaseTime} address-pool=${ids.pool} interface=${ids.interface} authoritative=yes add-arp=yes disabled=no conflict-detection=no\n/ip firewall nat add chain=srcnat src-address=${r.redeCidr} action=masquerade comment=${ids.comentario}\n\n`;
+        `#ADDRESS ${ids.comentario} ->>>>>>>>> ${ids.comentario} - VLAN_${id}\n/ip address add address=${r.gatewayCidr} interface=${ids.interface} disabled=no\n/ip pool add name=${ids.pool} ranges=${r.poolRanges}\n/ip dhcp-server network add address=${r.redeCidr} gateway=${r.gateway} dns-server=${WIFI_DNS}\n/ip dhcp-server add name=${ids.dhcp} lease-time=${leaseTime} address-pool=${ids.pool} interface=${ids.interface} authoritative=yes add-arp=yes disabled=no conflict-detection=no\n/ip firewall nat add chain=srcnat src-address=${r.redeCidr} action=masquerade comment=${ids.comentario}\n\n`;
 
     if (v60) script += blocoVlan(60, n60, r60, '01:59:00');
     if (v50) script += blocoVlan(50, n50, r50, '00:15:00');
@@ -530,14 +688,11 @@ export function wifiGerar() {
     extras.forEach(v => script += blocoVlan(v.id, v.ids, v.rede, '00:30:00'));
 
     if (v20 && hotspot === 'mambo') {
-        script += `#ADDRESS HOTSPOT ->>>>>>>>> REDE_HOTSPOT - VLAN_20\n/ip address add address=${hs.gatewayCidr} interface=VLAN_20_HOTSPOT\n/ip pool add name=POOL_HOTSPOT ranges=${hs.poolRanges}\n/ip dhcp-server network add address=${hs.redeCidr} gateway=${hs.gateway} dns-server=8.8.8.8,8.8.4.4\n/ip dhcp-server add name=DHCP_HOTSPOT lease-time=00:15:00 address-pool=POOL_HOTSPOT interface=VLAN_20_HOTSPOT authoritative=yes add-arp=yes disabled=no\n/ip firewall nat add chain=srcnat src-address=${hs.redeCidr} action=masquerade comment=REDE_HOTSPOT\n\n`;
-    } else if (v20 && hotspot === 'wifeed') {
-        script += `#VLAN_20 HOTSPOT ->>>>>>>>> VLAN criada para Wifeed (sem address local)\n# O Wifeed gerencia autenticacao externamente - nao configurar address na VLAN_20\n\n`;
-    }
+        script += `#ADDRESS HOTSPOT ->>>>>>>>> REDE_HOTSPOT - VLAN_20\n/ip address add address=${hs.gatewayCidr} interface=VLAN_20_HOTSPOT\n/ip pool add name=POOL_HOTSPOT ranges=${hs.poolRanges}\n/ip dhcp-server network add address=${hs.redeCidr} gateway=${hs.gateway} dns-server=${WIFI_DNS}\n/ip dhcp-server add name=DHCP_HOTSPOT lease-time=00:15:00 address-pool=POOL_HOTSPOT interface=VLAN_20_HOTSPOT authoritative=yes add-arp=yes disabled=no\n/ip firewall nat add chain=srcnat src-address=${hs.redeCidr} action=masquerade comment=REDE_HOTSPOT\n\n`;
+    } 
 
     // 5. ISOLAMENTO (Sempre forçado e Dinâmico - isola automaticamente o que foi criado)
     if (v20 || v30 || v40 || v50 || extras.length) {
-        script += `OBRIGATÓRIO NO SCRIPT\n#ISOLAR TODAS AS REDES\n`;
         if (v20) script += `/ip firewall address-list add address=${hs.redeCidr} list=BLOCK_REDES\n`;
         if (v30) script += `/ip firewall address-list add address=${r30.redeCidr} list=BLOCK_REDES\n`;
         if (v40) script += `/ip firewall address-list add address=${r40.redeCidr} list=BLOCK_REDES\n`;
@@ -564,7 +719,7 @@ export function wifiGerar() {
        propria. Fica por ultimo de proposito — a primeira regra que casa encerra
        o srcnat, e um masquerade sem filtro casa com tudo, entao qualquer regra
        especifica depois dele seria letra morta. */
-    script += `#MASQUERADE GERAL\n/ip firewall nat add chain=srcnat action=masquerade\n\n`;
+    script += `\n#MASQUERADE GERAL\n/ip firewall nat add chain=srcnat action=masquerade\n\n`;
 
     // 7. INSTRUÇÕES UNIFI
     if (ap === 'unifi') {
@@ -574,6 +729,8 @@ export function wifiGerar() {
     const resBox = document.getElementById('wifi-resultado');
     resBox.style.display = 'block';
     resBox.textContent = script;
+
+    wifiAtualizarWifeed();
 }
 
 export function wifiCopiar() {
@@ -589,15 +746,19 @@ export function wifiCopiar() {
 }
 
 /* Inicializa listeners que dependem de elementos dinâmicos ou de eventos
-   além de clique (input, delegação nas VLANs adicionais). */
+   além de clique (input, delegação nas VLANs adicionais e nos campos do Wifeed). */
 export function initWifi() {
     wifiAtualizarHosts();
     wifiWireVlansExtras();
-    wifiHotspotChange(); // sincroniza o estado inicial da VLAN 20 com o Hotspot selecionado
+    wifiWireWifeedCampos();
+    wifiHotspotChange(); // sincroniza o estado inicial da VLAN 20 (e o apoio Wifeed) com o Hotspot selecionado
 
-    ['vlan30-rede', 'vlan40-rede', 'vlan50-rede'].forEach(id => {
+    ['vlan20-rede', 'vlan30-rede', 'vlan40-rede', 'vlan50-rede', 'vlan60-rede'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) el.addEventListener('input', wifiAtualizarHosts);
+        if (el) el.addEventListener('input', () => {
+            wifiAtualizarHosts();
+            wifiAtualizarWifeed();
+        });
     });
 
     const btnAdd = document.getElementById('wifi-add-vlan');
