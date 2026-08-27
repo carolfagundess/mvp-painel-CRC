@@ -1,7 +1,7 @@
 // --- IMPORTAÇÃO DOS MÓDULOS ---
 import { initEquipamentos } from '../features/equipamentos/equip.js';
 import { novoToggleTipo, novoGerar, novoGerarSoRadius, novoGerarSoNtp, novoCopiar, novoLimpar } from '../features/acessos/novo-acesso.js';
-import { wifiHotspotChange, wifiGerar, wifiCopiar, wifiLimpar, initWifi } from '../features/wifi/wifi.js';
+import { wifiHotspotChange, wifiGerar, wifiCopiar, wifiLimpar, wifiCopiarWifeed, initWifi } from '../features/wifi/wifi.js';
 import { ciascTrocar, ciascToggleNovaVlan, ciascAdicionarPorta, ciascRemoverPorta, ciascGerar, ciascCopiar, ciascLimpar } from '../features/ciasc/ciasc.js';
 import { initIpv4, ipv4Calcular, ipv4Copiar, ipv4Limpar } from '../features/ipv4/ipv4.js';
 
@@ -113,6 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#page-wifi .btn-primary')?.addEventListener('click', wifiGerar);
     document.querySelector('#page-wifi .btn-success')?.addEventListener('click', wifiCopiar);
     document.querySelector('#page-wifi .btn-danger')?.addEventListener('click', wifiLimpar);
+
+    document.getElementById('wifi-copiar-wifeed')?.addEventListener('click', wifiCopiarWifeed);
 
 
     // 5. Eventos: CIASC
