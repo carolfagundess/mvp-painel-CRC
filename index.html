@@ -70,6 +70,16 @@
                 Wifi Business
             </button>
 
+            <button id="nav-vpls-evento" class="nav-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="6" cy="6" r="3"></circle>
+                    <circle cx="6" cy="18" r="3"></circle>
+                    <circle cx="18" cy="12" r="3"></circle>
+                    <path d="M6 9v6M8.5 7.5L15.5 10.5M8.5 16.5L15.5 13.5"></path>
+                </svg>
+                VPLS Evento
+            </button>
+
             <button id="nav-ipv4" class="nav-btn">
                 <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="4" y="2" width="16" height="20" rx="2"></rect>
@@ -153,6 +163,23 @@
                         <p>Gerador modular de scripts MikroTik para TP-Link/UniFi, VLANs, Isolamento e Hotspot Mambo.
                         </p>
                         <span class="tool-card-tag tag-blue">Infraestrutura</span>
+                    </div>
+
+                    <!-- Card 3b: VPLS Evento -->
+                    <div class="tool-card" onclick="showPage('vpls-evento')">
+                        <div class="tool-card-icon icon-amber">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="6" cy="6" r="3"></circle>
+                                <circle cx="6" cy="18" r="3"></circle>
+                                <circle cx="18" cy="12" r="3"></circle>
+                                <path d="M6 9v6M8.5 7.5L15.5 10.5M8.5 16.5L15.5 13.5"></path>
+                            </svg>
+                        </div>
+                        <h3>VPLS Evento</h3>
+                        <p>Gera script MikroTik do concentrador VPLS/MPLS da Sede para eventos temporários, com VLANs
+                            e rede cabeada opcional.</p>
+                        <span class="tool-card-tag tag-amber">Infraestrutura · Eventos</span>
                     </div>
 
                     <!-- Card 4: Verificador de Equipamentos -->
@@ -946,6 +973,168 @@
                     <li>O script gerado pode ser copiado ou baixado como arquivo <strong>.rsc</strong>, pronto para
                         importar no MikroTik com <code>/import file-name=&lt;arquivo&gt;.rsc</code>.</li>
                 </ul>
+            </div>
+
+            <!--Página VPLS Evento (Concentrador da Sede)-->
+            <div class="page" id="page-vpls-evento">
+                <button class="back-btn" onclick="showPage('home', document.getElementById('nav-home'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>VPLS Evento — Concentrador da Sede</h2>
+                        <p>Selecione o evento e informe os parâmetros para gerar automaticamente a configuração VPLS,
+                            VLANs e portas do MikroTik.</p>
+                    </div>
+                </div>
+
+                <div class="form-full">
+
+                    <div class="form-card" style="border-color: rgba(56, 189, 248, 0.3);">
+                        <p style="color:var(--text2);font-size:13px;line-height:1.6;">
+                            <strong style="color:var(--accent-light);">IP Concentrador:</strong> 177.200.218.17
+                            <br><br>
+                            <strong style="color:var(--accent-light);">Sites modelo padrão na Omada:</strong><br>
+                            EVENTO 01: <code>CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-01</code><br>
+                            EVENTO 02: <code>CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-02</code><br>
+                            EVENTO 03: <code>CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-03</code>
+                        </p>
+                    </div>
+
+                    <div class="layout-duas-colunas">
+
+                        <!-- COLUNA ESQUERDA (Configuração) -->
+                        <div>
+                            <div class="form-card">
+                                <div class="form-card-title">Configuração Principal</div>
+                                <div class="grid-2">
+                                    <div class="campo">
+                                        <label>Evento 01, 02 ou 03?</label>
+                                        <select id="vpls-evento">
+                                            <option value="01">EVENTO 01</option>
+                                            <option value="02">EVENTO 02</option>
+                                            <option value="03">EVENTO 03</option>
+                                        </select>
+                                    </div>
+                                    <div class="campo">
+                                        <label>Qual VPLS livre no concentrador?</label>
+                                        <input type="number" id="vpls-vpls" min="1" max="254" value="1" placeholder="Ex.: 1">
+                                    </div>
+                                </div>
+                                <p class="vlan-dica">EVENTO 01 — VLANs 20, 30, 40, 50, 60, 70, 80<br>
+                                    EVENTO 02 — VLANs 22, 32, 42, 52, 62, 72, 82<br>
+                                    VPLS 1 gera VPLS-ID <code>1:0</code> e IP <code>172.20.0.1</code>.</p>
+
+                                <div class="campo" style="margin-top:16px;">
+                                    <label>Interface para VLAN 3025</label>
+                                    <input type="text" id="vpls-interface3025" value="ether1" placeholder="Ex.: sfp-sfpplus1">
+                                </div>
+                                <p class="vlan-dica">VLAN de enlace da VPLS — exemplos: <code>ether1</code>,
+                                    <code>sfp-sfpplus1</code>.</p>
+                            </div>
+
+                            <div class="form-card">
+                                <div class="form-card-title">Rede Cabeada</div>
+                                <div class="campo">
+                                    <label>Será usada rede interna cabeada?</label>
+                                    <select id="vpls-redeCabeada">
+                                        <option value="nao">NÃO</option>
+                                        <option value="sim">SIM</option>
+                                    </select>
+                                </div>
+
+                                <div id="vpls-tipoRedeCabeadaBox" class="hidden">
+                                    <div class="campo">
+                                        <label>Onde será usada a rede cabeada?</label>
+                                        <select id="vpls-tipoRedeCabeada">
+                                            <option value="mikrotik">DIRETO NO MIKROTIK</option>
+                                            <option value="switch">DEPOIS DO SWITCH</option>
+                                        </select>
+                                    </div>
+                                    <p class="vlan-dica"><strong>Direto no MikroTik:</strong> a VLAN cabeada será
+                                        configurada em access na porta selecionada.<br><br>
+                                        <strong>Depois do switch:</strong> a VLAN cabeada será adicionada em tagged
+                                        junto com as demais VLANs. Deverá ser colocada em access na porta usada no
+                                        switch.</p>
+                                </div>
+
+                                <div id="vpls-cabledConfig" class="hidden" style="margin-top:16px;">
+                                    <div class="porta-bloco">
+                                        <label>Portas LAN da rede cabeada</label>
+                                        <p class="vlan-dica" style="margin-top:0;">Selecione as portas que receberão a
+                                            VLAN diretamente em access no MikroTik. Se utilizar ether2 a ether5, a
+                                            porta é retirada automaticamente das VLANs tagged principais.
+                                            <strong id="vpls-textoVlanCabeada" style="color:var(--text);">VLAN 80</strong>
+                                            será configurada como PVID e untagged.</p>
+
+                                        <div id="vpls-portsContainer" style="margin-top:12px;">
+                                            <div class="porta-linha">
+                                                <select class="lan-port">
+                                                    <option value="">SELECIONE A PORTA</option>
+                                                    <option value="ether2">ether2</option>
+                                                    <option value="ether3">ether3</option>
+                                                    <option value="ether4">ether4</option>
+                                                    <option value="ether5">ether5</option>
+                                                    <option value="ether6">ether6</option>
+                                                    <option value="ether7">ether7</option>
+                                                    <option value="ether8">ether8</option>
+                                                    <option value="ether9">ether9</option>
+                                                    <option value="ether10">ether10</option>
+                                                </select>
+                                                <button type="button" class="btn btn-danger btn-remove-porta">Remover</button>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-secondary" id="vpls-add-porta">+ Adicionar Porta</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- COLUNA DIREITA (Preview, Ações e Resultado) -->
+                        <div>
+                            <div class="form-card">
+                                <div class="form-card-title">Preview da Configuração</div>
+                                <p style="color:var(--text2);font-size:13px;line-height:2;">
+                                    <strong style="color:var(--text);">Evento:</strong> <span id="vpls-previewEvento">01</span><br>
+                                    <strong style="color:var(--text);">VPLS-ID:</strong> <span id="vpls-previewVpls">1:0</span><br>
+                                    <strong style="color:var(--text);">IP:</strong> <span id="vpls-previewIp">172.20.0.1/24</span><br>
+                                    <strong style="color:var(--text);">Peer:</strong> 172.20.0.254<br>
+                                    <strong style="color:var(--text);">VLAN de enlace VPLS:</strong> 3025<br>
+                                    <strong style="color:var(--text);">Portas VLAN <span id="vpls-previewVlanPrincipal">70</span>:</strong>
+                                    <span id="vpls-previewPortasPrincipais">ether2, ether3, ether4, ether5</span><br>
+                                    <strong style="color:var(--text);">VLANs tagged:</strong> <span id="vpls-previewVlansTagged">20, 30, 40, 50, 60</span><br>
+                                    <strong style="color:var(--text);">VLAN <span id="vpls-previewVlanUntagged">70</span>:</strong> untagged<br>
+                                    <strong style="color:var(--text);">Rede cabeada:</strong> <span id="vpls-previewRedeCabeadaStatus">NÃO</span>
+                                </p>
+                                <div id="vpls-previewTipoRedeBox" class="hidden" style="color:var(--text2);font-size:13px;">
+                                    <strong style="color:var(--text);">Tipo rede cabeada:</strong>
+                                    <span id="vpls-previewTipoRedeCabeada">DIRETO NO MIKROTIK</span>
+                                </div>
+                                <div id="vpls-previewVlanCabeadaBox" class="hidden" style="color:var(--text2);font-size:13px;">
+                                    <strong style="color:var(--text);">VLAN rede cabeada:</strong>
+                                    <span id="vpls-previewRedeCabeada">80</span>
+                                </div>
+                            </div>
+
+                            <div class="form-card">
+                                <div class="form-card-title">Ações e Resultado</div>
+                                <div class="btn-row" style="margin-top:0;">
+                                    <button class="btn btn-primary">Gerar Script</button>
+                                    <button class="btn btn-success">Copiar</button>
+                                    <button class="btn btn-danger">Limpar</button>
+                                </div>
+
+                                <div class="resultado-box" id="vpls-resultado" style="display:none;">—</div>
+                                <div class="copiado-msg" id="vpls-copiado">✓ Script copiado para a área de transferência!</div>
+                                <p id="vpls-status" style="color:var(--green);font-size:13px;margin-top:10px;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!--Página de viabilidade de equipamento-->
