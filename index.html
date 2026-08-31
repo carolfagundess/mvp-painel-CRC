@@ -651,6 +651,7 @@
                     </div>
 
                     <div class="section-divider">Redes a serem criadas (VLANs)</div>
+                    <div class="wifi-vlans-layout">
                     <div class="porta-bloco" style="max-width: 680px;">
                         <label style="margin-bottom:14px;">Marque as VLANs a provisionar na Bridge-LAN e ajuste o
                             endereçamento</label>
@@ -669,8 +670,8 @@
                                     <strong>VLAN 20</strong>
                                 </label>
                                 <span class="vlan-nome-fixo" title="Nome padrão do setor — não editável">HOTSPOT</span>
-                                <span class="vlan-rede-wrap"><span class="vlan-fixo" title="Endereçamento padrão do setor — não editável">10.0.0.1/22
-                                    · fixo</span><small class="vlan-hosts" id="vlan20-hosts"></small></span>
+                                <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan20-rede" value="10.20.0.1/20"
+                                    spellcheck="false" aria-label="Endereçamento da VLAN 20"><small class="vlan-hosts" id="vlan20-hosts"></small></span>
                                 <span></span>
                             </div>
 
@@ -712,12 +713,13 @@
 
                             <div class="vlan-row">
                                 <label class="vlan-check">
-                                    <input type="checkbox" id="vlan60" value="60" checked disabled title="Gerência sempre ativa — não pode ser desmarcada">
+                                    <input type="checkbox" id="vlan60" value="60" checked>
                                     <strong>VLAN 60</strong>
                                 </label>
-                                <span class="vlan-nome-fixo" title="Nome padrão do setor — não editável">GERENCIA</span>
-                                <span class="vlan-rede-wrap"><span class="vlan-fixo" title="Endereçamento padrão do setor — não editável">10.60.0.1/24
-                                    · fixo</span><small class="vlan-hosts" id="vlan60-hosts"></small></span>
+                                <input type="text" class="vlan-nome" id="vlan60-nome" value="GERENCIA"
+                                    spellcheck="false" aria-label="Nome da VLAN 60">
+                                <span class="vlan-rede-wrap"><input type="text" class="vlan-rede" id="vlan60-rede" value="10.60.0.1/24"
+                                    spellcheck="false" aria-label="Endereçamento da VLAN 60"><small class="vlan-hosts" id="vlan60-hosts"></small></span>
                                 <span></span>
                             </div>
                         </div>
@@ -728,12 +730,34 @@
 
                         <p class="vlan-dica">Padrão do setor: <code>10.&lt;VLAN&gt;.0.1/20</code> — a VLAN 40 nasce em
                             <code>10.40.0.1/20</code> e o nome padrão segue <code>WIFI-CORP&lt;N&gt;</code> (30 → CORP1,
-                            40 → CORP2, 50 → CORP3, e assim por diante nas VLANs adicionais). Fora do padrão só a 20
-                            (Hotspot) e a 60 (Gerência): ambas com nome e endereço fixos, e a Gerência fica sempre
-                            ativa — não pode ser desmarcada. Informe o IP do gateway com a máscara que o pool DHCP, a
-                            rede, o NAT e o isolamento saem calculados. VLANs adicionais recebem o mesmo bloco de
-                            configuração — muda só a rede — e o endereço acompanha o número da VLAN (VLAN 55 →
+                            40 → CORP2, 50 → CORP3, e assim por diante nas VLANs adicionais). A 60 (Gerência) segue a
+                            mesma regra mas nasce <code>/24</code>, que já sobra para gerência. A <strong>VLAN
+                            20</strong> é a do Hotspot: colocar rede nela significa que o cliente vai ser integrado ao
+                            <strong>Wifeed</strong> — escolha o Hotspot acima para o painel montar os campos daquela
+                            configuração. Informe o IP do gateway com a máscara que o pool DHCP, a rede, o NAT e o
+                            isolamento saem calculados. VLANs adicionais recebem o mesmo bloco de configuração — muda
+                            só a rede — e o endereço acompanha o número da VLAN (VLAN 55 →
                             <code>10.55.0.1/20</code>) até você editá-lo à mão.</p>
+                    </div>
+
+                    <div class="apoio-wifeed" id="wifi-wifeed-apoio" style="display:none;">
+                        <div class="apoio-aviso">
+                            <svg class="alerta-icone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 3l9 16H3l9-16z" />
+                                <line x1="12" y1="10" x2="12" y2="14" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            <div>
+                                <strong>Wifeed — integração pendente</strong>
+                                <p>A <code>VLAN_20_HOTSPOT</code> é criada sem endereço; o Wifeed configura a rede
+                                    <b id="wifi-alerta-rede">10.20.0.1/20</b> do lado dele. Copie os dados abaixo para
+                                    a solicitação antes de fechar o atendimento.</p>
+                            </div>
+                        </div>
+                        <div class="wf-grupos" id="wifi-wifeed-campos"></div>
+                        <p class="wf-nota" id="wifi-wifeed-nota" style="display:none;"></p>
+                        <button type="button" class="btn btn-secondary" id="wifi-copiar-wifeed" style="width:100%; margin-top:14px;">Copiar todos os dados</button>
+                    </div>
                     </div>
 
                     <div class="btn-row">
@@ -767,9 +791,11 @@
 
                 <div class="section-divider" style="margin-top: 0;">Resumo Geral da Topologia</div>
                 <p style="color:var(--text2);font-size:13px;margin-bottom:14px;">A tabela abaixo mostra os valores
-                    <strong>padrão</strong> propostos pelo gerador. Nome e rede das VLANs 30/40/50 e das VLANs
-                    adicionais podem ser editados na tela antes de gerar o script — apenas o Hotspot (20) e a
-                    Gerência (60) são fixos e não podem ser alterados.</p>
+                    <strong>padrão</strong> propostos pelo gerador. Nome e rede de todas as VLANs — inclusive a
+                    Gerência (60) — podem ser editados na tela antes de gerar o script. O Hotspot (20) é a exceção
+                    parcial: o nome (<code>HOTSPOT</code>) é sempre fixo, e a rede só é editável com Hotspot Mambo —
+                    com Wifeed ela trava no padrão do setor, porque quem configura esse endereçamento é o painel do
+                    Wifeed, não o MikroTik.</p>
                 <div class="table-responsive">
                     <table class="doc-table">
                         <thead>
@@ -794,8 +820,8 @@
                             <tr>
                                 <td>20</td>
                                 <td>HOTSPOT</td>
-                                <td>VLAN_20_HOTSPOT<br>10.0.0.1/22</td>
-                                <td>Não — fixo (só entra se algum Hotspot for selecionado)</td>
+                                <td>VLAN_20_HOTSPOT<br>10.20.0.1/20</td>
+                                <td>Rede editável só com Mambo — trava no padrão com Wifeed; nome sempre fixo</td>
                                 <td>Isolada, exceto o gateway</td>
                                 <td>Rede para clientes Wi-Fi com Hotspot (Mambo ou Wifeed)</td>
                             </tr>
@@ -827,7 +853,7 @@
                                 <td>60</td>
                                 <td>GERENCIA</td>
                                 <td>VLAN_60_GERENCIA<br>10.60.0.1/24</td>
-                                <td>Não — fixo e sempre ativo</td>
+                                <td>Sim — nome e rede</td>
                                 <td>Sem bloqueio</td>
                                 <td>Administração da infraestrutura (equipamentos)</td>
                             </tr>
@@ -892,7 +918,7 @@
                                 </tr>
                                 <tr>
                                     <td>DHCP_HOTSPOT</td>
-                                    <td>10.0.0.1</td>
+                                    <td>gateway informado (padrão 10.20.0.1) — só quando Hotspot = Mambo</td>
                                     <td>15 min</td>
                                 </tr>
                                 <tr>
@@ -917,7 +943,7 @@
                                 </tr>
                                 <tr>
                                     <td>DHCP_GERENCIA</td>
-                                    <td>10.60.0.1</td>
+                                    <td>gateway informado (padrão 10.60.0.1)</td>
                                     <td>1h 59min</td>
                                 </tr>
                             </tbody>
@@ -940,19 +966,44 @@
                         redes listadas em <code>BLOCK_REDES</code>.
                     </li>
                     <li><strong>Exceção da VLAN 20 (Hotspot):</strong> Os clientes podem se comunicar com o gateway
-                        do Hotspot (10.0.0.1), permitindo o funcionamento do DHCP, DNS (quando fornecido pelo
-                        MikroTik) e do Hotspot/Portal Captivo.</li>
+                        do Hotspot (rede informada, padrão 10.20.0.1), permitindo o funcionamento do DHCP, DNS (quando
+                        fornecido pelo MikroTik) e do Hotspot/Portal Captivo.</li>
                     <li><strong>VLAN 60 (Gerência):</strong> Nunca entra na <code>BLOCK_REDES</code> e não possui
                         regras de bloqueio em raw, podendo acessar as demais redes para fins de administração (salvo
-                        se existirem outras regras de firewall restringindo esse acesso). Por ser sempre provisionada,
-                        a rede de Gerência está sempre disponível para gerenciar o equipamento.</li>
+                        se existirem outras regras de firewall restringindo esse acesso). Assim como as demais VLANs,
+                        pode ser desmarcada, renomeada e ter o endereçamento alterado — mas o padrão do setor
+                        recomenda mantê-la sempre ativa para não perder o acesso de gerência ao equipamento.</li>
                     <li><strong>Processamento em RAW:</strong> O bloqueio é realizado antes do Connection Tracking,
                         reduzindo o consumo de CPU e melhorando o desempenho do roteador.</li>
                     <li><strong>NAT (Masquerade):</strong> Configurado para cada rede provisionada e, por segurança,
                         reforçado por uma regra de masquerade geral ao final do script, cobrindo qualquer rede que
                         não tenha ganhado regra própria.</li>
                 </ul>
-                <div class="section-divider">Observações e Padrões Fixos</div>
+                <div class="section-divider">Apoio à Configuração do Wifeed</div>
+                <p style="color:var(--text2);font-size:13px;margin-bottom:14px;">Quando o Hotspot é
+                    <strong>Wifeed</strong>, a <code>VLAN_20_HOTSPOT</code> é criada no MikroTik <strong>sem
+                    endereço local</strong> — a autenticação e o endereçamento dos clientes ficam por conta do
+                    painel do Wifeed, do outro lado. Para que ninguém precise converter máscara na mão nem descobrir
+                    a faixa por tentativa, a ferramenta traduz automaticamente a rede informada na VLAN 20 para os
+                    campos daquela tela.</p>
+                <ul class="doc-list">
+                    <li>Assim que o Hotspot é definido como Wifeed, o campo de rede da VLAN 20 <strong>trava no
+                        padrão do setor</strong> (<code>10.20.0.1/20</code>) e uma <strong>faixa de alerta</strong>
+                        aparece no topo da ferramenta lembrando que a integração precisa ser configurada manualmente
+                        no painel do Wifeed antes de fechar o atendimento.</li>
+                    <li>Um bloco <strong>"Dados para o painel do Wifeed"</strong> é exibido logo abaixo dos botões,
+                        com os campos já calculados a partir do gateway/máscara da VLAN 20: Endereço IP, Máscara de
+                        Rede (convertida para decimal, ex.: <code>/20</code> → <code>255.255.240.0</code>), Faixa de
+                        IP, Servidores DNS, Interface LAN (<code>VLAN_20_HOTSPOT</code>) e Virtual LAN
+                        (<code>20</code>).</li>
+                    <li>Cada campo tem um botão de cópia individual, e o botão <strong>"Copiar tudo"</strong> gera o
+                        texto completo, pronto para colar no chamado da integração.</li>
+                    <li>Se o gateway informado não for o primeiro host da faixa, o pool sai partido em duas
+                        sub-faixas — como o campo "Faixa de IP" do Wifeed aceita só uma, o painel avisa e recomenda
+                        usar a maior faixa ou ajustar o gateway para o primeiro endereço da rede.</li>
+                </ul>
+
+                <div class="section-divider">Observações e Padrões do Setor</div>
                 <ul class="doc-list">
                     <li>Todas as VLANs provisionadas possuem <strong>DHCP próprio</strong> e <strong>Pool de IP
                         dedicado</strong>, calculados automaticamente a partir do gateway/máscara informado.</li>
@@ -961,15 +1012,19 @@
                     </li>
                     <li>A rede da Bridge <strong>192.168.200.0/24</strong> destina-se exclusivamente ao
                         provisionamento/adoção de Access Points, isolando este tráfego das demais redes.</li>
-                    <li>A VLAN 60 (Gerência) é sempre provisionada — não pode ser desmarcada — e mantém nome
-                        (<code>GERENCIA</code>) e rede (<code>10.60.0.1/24</code>) fixos.</li>
+                    <li>A VLAN 60 (Gerência) nasce marcada, com nome <code>GERENCIA</code> e rede
+                        <code>10.60.0.1/24</code> como padrão — mas, como as demais, pode ser desmarcada e ter nome
+                        e rede editados.</li>
+                    <li>A VLAN 20 (Hotspot) nasce com a rede <code>10.20.0.1/20</code> como padrão. O nome permanece
+                        sempre fixo em <code>HOTSPOT</code>; a rede só é editável com Hotspot Mambo — com Wifeed ela
+                        trava no padrão, pois o endereçamento real é configurado no painel do Wifeed.</li>
                     <li>As VLANs 30, 40 e 50 nascem com o nome padrão <code>WIFI-CORP1</code>, <code>WIFI-CORP2</code>
                         e <code>WIFI-CORP3</code>; VLANs adicionais seguem a mesma sequência
                         (<code>WIFI-CORP4</code>, <code>WIFI-CORP5</code>...), mas todos os nomes podem ser
                         editados livremente.</li>
                     <li>O Hotspot pode ser configurado com <strong>Mambo</strong> (exige Identificador e provisiona o
                         RADIUS/Walled Garden) ou <strong>Wifeed</strong> (a VLAN 20 é criada sem endereço local, pois
-                        a autenticação é gerenciada externamente).</li>
+                        a autenticação é gerenciada externamente — veja o apoio à configuração acima).</li>
                     <li>O script gerado pode ser copiado ou baixado como arquivo <strong>.rsc</strong>, pronto para
                         importar no MikroTik com <code>/import file-name=&lt;arquivo&gt;.rsc</code>.</li>
                 </ul>
