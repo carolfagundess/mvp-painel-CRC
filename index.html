@@ -1048,26 +1048,54 @@
 
                 <div class="form-full">
 
-                    <div class="form-card" style="border-color: rgba(56, 189, 248, 0.3);">
-                        <p style="color:var(--text2);font-size:13px;line-height:1.6;">
-                            <strong style="color:var(--accent-light);">IP Concentrador:</strong> 177.200.218.17
-                            <br><br>
-                            <strong style="color:var(--accent-light);">Sites modelo padrão na Omada:</strong><br>
-                            EVENTO 01: <code>CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-01</code><br>
-                            EVENTO 02: <code>CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-02</code><br>
-                            EVENTO 03: <code>CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-03</code>
-                        </p>
+                    <details class="ipv4-ajuda" style="border-color: rgba(56, 189, 248, 0.3);">
+                        <summary>Referência — Concentrador e Sites Omada</summary>
+                        <div class="grid-2">
+                            <div class="resumo-item">
+                                <span class="resumo-label">IP Concentrador</span>
+                                <span class="resumo-value">177.200.218.17</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Site Evento 01</span>
+                                <span class="resumo-value">CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-01</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Site Evento 02</span>
+                                <span class="resumo-value">CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-02</span>
+                            </div>
+                            <div class="resumo-item">
+                                <span class="resumo-label">Site Evento 03</span>
+                                <span class="resumo-value">CRC-PADRÃO-CONTROLADORA_SEDE-EVENTO-03</span>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="wizard-steps">
+                        <button type="button" class="wizard-step active" data-step="1">
+                            <span class="wizard-step-num">1</span> Configuração
+                        </button>
+                        <span class="wizard-step-sep"></span>
+                        <button type="button" class="wizard-step" data-step="2">
+                            <span class="wizard-step-num">2</span> Rede Cabeada
+                        </button>
+                        <span class="wizard-step-sep"></span>
+                        <button type="button" class="wizard-step" data-step="3">
+                            <span class="wizard-step-num">3</span> Revisão
+                        </button>
+                        <span class="wizard-step-sep"></span>
+                        <button type="button" class="wizard-step" data-step="4">
+                            <span class="wizard-step-num">4</span> Resultado
+                        </button>
                     </div>
 
-                    <div class="layout-duas-colunas">
-
-                        <!-- COLUNA ESQUERDA (Configuração) -->
-                        <div>
+                    <!-- PASSO 1: CONFIGURAÇÃO PRINCIPAL -->
+                    <div class="wizard-panel active" id="vpls-step-1">
+                        <div class="layout-duas-colunas">
                             <div class="form-card">
                                 <div class="form-card-title">Configuração Principal</div>
                                 <div class="grid-2">
                                     <div class="campo">
-                                        <label>Evento 01, 02 ou 03?</label>
+                                        <label>Evento</label>
                                         <select id="vpls-evento">
                                             <option value="01">EVENTO 01</option>
                                             <option value="02">EVENTO 02</option>
@@ -1075,24 +1103,72 @@
                                         </select>
                                     </div>
                                     <div class="campo">
-                                        <label>Qual VPLS livre no concentrador?</label>
+                                        <label>VPLS livre no concentrador</label>
                                         <input type="number" id="vpls-vpls" min="1" max="254" value="1" placeholder="Ex.: 1">
                                     </div>
                                 </div>
-                                <p class="vlan-dica">EVENTO 01 — VLANs 20, 30, 40, 50, 60, 70, 80<br>
-                                    EVENTO 02 — VLANs 22, 32, 42, 52, 62, 72, 82<br>
-                                    VPLS 1 gera VPLS-ID <code>1:0</code> e IP <code>172.20.0.1</code>.</p>
 
-                                <div class="campo" style="margin-top:16px;">
-                                    <label>Interface para VLAN 3025</label>
+                                <div class="campo" style="margin-top:16px;margin-bottom:0;">
+                                    <label>Interface para VLAN 3025 (enlace)</label>
                                     <input type="text" id="vpls-interface3025" value="ether1" placeholder="Ex.: sfp-sfpplus1">
                                 </div>
-                                <p class="vlan-dica">VLAN de enlace da VPLS — exemplos: <code>ether1</code>,
-                                    <code>sfp-sfpplus1</code>.</p>
                             </div>
 
                             <div class="form-card">
-                                <div class="form-card-title">Rede Cabeada</div>
+                                <div class="form-card-title">Preview — o que este evento gera</div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">VPLS-ID</span>
+                                    <span class="resumo-value" id="vpls-p1-vplsid">1:0</span>
+                                </div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">IP do túnel</span>
+                                    <span class="resumo-value" id="vpls-p1-ip">172.20.0.1/24</span>
+                                </div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">Peer</span>
+                                    <span class="resumo-value">172.20.0.254</span>
+                                </div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">VLAN de enlace</span>
+                                    <span class="resumo-value">3025</span>
+                                </div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">VLAN principal (untagged)</span>
+                                    <span class="resumo-value" id="vpls-p1-vlanprincipal">70</span>
+                                </div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">VLANs tagged</span>
+                                    <span class="resumo-value" id="vpls-p1-vlanstagged">20, 30, 40, 50, 60</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-card">
+                            <div class="form-card-title">VLANs por Evento</div>
+                            <div class="resumo-item" data-evento-ref="01">
+                                <span class="resumo-label">Evento 01</span>
+                                <span class="resumo-value">20, 30, 40, 50, 60, 70, 80</span>
+                            </div>
+                            <div class="resumo-item" data-evento-ref="02">
+                                <span class="resumo-label">Evento 02</span>
+                                <span class="resumo-value">22, 32, 42, 52, 62, 72, 82</span>
+                            </div>
+                            <div class="resumo-item" data-evento-ref="03">
+                                <span class="resumo-label">Evento 03</span>
+                                <span class="resumo-value">23, 33, 43, 53, 63, 73, 83</span>
+                            </div>
+                        </div>
+
+                        <div class="wizard-nav is-start">
+                            <button type="button" class="btn btn-primary" id="vpls-btn-to-2">Próximo: Rede Cabeada →</button>
+                        </div>
+                    </div>
+
+                    <!-- PASSO 2: REDE CABEADA -->
+                    <div class="wizard-panel" id="vpls-step-2">
+                        <div class="layout-duas-colunas">
+                            <div class="form-card">
+                                <div class="form-card-title">Rede Cabeada (opcional)</div>
                                 <div class="campo">
                                     <label>Será usada rede interna cabeada?</label>
                                     <select id="vpls-redeCabeada">
@@ -1102,30 +1178,30 @@
                                 </div>
 
                                 <div id="vpls-tipoRedeCabeadaBox" class="hidden">
-                                    <div class="campo">
+                                    <div class="campo" style="margin-bottom:8px;">
                                         <label>Onde será usada a rede cabeada?</label>
                                         <select id="vpls-tipoRedeCabeada">
                                             <option value="mikrotik">DIRETO NO MIKROTIK</option>
                                             <option value="switch">DEPOIS DO SWITCH</option>
                                         </select>
                                     </div>
-                                    <p class="vlan-dica"><strong>Direto no MikroTik:</strong> a VLAN cabeada será
-                                        configurada em access na porta selecionada.<br><br>
-                                        <strong>Depois do switch:</strong> a VLAN cabeada será adicionada em tagged
-                                        junto com as demais VLANs. Deverá ser colocada em access na porta usada no
-                                        switch.</p>
+                                    <p class="vlan-dica" style="margin-top:0;">
+                                        <strong>Direto no Mikrotik:</strong> a VLAN cabeada fica em access na porta
+                                        selecionada abaixo. <strong>Depois do switch:</strong> a VLAN cabeada vai
+                                        tagged junto às demais — coloque-a em access na porta usada no switch.
+                                    </p>
                                 </div>
 
                                 <div id="vpls-cabledConfig" class="hidden" style="margin-top:16px;">
                                     <div class="porta-bloco">
                                         <label>Portas LAN da rede cabeada</label>
-                                        <p class="vlan-dica" style="margin-top:0;">Selecione as portas que receberão a
-                                            VLAN diretamente em access no MikroTik. Se utilizar ether2 a ether5, a
-                                            porta é retirada automaticamente das VLANs tagged principais.
+                                        <p class="vlan-dica" style="margin-top:0;margin-bottom:12px;">
+                                            Essas portas saem das VLANs tagged principais e passam a receber
                                             <strong id="vpls-textoVlanCabeada" style="color:var(--text);">VLAN 80</strong>
-                                            será configurada como PVID e untagged.</p>
+                                            em access (PVID + untagged).
+                                        </p>
 
-                                        <div id="vpls-portsContainer" style="margin-top:12px;">
+                                        <div id="vpls-portsContainer">
                                             <div class="porta-linha">
                                                 <select class="lan-port">
                                                     <option value="">SELECIONE A PORTA</option>
@@ -1147,46 +1223,97 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="form-card">
+                                <div class="form-card-title">Preview — como fica o cabeamento</div>
+
+                                <p class="vlan-dica" id="vpls-p2-sem-cabeamento" style="margin-top:0;">
+                                    Sem rede cabeada: todas as portas padrão (<code>ether2</code> a <code>ether5</code>)
+                                    ficam untagged na VLAN principal e recebem todas as VLANs tagged do evento.
+                                </p>
+
+                                <div id="vpls-p2-com-cabeamento" class="hidden">
+                                    <div class="resumo-item">
+                                        <span class="resumo-label">Untagged (VLAN <span id="vpls-p2-vlanprincipal">70</span>)</span>
+                                        <span class="resumo-value" id="vpls-p2-portas-principais">ether2, ether3, ether4, ether5</span>
+                                    </div>
+                                    <div class="resumo-item" id="vpls-p2-linha-access">
+                                        <span class="resumo-label">Access (VLAN <span id="vpls-p2-vlancabeada">80</span>)</span>
+                                        <span class="resumo-value" id="vpls-p2-portas-access">—</span>
+                                    </div>
+                                    <p class="vlan-dica hidden" id="vpls-p2-nota-switch" style="margin-top:10px;">
+                                        VLAN <span id="vpls-p2-vlancabeada-switch">80</span> entra tagged junto com as
+                                        demais nas mesmas portas — coloque-a em access na porta usada no switch.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- COLUNA DIREITA (Preview, Ações e Resultado) -->
-                        <div>
+                        <div class="wizard-nav">
+                            <button type="button" class="btn btn-secondary" id="vpls-btn-to-1">← Voltar</button>
+                            <button type="button" class="btn btn-primary" id="vpls-btn-to-3">Revisar →</button>
+                        </div>
+                    </div>
+
+                    <!-- PASSO 3: REVISÃO -->
+                    <div class="wizard-panel" id="vpls-step-3">
+                        <div class="layout-duas-colunas">
                             <div class="form-card">
-                                <div class="form-card-title">Preview da Configuração</div>
-                                <p style="color:var(--text2);font-size:13px;line-height:2;">
-                                    <strong style="color:var(--text);">Evento:</strong> <span id="vpls-previewEvento">01</span><br>
-                                    <strong style="color:var(--text);">VPLS-ID:</strong> <span id="vpls-previewVpls">1:0</span><br>
-                                    <strong style="color:var(--text);">IP:</strong> <span id="vpls-previewIp">172.20.0.1/24</span><br>
-                                    <strong style="color:var(--text);">Peer:</strong> 172.20.0.254<br>
-                                    <strong style="color:var(--text);">VLAN de enlace VPLS:</strong> 3025<br>
-                                    <strong style="color:var(--text);">Portas VLAN <span id="vpls-previewVlanPrincipal">70</span>:</strong>
-                                    <span id="vpls-previewPortasPrincipais">ether2, ether3, ether4, ether5</span><br>
-                                    <strong style="color:var(--text);">VLANs tagged:</strong> <span id="vpls-previewVlansTagged">20, 30, 40, 50, 60</span><br>
-                                    <strong style="color:var(--text);">VLAN <span id="vpls-previewVlanUntagged">70</span>:</strong> untagged<br>
-                                    <strong style="color:var(--text);">Rede cabeada:</strong> <span id="vpls-previewRedeCabeadaStatus">NÃO</span>
-                                </p>
-                                <div id="vpls-previewTipoRedeBox" class="hidden" style="color:var(--text2);font-size:13px;">
-                                    <strong style="color:var(--text);">Tipo rede cabeada:</strong>
-                                    <span id="vpls-previewTipoRedeCabeada">DIRETO NO MIKROTIK</span>
+                                <div class="form-card-title">Configuração</div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">Evento</span>
+                                    <span class="resumo-value" id="vpls-rev-evento">01</span>
                                 </div>
-                                <div id="vpls-previewVlanCabeadaBox" class="hidden" style="color:var(--text2);font-size:13px;">
-                                    <strong style="color:var(--text);">VLAN rede cabeada:</strong>
-                                    <span id="vpls-previewRedeCabeada">80</span>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">VPLS-ID</span>
+                                    <span class="resumo-value" id="vpls-rev-vplsid">1:0</span>
+                                </div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">IP do túnel</span>
+                                    <span class="resumo-value" id="vpls-rev-ip">172.20.0.1/24</span>
+                                </div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">Interface (enlace 3025)</span>
+                                    <span class="resumo-value" id="vpls-rev-interface">ether1</span>
                                 </div>
                             </div>
 
                             <div class="form-card">
-                                <div class="form-card-title">Ações e Resultado</div>
-                                <div class="btn-row" style="margin-top:0;">
-                                    <button class="btn btn-primary">Gerar Script</button>
-                                    <button class="btn btn-success">Copiar</button>
-                                    <button class="btn btn-danger">Limpar</button>
+                                <div class="form-card-title">Rede Cabeada</div>
+                                <div class="resumo-item">
+                                    <span class="resumo-label">Status</span>
+                                    <span class="resumo-value" id="vpls-rev-cabeada">NÃO</span>
                                 </div>
-
-                                <div class="resultado-box" id="vpls-resultado" style="display:none;">—</div>
-                                <div class="copiado-msg" id="vpls-copiado">✓ Script copiado para a área de transferência!</div>
-                                <p id="vpls-status" style="color:var(--green);font-size:13px;margin-top:10px;"></p>
                             </div>
+                        </div>
+
+                        <p class="vlan-dica">
+                            Algo errado? Volte e ajuste antes de gerar — o script só é criado ao avançar para o
+                            próximo passo.
+                        </p>
+
+                        <div class="wizard-nav">
+                            <button type="button" class="btn btn-secondary" id="vpls-btn-to-2-b">← Voltar e ajustar</button>
+                            <button type="button" class="btn btn-primary" id="vpls-btn-to-4">Gerar Script →</button>
+                        </div>
+                    </div>
+
+                    <!-- PASSO 4: RESULTADO -->
+                    <div class="wizard-panel" id="vpls-step-4">
+                        <div class="form-card">
+                            <div class="form-card-title">Resultado</div>
+                            <div class="btn-row" style="margin-top:0;">
+                                <button class="btn btn-success" id="vpls-btn-copiar">Copiar</button>
+                                <button class="btn btn-danger" id="vpls-btn-limpar">Limpar</button>
+                            </div>
+
+                            <div class="resultado-box" id="vpls-resultado" style="display:none;">—</div>
+                            <div class="copiado-msg" id="vpls-copiado">✓ Script copiado para a área de transferência!</div>
+                            <p id="vpls-status" style="color:var(--green);font-size:13px;margin-top:10px;"></p>
+                        </div>
+
+                        <div class="wizard-nav is-start">
+                            <button type="button" class="btn btn-secondary" id="vpls-btn-to-3-b">← Voltar e ajustar</button>
                         </div>
                     </div>
                 </div>

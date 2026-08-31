@@ -4,7 +4,7 @@ import { novoToggleTipo, novoGerar, novoGerarSoRadius, novoGerarSoNtp, novoCopia
 import { wifiHotspotChange, wifiGerar, wifiCopiar, wifiLimpar, wifiCopiarWifeed, initWifi } from '../features/wifi/wifi.js';
 import { ciascTrocar, ciascToggleNovaVlan, ciascAdicionarPorta, ciascRemoverPorta, ciascGerar, ciascCopiar, ciascLimpar } from '../features/ciasc/ciasc.js';
 import { initIpv4, ipv4Calcular, ipv4Copiar, ipv4Limpar } from '../features/ipv4/ipv4.js';
-import { initVplsEvento, vplsGerar, vplsCopiar, vplsLimpar } from '../features/vpls-evento/vpls-evento.js';
+import { initVplsEvento } from '../features/vpls-evento/vpls-evento.js';
 
 // --- SISTEMA DE NAVEGAÇÃO ---
 function showPage(id, navEl) {
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1c. Inicializa o módulo do Wifi Business (hosts calculados, VLANs adicionais, .rsc)
     initWifi();
 
-    // 1d. Inicializa o módulo do VPLS Evento (preview dinâmico e portas cabeadas)
+    // 1d. Inicializa o módulo do VPLS Evento (wizard de passos e portas cabeadas)
     initVplsEvento();
 
     // 2. Eventos de Navegação (Sidebar e Cards da Home)
@@ -168,10 +168,5 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#page-ipv4 .btn-primary')?.addEventListener('click', ipv4Calcular);
     document.querySelector('#page-ipv4 .btn-success')?.addEventListener('click', ipv4Copiar);
     document.querySelector('#page-ipv4 .btn-danger')?.addEventListener('click', ipv4Limpar);
-
-    // 7. Eventos: VPLS Evento
-    document.querySelector('#page-vpls-evento .btn-row .btn-primary')?.addEventListener('click', vplsGerar);
-    document.querySelector('#page-vpls-evento .btn-row .btn-success')?.addEventListener('click', vplsCopiar);
-    document.querySelector('#page-vpls-evento .btn-row .btn-danger')?.addEventListener('click', vplsLimpar);
 
 });
