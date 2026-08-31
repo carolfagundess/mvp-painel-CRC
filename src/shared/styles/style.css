@@ -1094,6 +1094,22 @@ body {
   border: 1px solid var(--border);
 }
 
+/* ── LINHAS DE PORTA (VPLS Evento) ── */
+.porta-linha {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.porta-linha select {
+  flex: 1;
+}
+
+.porta-linha .btn-danger {
+  padding: 9px 14px;
+  font-size: 12px;
+}
+
 /* ── APOIO À CONFIGURAÇÃO DO WIFEED (Wifi Business) ──
    Fica ao lado do template de VLANs, na altura da linha da VLAN 20 (Hotspot)
    — visível só quando o Hotspot é Wifeed. Reúne num único card o aviso de
@@ -1301,4 +1317,3 @@ body {
   border: 1px solid rgba(245, 158, 11, 0.28);
   color: var(--amber-light);
 }
-
