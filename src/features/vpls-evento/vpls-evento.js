@@ -257,7 +257,7 @@ export function vplsGerar() {
     }
 
     const script = `/interface bridge
-add name=BRIDGE-LAN protocol-mode=none vlan-filtering=yes
+add name=BRIDGE-LAN vlan-filtering=yes
 
 /interface vpls
 add arp=enabled disabled=no mtu=1500 name=VPLS-Concentrador-TI peer=${peer} pw-l2mtu=1544 vpls-id=${vplsId}

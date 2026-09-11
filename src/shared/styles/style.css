@@ -1231,7 +1231,7 @@ body {
 
 .wizard-nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 10px;
   margin-top: 20px;
 }
