@@ -245,22 +245,22 @@ export function vplsGerar() {
     const portasPrincipais = portasPadraoDisponiveis.join(',');
 
     bridgeVlan += portasPrincipais
-        ? `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-TI untagged=${portasPrincipais} vlan-ids=${vlanPrincipal}\n`
-        : `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-TI vlan-ids=${vlanPrincipal}\n`;
+        ? `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-Eventos untagged=${portasPrincipais} vlan-ids=${vlanPrincipal}\n`
+        : `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-Eventos vlan-ids=${vlanPrincipal}\n`;
 
     bridgeVlan += portasPrincipais
-        ? `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-TI,${portasPrincipais} vlan-ids=${vlansTaggedFinal.join(',')}\n`
-        : `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-TI vlan-ids=${vlansTaggedFinal.join(',')}\n`;
+        ? `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-Eventos,${portasPrincipais} vlan-ids=${vlansTaggedFinal.join(',')}\n`
+        : `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-Eventos vlan-ids=${vlansTaggedFinal.join(',')}\n`;
 
     if (redeCabeada === 'sim' && tipoRedeCabeada === 'mikrotik' && portasCabeadas.length > 0) {
-        bridgeVlan += `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-TI untagged=${portasCabeadas.join(',')} vlan-ids=${vlanCabeada}\n`;
+        bridgeVlan += `add bridge=BRIDGE-LAN tagged=VPLS-Concentrador-Eventos untagged=${portasCabeadas.join(',')} vlan-ids=${vlanCabeada}\n`;
     }
 
     const script = `/interface bridge
 add name=BRIDGE-LAN vlan-filtering=yes
 
 /interface vpls
-add arp=enabled disabled=no mtu=1500 name=VPLS-Concentrador-TI peer=${peer} pw-l2mtu=1544 vpls-id=${vplsId}
+add arp=enabled disabled=no mtu=1500 name=VPLS-Concentrador-Eventos peer=${peer} pw-l2mtu=1544 vpls-id=${vplsId}
 
 /interface vlan
 add interface=${interface3025} name=vlan3025 vlan-id=3025
@@ -269,7 +269,7 @@ add interface=${interface3025} name=vlan3025 vlan-id=3025
 add disabled=no name=tp1 use-cspf=no
 
 /interface bridge port
-add bridge=BRIDGE-LAN interface=VPLS-Concentrador-TI
+add bridge=BRIDGE-LAN interface=VPLS-Concentrador-Eventos
 ${bridgePorts}
 /interface bridge vlan
 ${bridgeVlan}
