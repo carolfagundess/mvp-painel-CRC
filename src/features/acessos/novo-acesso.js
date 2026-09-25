@@ -72,7 +72,7 @@ export function novoGerar() {
     let combined = `--- IDENTITY ---\n/system identity set name=\"${identity}\"\n\n`;
 
     if (document.getElementById('novo-includeRadius').checked) {
-        const radiusScript = `/ip service set [find ] address=187.85.161.248/29,189.45.192.0/26,177.54.10.0/29,189.90.48.131/32 disabled=no\n/ip service set ftp,telnet,api,api-ssl disabled=yes\n/radius remove [find ]\n/radius add address=187.85.161.130 secret=99hxSGKae service=login\n/radius incoming set accept=no\n/user aaa\nset default-group=read use-radius=yes\n/user group add name=N1-Suporte policy=[/user group get value-name=policy number=[find name=full ]]\n/system logging\nset 0,1,2,3 action=disk\n/system logging action set 3 remote=187.85.161.130 remote-port=8514\n/system logging remove [find default=no]\n/system logging add action=remote topics=critical\n/system logging add action=remote topics=error,!ipsec\n/system logging add action=remote topics=info,!dhcp,!firewall\n/system logging add action=remote topics=warning,!dhcp\n/ip dns\nset servers=189.45.192.3,177.200.200.20`;
+        const radiusScript = `${radiusIpService()}\n/ip service set ftp,telnet,api,api-ssl disabled=yes\n/radius remove [find ]\n/radius add address=187.85.161.130 secret=99hxSGKae service=login\n/radius incoming set accept=no\n/user aaa\nset default-group=read use-radius=yes\n/user group add name=N1-Suporte policy=[/user group get value-name=policy number=[find name=full ]]\n/system logging\nset 0,1,2,3 action=disk\n/system logging action set 3 remote=187.85.161.130 remote-port=8514\n/system logging remove [find default=no]\n/system logging add action=remote topics=critical\n/system logging add action=remote topics=error,!ipsec\n/system logging add action=remote topics=info,!dhcp,!firewall\n/system logging add action=remote topics=warning,!dhcp\n/ip dns\nset servers=189.45.192.3,177.200.200.20`;
         combined += `--- RADIUS E SERVICOS ---\n${radiusScript}\n\n`;
     }
 
@@ -105,8 +105,14 @@ export function novoGerar() {
     }
 }
 
+// Funciona em RouterOS v6 e v7
+function radiusIpService() {
+    const addr = '187.85.161.248/29,189.45.192.0/26,177.54.10.0/29,189.90.48.131/32';
+    return `:foreach i in=[/ip service find] do={ :do { /ip service set $i address=${addr} disabled=no } on-error={} }`;
+}
+
 export function novoGerarSoRadius() {
-    const radiusScript = `/ip service set [find ] address=187.85.161.248/29,189.45.192.0/26,177.54.10.0/29,189.90.48.131/32 disabled=no\n/ip service set ftp,telnet,api,api-ssl disabled=yes\n/radius remove [find ]\n/radius add address=187.85.161.130 secret=99hxSGKae service=login\n/radius incoming set accept=no\n/user aaa\nset default-group=read use-radius=yes\n/user group add name=N1-Suporte policy=[/user group get value-name=policy number=[find name=full ]]\n/system logging\nset 0,1,2,3 action=disk\n/system logging action set 3 remote=187.85.161.130 remote-port=8514\n/system logging remove [find default=no]\n/system logging add action=remote topics=critical\n/system logging add action=remote topics=error,!ipsec\n/system logging add action=remote topics=info,!dhcp,!firewall\n/system logging add action=remote topics=warning,!dhcp\n/ip dns\nset servers=189.45.192.3,177.200.200.20`;
+    const radiusScript = `${radiusIpService()}\n/ip service set ftp,telnet,api,api-ssl disabled=yes\n/radius remove [find ]\n/radius add address=187.85.161.130 secret=99hxSGKae service=login\n/radius incoming set accept=no\n/user aaa\nset default-group=read use-radius=yes\n/user group add name=N1-Suporte policy=[/user group get value-name=policy number=[find name=full ]]\n/system logging\nset 0,1,2,3 action=disk\n/system logging action set 3 remote=187.85.161.130 remote-port=8514\n/system logging remove [find default=no]\n/system logging add action=remote topics=critical\n/system logging add action=remote topics=error,!ipsec\n/system logging add action=remote topics=info,!dhcp,!firewall\n/system logging add action=remote topics=warning,!dhcp\n/ip dns\nset servers=189.45.192.3,177.200.200.20`;
 
     const resultBox = document.getElementById('novo-id-resultado');
     if (resultBox) {
