@@ -506,7 +506,7 @@ export function wifiLimpar() {
     document.getElementById('wifi-identificador').value = '';
     document.getElementById('wifi-identificador-wrap').style.display = 'none';
 
-    const padroes = { vlan20: true, vlan30: false, vlan40: true, vlan50: false, vlan60: true };
+    const padroes = { vlan20: false, vlan30: true, vlan40: true, vlan50: true, vlan60: true };
     Object.entries(padroes).forEach(([id, marcado]) => {
         document.getElementById(id).checked = marcado;
     });
