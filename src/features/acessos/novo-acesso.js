@@ -14,15 +14,21 @@ export function novoToggleTipo() {
     document.getElementById('bloco-bandalarga-ip').classList.toggle('hidden', modelo !== 'banda-larga');
 }
 
+/* Normaliza um campo para o identity: mai\u00fasculas, sem acentos,
+ * apenas A-Z, 0-9, "-" e "_"; espa\u00e7os viram "_". */
+function novoLimparCampo(valor) {
+    const upper = valor.trim().toUpperCase();
+    const semAcento = upper.normalize ? upper.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : upper;
+    return semAcento.replace(/[^A-Z0-9_\-\s]/g, '').trim().replace(/\s+/g, '_');
+}
+
 export function novoGerar() {
     const modelo = document.getElementById('novo-modelo').value;
     const tipo = document.getElementById('novo-tipo').value;
-    const cidade = document.getElementById('novo-cidade').value.trim().toUpperCase();
-    const cliente = document.getElementById('novo-cliente').value.trim();
-    const circuito = document.getElementById('novo-circuito').value.trim();
-    const nomeRaw = document.getElementById('novo-nome').value.trim().toUpperCase();
-    const nome = nomeRaw.normalize ? nomeRaw.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : nomeRaw;
-    const nomeClean = nome.replace(/[^A-Z0-9\s]/g, '').replace(/\s+/g, '_');
+    const cidade = novoLimparCampo(document.getElementById('novo-cidade').value);
+    const cliente = novoLimparCampo(document.getElementById('novo-cliente').value);
+    const circuito = novoLimparCampo(document.getElementById('novo-circuito').value);
+    const nomeClean = novoLimparCampo(document.getElementById('novo-nome').value);
 
     if (!cidade || !cliente || !circuito || !nomeClean) {
         alert('Preencha todos os campos do cliente (Cidade, Código, Circuito e Nome)!');
