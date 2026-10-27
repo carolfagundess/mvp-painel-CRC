@@ -95,6 +95,14 @@
                 Calculadora IPv4
             </button>
 
+            <button id="nav-mac" class="nav-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                    <path d="M6 10v4M10 10v4M14 10v4M18 10v4"></path>
+                </svg>
+                Gerador de MAC
+            </button>
+
             <div class="sidebar-section">Demais Serviços</div>
 
             <button id="nav-equip" class="nav-btn">
@@ -217,6 +225,21 @@
                         <h3>Calculadora de Redes IPv4</h3>
                         <p>Calcule rede, broadcast, máscara, wildcard e faixa de hosts a partir de um IP/CIDR.</p>
                         <span class="tool-card-tag tag-purple">Cálculo · Sub-rede</span>
+                    </div>
+
+                    <!-- Card 6: Gerador de MAC -->
+                    <div class="tool-card" onclick="showPage('mac')">
+                        <div class="tool-card-icon icon-green">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                                <path d="M6 10v4M10 10v4M14 10v4M18 10v4"></path>
+                            </svg>
+                        </div>
+                        <h3>Gerador de MAC</h3>
+                        <p>A partir do MAC de uma porta conhecida, calcula o endereço MAC de todas as interfaces do
+                            equipamento MikroTik.</p>
+                        <span class="tool-card-tag tag-green">MikroTik · Interfaces</span>
                     </div>
                 </div>
             </div>
@@ -1645,6 +1668,131 @@
                     </div>
 
                     <div class="copiado-msg" id="ipv4-copiado">✓ Copiado para a área de transferência!</div>
+                </div>
+            </div>
+
+            <!--Página do Gerador de MAC-->
+            <div class="page" id="page-mac">
+                <button class="back-btn" onclick="showPage('home', document.getElementById('nav-home'))">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M5 12l7 7M5 12l7-7" />
+                    </svg>
+                    Voltar ao início
+                </button>
+                <div class="tool-page-header">
+                    <div>
+                        <h2>Gerador de MAC</h2>
+                        <p>Informe um endereço MAC conhecido e a porta correspondente — o gerador calcula os endereços
+                            das demais portas do equipamento, mantendo a sequência numérica.</p>
+                    </div>
+                </div>
+
+                <div class="form-full">
+
+                    <details class="ipv4-ajuda">
+                        <summary>Como funciona</summary>
+                        <ul class="doc-list">
+                            <li>Escolha o <code>Modelo do Equipamento</code> e informe o <code>MAC Conhecido</code>
+                                de qualquer porta (aceita <code>:</code>, <code>-</code>, <code>.</code> ou sem
+                                separador).</li>
+                            <li>Selecione em <code>Porta do MAC Informado</code> a porta a que esse MAC pertence.</li>
+                            <li>O MAC informado é a referência: o valor hexadecimal é incrementado ou decrementado
+                                conforme a distância entre a porta de referência e cada porta.</li>
+                            <li>No <strong>CCR2004-16G-2S+</strong>, sfp1 e sfp2 têm a ordem de MAC invertida — o
+                                gerador já considera isso.</li>
+                        </ul>
+                    </details>
+
+                    <div class="mac-layout">
+
+                        <!-- COLUNA ESQUERDA (Inputs) -->
+                        <div class="form-card">
+                            <div class="form-card-title">Configuração</div>
+
+                            <div class="campo">
+                                <label>Modelo do Equipamento</label>
+                                <select id="mac-modelo"></select>
+                            </div>
+                            <p class="ipv4-hint" id="mac-modelo-hint"></p>
+                            <div class="campo">
+                                <label>MAC Conhecido</label>
+                                <input type="text" id="mac-endereco" placeholder="Ex: AA:BB:CC:DD:EE:FF"
+                                    autocomplete="off" spellcheck="false">
+                            </div>
+                            <div class="grid-2">
+                                <div class="campo">
+                                    <label>Porta do MAC Informado</label>
+                                    <select id="mac-porta"></select>
+                                </div>
+                                <div class="campo">
+                                    <label>Formato de Saída</label>
+                                    <select id="mac-formato">
+                                        <option value="colon">AA:BB:CC:DD:EE:FF</option>
+                                        <option value="dash">AA-BB-CC-DD-EE-FF</option>
+                                        <option value="dot">AABB.CCDD.EEFF</option>
+                                        <option value="plain">AABBCCDDEEFF</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="btn-row">
+                                <button class="btn btn-primary">Gerar MACs</button>
+                                <button class="btn btn-danger">Limpar</button>
+                            </div>
+                        </div>
+
+                        <!-- COLUNA DIREITA (Output) -->
+                        <div class="form-card">
+                            <div class="form-card-title">Resultado</div>
+
+                            <div class="mac-resumo">
+                                <div class="campo">
+                                    <label>Modelo</label>
+                                    <input type="text" id="mac-out-modelo" readonly>
+                                </div>
+                                <div class="campo">
+                                    <label>Total de Portas</label>
+                                    <input type="text" id="mac-out-portas" readonly>
+                                </div>
+                                <div class="campo">
+                                    <label>MACs Gerados</label>
+                                    <input type="text" id="mac-out-gerados" value="—" readonly>
+                                </div>
+                            </div>
+
+                            <div class="section-divider">Lista de Interfaces</div>
+
+                            <div class="mac-vazio" id="mac-vazio">
+                                <strong>Nenhum MAC gerado ainda</strong>
+                                Preencha o MAC de referência e clique em "Gerar MACs".
+                            </div>
+
+                            <p class="equip-alert hidden" id="mac-erro-msg"></p>
+
+                            <div class="hidden" id="mac-resultado-wrap">
+                                <div class="table-responsive mac-tabela-wrap">
+                                    <table class="doc-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Porta</th>
+                                                <th>Interface</th>
+                                                <th>Tipo</th>
+                                                <th>Endereço MAC</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="mac-tabela-body"></tbody>
+                                    </table>
+                                </div>
+
+                                <div class="btn-row">
+                                    <button class="btn btn-success">Copiar Lista</button>
+                                    <button class="btn btn-secondary" id="mac-exportar">Exportar CSV</button>
+                                </div>
+                                <div class="copiado-msg" id="mac-copiado">✓ Copiado para a área de transferência!</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

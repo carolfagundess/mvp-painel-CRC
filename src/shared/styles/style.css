@@ -954,6 +954,94 @@ body {
   margin-bottom: 0;
 }
 
+/* ── GERADOR DE MAC ── */
+.mac-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.mac-resumo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.mac-resumo .campo {
+  margin-bottom: 0;
+}
+
+.mac-vazio {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--text3);
+  font-size: 13px;
+}
+
+.mac-vazio strong {
+  display: block;
+  color: var(--text2);
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.mac-tabela-wrap {
+  max-height: 510px;
+  overflow-y: auto;
+  margin-bottom: 0;
+}
+
+.mac-tabela-wrap .doc-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+@media (max-width: 880px) {
+  .mac-layout { grid-template-columns: 1fr; }
+}
+
+.mac-mono {
+  font-family: 'Courier New', monospace;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.mac-tipo {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.mac-tipo-ether {
+  background: var(--accent-bg);
+  color: var(--accent-light);
+}
+
+.mac-tipo-sfp {
+  background: var(--purple-bg);
+  color: var(--purple-light);
+}
+
+.mac-tipo-serial {
+  background: var(--amber-bg);
+  color: var(--amber-light);
+}
+
+.doc-table tr.mac-ref td {
+  background: var(--green-bg);
+}
+
+.mac-copiar-linha {
+  padding: 5px 10px;
+  font-size: 11px;
+}
+
 /* ── SEPARADOR ── */
 .section-divider {
   font-size: 11px;

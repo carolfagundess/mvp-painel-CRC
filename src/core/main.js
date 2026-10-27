@@ -5,6 +5,7 @@ import { wifiHotspotChange, wifiGerar, wifiCopiar, wifiLimpar, wifiCopiarWifeed,
 import { ciascTrocar, ciascToggleNovaVlan, ciascAdicionarPorta, ciascRemoverPorta, ciascGerar, ciascCopiar, ciascLimpar } from '../features/ciasc/ciasc.js';
 import { initIpv4, ipv4Calcular, ipv4Copiar, ipv4Limpar } from '../features/ipv4/ipv4.js';
 import { initVplsEvento } from '../features/vpls-evento/vpls-evento.js';
+import { initMac, macGerar, macCopiar, macExportarCsv, macLimpar } from '../features/mac/mac.js';
 
 // --- SISTEMA DE NAVEGAÇÃO ---
 function showPage(id, navEl) {
@@ -44,6 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1d. Inicializa o módulo do VPLS Evento (wizard de passos e portas cabeadas)
     initVplsEvento();
 
+    // 1e. Inicializa o módulo do Gerador de MAC (popula modelos e portas)
+    initMac();
+
     // 2. Eventos de Navegação (Sidebar e Cards da Home)
     const navLinks = {
         'nav-home': 'home',
@@ -52,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'nav-wifi': 'wifi',
         'nav-vpls-evento': 'vpls-evento',
         'nav-equip': 'equip',
-        'nav-ipv4': 'ipv4'
+        'nav-ipv4': 'ipv4',
+        'nav-mac': 'mac'
     };
 
     // Vincula os botões da Sidebar
@@ -77,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (title.includes('vpls evento')) showPage('vpls-evento', document.getElementById('nav-vpls-evento'));
             if (title.includes('verificador')) showPage('equip', document.getElementById('nav-equip'));
             if (title.includes('ipv4')) showPage('ipv4', document.getElementById('nav-ipv4'));
+            if (title.includes('gerador de mac')) showPage('mac', document.getElementById('nav-mac'));
         });
     });
 
@@ -168,5 +174,11 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('#page-ipv4 .btn-primary')?.addEventListener('click', ipv4Calcular);
     document.querySelector('#page-ipv4 .btn-success')?.addEventListener('click', ipv4Copiar);
     document.querySelector('#page-ipv4 .btn-danger')?.addEventListener('click', ipv4Limpar);
+
+    // 7. Eventos: Gerador de MAC
+    document.querySelector('#page-mac .btn-primary')?.addEventListener('click', macGerar);
+    document.querySelector('#page-mac .btn-success')?.addEventListener('click', macCopiar);
+    document.querySelector('#page-mac .btn-danger')?.addEventListener('click', macLimpar);
+    document.getElementById('mac-exportar')?.addEventListener('click', macExportarCsv);
 
 });
