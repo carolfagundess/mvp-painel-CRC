@@ -692,7 +692,7 @@ export function wifiGerar() {
     }
 
     if (v20 && hotspot === 'wifeed') {
-        script += `#NAT HOTSPOT ->>>>>>>>> VLAN_20\n/ip firewall nat add chain=srcnat src-address=10.20.0.1/20 action=masquerade comment=HOTSPOT\n\n`;
+        script += `#NAT HOTSPOT ->>>>>>>>> VLAN_20\n/ip firewall nat add chain=srcnat src-address=10.20.0.0/20 action=masquerade comment=HOTSPOT\n\n`;
     }
 
     // 5. ISOLAMENTO (Sempre forçado e Dinâmico - isola automaticamente o que foi criado)
